@@ -42,6 +42,15 @@ function mapsUrlCoord(lat, lng) {
   const q = encodeURIComponent(`${lat},${lng}`);
   return `https://www.google.com/maps/search/?api=1&query=${q}`;
 }
+
+function bestUrl(item, lang) {
+  if (item && item.lat != null && item.lng != null)
+    return mapsUrlCoord(item.lat, item.lng);
+  if (item && item.nEn)
+    return mapsUrl(item.nEn + " Salalah Oman", lang);
+  return mapsUrl(item && item.nAr ? item.nAr : "", lang);
+}
+
 function directionsUrl(destination, origin) {
   const d = encodeURIComponent(destination);
   const base = `https://www.google.com/maps/dir/?api=1&destination=${d}&travelmode=driving`;
@@ -254,8 +263,8 @@ const LEVEL_LABELS = {
    DATA
 =================================================================== */
 
-const APP_DOWNLOAD_URL = "https://khareef-dhofar-c4so43ze2-samiharthys-projects.vercel.app/";
-const APP_VERSION = "1.24";  // increment each time you push an update
+const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
+const APP_VERSION = "1.26";
 
 const SOCIAL = [
   { handle: "@khareef.dhofar", url: "https://www.instagram.com/khareef.dhofar" },
@@ -344,23 +353,23 @@ const EVENTS = [
 
 const COMPANION_SITES = [
   { nAr: "الغارف", nEn: "Al Gharef",
-    desc: { ar: "مقاهي ومطاعم وسط أجواء زراعية خضراء، مكان هادئ للاسترخاء بعد جولات الطبيعة.", en: "Cafés and restaurants set in a green farm-like atmosphere — a relaxing stop after a day exploring nature.", hi: "हरे-भरे कृषि वातावरण में कैफे और रेस्तरां — प्रकृति यात्रा के बाद आराम करने की एक शांत जगह।", fr: "Cafés et restaurants dans une ambiance agricole verdoyante — un endroit paisible pour se détendre après une excursion nature." } },
+    desc: { ar: "مقاهي ومطاعم وسط أجواء زراعية خضراء، مكان هادئ للاسترخاء بعد جولات الطبيعة.", en: "Cafés and restaurants set in a green farm-like atmosphere — a relaxing stop after a day exploring nature.", hi: "हरे-भरे कृषि वातावरण में कैफे और रेस्तरां — प्रकृति यात्रा के बाद आराम करने की एक शांत जगह।", fr: "Cafés et restaurants dans une ambiance agricole verdoyante — un endroit paisible pour se détendre après une excursion nature." , lat: 17.017, lng: 54.108} },
   { nAr: "نوفا", nEn: "Nova",
-    desc: { ar: "مجمع ترفيهي وتجاري حديث يجمع المقاهي والمحال في أجواء عصرية.", en: "A modern entertainment and retail complex combining cafés and shops in a contemporary setting.", hi: "एक आधुनिक मनोरंजन और रिटेल कॉम्प्लेक्स जो कैफे और दुकानों को समकालीन माहौल में जोड़ता है।", fr: "Un complexe moderne de divertissement et de commerces alliant cafés et boutiques dans une ambiance contemporaine." } },
+    desc: { ar: "مجمع ترفيهي وتجاري حديث يجمع المقاهي والمحال في أجواء عصرية.", en: "A modern entertainment and retail complex combining cafés and shops in a contemporary setting.", hi: "एक आधुनिक मनोरंजन और रिटेल कॉम्प्लेक्स जो कैफे और दुकानों को समकालीन माहौल में जोड़ता है।", fr: "Un complexe moderne de divertissement et de commerces alliant cafés et boutiques dans une ambiance contemporaine." , lat: 17.0095, lng: 54.105} },
   { nAr: "اوسارا", nEn: "Ausara",
-    desc: { ar: "منطقة مطلة على شاطئ ريسوت، تجمع بين المطاعم والأجواء البحرية المسائية.", en: "An area overlooking Raysut beach, combining restaurants with an evening seaside atmosphere.", hi: "रायसुत समुद्र तट को निहारता एक क्षेत्र, रेस्तरां और शाम के समुद्री माहौल का मिश्रण।", fr: "Un secteur donnant sur la plage de Raysut, combinant restaurants et ambiance maritime en soirée." } },
+    desc: { ar: "منطقة مطلة على شاطئ ريسوت، تجمع بين المطاعم والأجواء البحرية المسائية.", en: "An area overlooking Raysut beach, combining restaurants with an evening seaside atmosphere.", hi: "रायसुत समुद्र तट को निहारता एक क्षेत्र, रेस्तरां और शाम के समुद्री माहौल का मिश्रण।", fr: "Un secteur donnant sur la plage de Raysut, combinant restaurants et ambiance maritime en soirée." , lat: 17.019, lng: 54.0865} },
   { nAr: "واجهة شاطيء ريسوت", nEn: "Raysut Beach Front",
-    desc: { ar: "ممشى ساحلي بإطلالة مباشرة على شاطئ ريسوت، مناسب للمشي والجلسات المسائية.", en: "A coastal promenade directly overlooking Raysut beach, ideal for walks and evening sit-downs.", hi: "रायसुत समुद्र तट के सामने एक तटीय वॉकवे, टहलने और शाम बैठने के लिए उपयुक्त।", fr: "Une promenade côtière donnant directement sur la plage de Raysut, idéale pour les balades et soirées." } },
+    desc: { ar: "ممشى ساحلي بإطلالة مباشرة على شاطئ ريسوت، مناسب للمشي والجلسات المسائية.", en: "A coastal promenade directly overlooking Raysut beach, ideal for walks and evening sit-downs.", hi: "रायसुत समुद्र तट के सामने एक तटीय वॉकवे, टहलने और शाम बैठने के लिए उपयुक्त।", fr: "Une promenade côtière donnant directement sur la plage de Raysut, idéale pour les balades et soirées." , lat: 17.0195, lng: 54.087} },
   { nAr: "لامير", nEn: "La Mer",
-    desc: { ar: "مطاعم ومقاهي بإطلالة بحرية أنيقة، من الوجهات المفضلة للسهرات المسائية.", en: "Restaurants and cafés with an elegant seaside view, a popular spot for evening outings.", hi: "खूबसूरत समुद्री दृश्य वाले रेस्तरां और कैफे, शाम की सैर के लिए एक लोकप्रिय जगह।", fr: "Restaurants et cafés avec une élégante vue sur la mer, un lieu prisé pour les sorties en soirée." } },
+    desc: { ar: "مطاعم ومقاهي بإطلالة بحرية أنيقة، من الوجهات المفضلة للسهرات المسائية.", en: "Restaurants and cafés with an elegant seaside view, a popular spot for evening outings.", hi: "खूबसूरत समुद्री दृश्य वाले रेस्तरां और कैफे, शाम की सैर के लिए एक लोकप्रिय जगह।", fr: "Restaurants et cafés avec une élégante vue sur la mer, un lieu prisé pour les sorties en soirée." , lat: 17.0193, lng: 54.0868} },
   { nAr: "مسرح المروج", nEn: "Al Muruj Theatre",
-    desc: { ar: "مسرح مفتوح يستضيف فعاليات وعروضاً مصاحبة لموسم الخريف.", en: "An open-air theatre hosting shows and events that accompany the khareef season.", hi: "एक ओपन-एयर थिएटर जो ख़रीफ़ सीज़न के साथ होने वाले कार्यक्रमों और शो की मेज़बानी करता है।", fr: "Un théâtre en plein air accueillant spectacles et événements accompagnant la saison du khareef." } },
+    desc: { ar: "مسرح مفتوح يستضيف فعاليات وعروضاً مصاحبة لموسم الخريف.", en: "An open-air theatre hosting shows and events that accompany the khareef season.", hi: "एक ओपन-एयर थिएटर जो ख़रीफ़ सीज़न के साथ होने वाले कार्यक्रमों और शो की मेज़बानी करता है।", fr: "Un théâtre en plein air accueillant spectacles et événements accompagnant la saison du khareef." , lat: 17.0088, lng: 54.1038} },
   { nAr: "فعاليات الولايات", nEn: "Wilayat Events",
-    desc: { ar: "رحلة تمتد عبر الطبيعة والثقافة والتجربة، تربط بين سدح ومرباط وطاقة بفعاليات محلية في كل ولاية.", en: "A journey through nature, culture, and experience, linking Sadh, Mirbat, and Taqah with local events in each wilayat.", hi: "प्रकृति, संस्कृति और अनुभव से होकर गुज़रने वाली एक यात्रा, जो सद्ह, मिरबात और तक़ा को हर विलायत में स्थानीय कार्यक्रमों से जोड़ती है।", fr: "Un voyage à travers la nature, la culture et l'expérience, reliant Sadh, Mirbat et Taqah par des événements locaux dans chaque wilaya." } },
+    desc: { ar: "رحلة تمتد عبر الطبيعة والثقافة والتجربة، تربط بين سدح ومرباط وطاقة بفعاليات محلية في كل ولاية.", en: "A journey through nature, culture, and experience, linking Sadh, Mirbat, and Taqah with local events in each wilayat.", hi: "प्रकृति, संस्कृति और अनुभव से होकर गुज़रने वाली एक यात्रा, जो सद्ह, मिरबात और तक़ा को हर विलायत में स्थानीय कार्यक्रमों से जोड़ती है।", fr: "Un voyage à travers la nature, la culture et l'expérience, reliant Sadh, Mirbat et Taqah par des événements locaux dans chaque wilaya." , lat: 16.9894, lng: 54.6917} },
   { nAr: "الفعاليات الثقافية والفنية", nEn: "Cultural & Artistic Events",
-    desc: { ar: "عروض كورالية وسيمفونية تراثية وستاند أب كوميدي، تجمع مواهب محلية وضيوفاً من السعودية والبصرة.", en: "Choral and heritage symphony performances plus stand-up comedy, featuring local talent and guests from Saudi Arabia and Basra.", hi: "कोरल और विरासत सिम्फनी प्रदर्शन के साथ स्टैंड-अप कॉमेडी, स्थानीय प्रतिभा और सऊदी अरब व बसरा से आए मेहमानों के साथ।", fr: "Spectacles choraux et symphoniques patrimoniaux ainsi que du stand-up, mettant en avant des talents locaux et des invités d'Arabie saoudite et de Bassorah." } },
+    desc: { ar: "عروض كورالية وسيمفونية تراثية وستاند أب كوميدي، تجمع مواهب محلية وضيوفاً من السعودية والبصرة.", en: "Choral and heritage symphony performances plus stand-up comedy, featuring local talent and guests from Saudi Arabia and Basra.", hi: "कोरल और विरासत सिम्फनी प्रदर्शन के साथ स्टैंड-अप कॉमेडी, स्थानीय प्रतिभा और सऊदी अरब व बसरा से आए मेहमानों के साथ।", fr: "Spectacles choraux et symphoniques patrimoniaux ainsi que du stand-up, mettant en avant des talents locaux et des invités d'Arabie saoudite et de Bassorah." , lat: 17.012, lng: 54.0975} },
   { nAr: "الفعاليات الرياضية", nEn: "Sports Events",
-    desc: { ar: "بطولة ظفار الدولية للدراجات (ريس 5)، مسابقة الرماية بالأسلحة التقليدية، وطواف صلالة الدولي للدراجات.", en: "The Dhofar International Cycling Championship (Race 5), a traditional-weapons shooting competition, and the Salalah International Cycling Tour.", hi: "ज़ुफ़ार अंतर्राष्ट्रीय साइकिलिंग चैंपियनशिप (रेस 5), पारंपरिक हथियारों से निशानेबाज़ी प्रतियोगिता, और सलालाह अंतर्राष्ट्रीय साइकिलिंग टूर।", fr: "Le championnat international de cyclisme de Dhofar (Race 5), un concours de tir aux armes traditionnelles, et le Tour international cycliste de Salalah." } },
+    desc: { ar: "بطولة ظفار الدولية للدراجات (ريس 5)، مسابقة الرماية بالأسلحة التقليدية، وطواف صلالة الدولي للدراجات.", en: "The Dhofar International Cycling Championship (Race 5), a traditional-weapons shooting competition, and the Salalah International Cycling Tour.", hi: "ज़ुफ़ार अंतर्राष्ट्रीय साइकिलिंग चैंपियनशिप (रेस 5), पारंपरिक हथियारों से निशानेबाज़ी प्रतियोगिता, और सलालाह अंतर्राष्ट्रीय साइकिलिंग टूर।", fr: "Le championnat international de cyclisme de Dhofar (Race 5), un concours de tir aux armes traditionnelles, et le Tour international cycliste de Salalah." , lat: 17.0088, lng: 54.1038} },
 ];
 
 const BEST_PERIODS = [
@@ -440,13 +449,13 @@ const REGIONS = {
     },
     spots: [
       { nAr: "عين كور", nEn: "Ayn Kour", km: 21, extra: { ar: "(فوروفيل)", en: "(4x4 only)", hi: "(केवल 4x4)" } },
-      { nAr: "افتلقوت", nEn: "Aftalqut", km: 38, extra: { ar: "(فوروفيل)", en: "(4x4 only)", hi: "(केवल 4x4)" } },
+      { nAr: "افتلقوت", nEn: "Aftalqut", km: 38, extra: { ar: "(فوروفيل)", en: "(4x4 only)", hi: "(केवल 4x4)" , lat: 17.0512, lng: 53.9823} },
       { nAr: "نوافير المغسيل", nEn: "Mughsail Waterfalls", km: 44, extra: { ar: "طريق صعب نوعاً ما للمبتدئين", en: "Fairly difficult route for beginners", hi: "शुरुआती लोगों के लिए कुछ कठिन रास्ता" }, crowdBase: "natureHigh" },
       { nAr: "شعت", nEn: "Sha'at", km: 83 },
-      { nAr: "رخيوت", nEn: "Rakhyut", km: 110 , spotType: "viewpoint", spotDescAr: "ولاية ساحلية جبلية بعيدة بطبيعة بكر ومناظر استثنائية بين الجبال والبحر.", spotDescEn: "A remote coastal mountain wilayat with pristine nature and exceptional scenery."},
-      { nAr: "ضلكوت", nEn: "Dalkut", km: 155 , spotType: "mountain", spotDescAr: "ولاية في أقصى الغرب تجمع بين الطبيعة الجبلية الخلابة وضباب الخريف الكثيف.", spotDescEn: "A far-western wilayat combining stunning mountain nature with dense khareef mist."},
-      { nAr: "شجرة التبلدي (البولاب) – ضلكوت", nEn: "Dalkut Baobab Tree", km: 157, extra: { ar: "من أضخم أشجار شبه الجزيرة العربية", en: "One of the largest trees on the Arabian Peninsula", hi: "अरब प्रायद्वीप के सबसे बड़े पेड़ों में से एक", fr: "L'un des plus grands arbres de la péninsule arabique" , spotType: "tree", spotDescAr: "من أضخم وأندر الأشجار في شبه الجزيرة العربية، معلم طبيعي فريد.", spotDescEn: "One of the largest and rarest trees on the Arabian Peninsula — a unique natural landmark."} },
-      { nAr: "قرية ديم", nEn: "Daim Village", km: 160, extra: { ar: "قرية جبلية عالية يغمرها ضباب الخريف", en: "A highland village engulfed in khareef mist", hi: "ख़रीफ़ कोहरे में डूबा एक पहाड़ी गांव", fr: "Village montagneux enveloppé par la brume khareef" , spotType: "village", spotDescAr: "قرية جبلية عالية تغمرها سحب الخريف الكثيفة، تجربة فوتوغرافية استثنائية.", spotDescEn: "A high mountain village engulfed in dense khareef clouds — an exceptional photography experience."} },
+      { nAr: "رخيوت", nEn: "Rakhyut", km: 110 , spotType: "viewpoint", spotDescAr: "ولاية ساحلية جبلية بعيدة بطبيعة بكر ومناظر استثنائية بين الجبال والبحر.", spotDescEn: "A remote coastal mountain wilayat with pristine nature and exceptional scenery.", lat: 16.775, lng: 53.32},
+      { nAr: "ضلكوت", nEn: "Dalkut", km: 155 , spotType: "mountain", spotDescAr: "ولاية في أقصى الغرب تجمع بين الطبيعة الجبلية الخلابة وضباب الخريف الكثيف.", spotDescEn: "A far-western wilayat combining stunning mountain nature with dense khareef mist.", lat: 16.726, lng: 53.258},
+      { nAr: "شجرة التبلدي (البولاب) – ضلكوت", nEn: "Dalkut Baobab Tree", km: 157, extra: { ar: "من أضخم أشجار شبه الجزيرة العربية", en: "One of the largest trees on the Arabian Peninsula", hi: "अरब प्रायद्वीप के सबसे बड़े पेड़ों में से एक", fr: "L'un des plus grands arbres de la péninsule arabique" , spotType: "tree", spotDescAr: "من أضخم وأندر الأشجار في شبه الجزيرة العربية، معلم طبيعي فريد.", spotDescEn: "One of the largest and rarest trees on the Arabian Peninsula — a unique natural landmark.", lat: 16.726, lng: 53.258} },
+      { nAr: "قرية ديم", nEn: "Daim Village", km: 160, extra: { ar: "قرية جبلية عالية يغمرها ضباب الخريف", en: "A highland village engulfed in khareef mist", hi: "ख़रीफ़ कोहरे में डूबा एक पहाड़ी गांव", fr: "Village montagneux enveloppé par la brume khareef" , spotType: "village", spotDescAr: "قرية جبلية عالية تغمرها سحب الخريف الكثيفة، تجربة فوتوغرافية استثنائية.", spotDescEn: "A high mountain village engulfed in dense khareef clouds — an exceptional photography experience.", lat: 16.74, lng: 53.27} },
       { nAr: "صرفيت (الحدود العمانية اليمنية)", nEn: "Sarfait (Oman–Yemen border)", km: null },
     ],
   },
@@ -461,20 +470,20 @@ const REGIONS = {
       fr: "Les sites naturels les plus proches du centre de Salalah — idéal si votre temps est limité.",
     },
     spots: [
-      { nAr: "عين ارزات", nEn: "Ayn Razat", km: 23, crowdBase: "natureHigh" , spotType: "spring", spotDescAr: "من أشهر عيون ظفار وأجملها، تتدفق مياهها وسط الأشجار الكثيفة المعمّرة.", spotDescEn: "One of Dhofar's most famous springs, with water flowing through ancient dense trees."},
-      { nAr: "جبل السان", nEn: "Jabal Al San", km: 33, crowdBase: "natureMid" , spotType: "mountain", spotDescAr: "قمة جبلية خضراء في موسم الخريف تكسوها الضباب والسحاب.", spotDescEn: "A green mountain peak during khareef season, draped in mist and clouds."},
-      { nAr: "عين صحلنوت", nEn: "Ayn Sahalnaut", km: 18, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "منبع ماء طبيعي تحيط به الأشجار والمتحجرات، مثالي للاسترخاء العائلي.", spotDescEn: "A natural spring surrounded by trees and petrified wood, ideal for family relaxation."},
-      { nAr: "جبل شير", nEn: "Jabal Shir", km: 23, crowdBase: "natureMid" , spotType: "mountain", spotDescAr: "قمة جبلية خضراء هادئة تناسب المشي والتأمل في أجواء الخريف.", spotDescEn: "A quiet green mountain peak ideal for walking and contemplation during khareef."},
-      { nAr: "عين جوجب", nEn: "Ayn Jujub", km: 31, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين مائية جميلة بالقرب من منطقة جوجب الجبلية الخلابة.", spotDescEn: "A beautiful spring near the stunning Jujub mountain area."},
-      { nAr: "وادي نحيز", nEn: "Wadi Nuheiz", km: 29, crowdBase: "natureMid" , spotType: "wadi", spotDescAr: "واد طبيعي تحيط به الجبال يزخر بجمال النباتات والتكوينات الصخرية.", spotDescEn: "A natural wadi surrounded by mountains, rich with plants and rock formations."},
-      { nAr: "عين جرزيز", nEn: "Ayn Jarziz", km: 17, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين مائية خفية بمجرى قصير بين الأشجار وأجواء باردة منعشة.", spotDescEn: "A hidden spring along a short trail through cool, refreshing trees."},
-      { nAr: "جبل اتين", nEn: "Jabal Atin", km: 21, crowdBase: "natureHigh" , spotType: "mountain", spotDescAr: "قمة جبلية تطل على السحاب والوديان، وجهة مفضلة لعشاق التصوير.", spotDescEn: "A mountain peak overlooking clouds and valleys, a favourite for photographers."},
-      { nAr: "إطلالة حمرير", nEn: "Hamrir Viewpoint", km: 19, crowdBase: "natureMid" , spotType: "viewpoint", spotDescAr: "منظر بانورامي خلاب يطل على خضرة الجبال وأجواء ظفار الساحرة.", spotDescEn: "A stunning panoramic view over the green mountains and enchanting Dhofar scenery."},
-      { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", km: 48, crowdBase: "natureMid" , spotType: "marina", spotDescAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة بأجواء ترفيهية فريدة.", spotDescEn: "A lovely spot for boat rides surrounded by water and nature in a unique atmosphere."},
-      { nAr: "النبي ايوب", nEn: "Prophet Job's Tomb (Nabi Ayoub)", km: 29, crowdBase: "natureLow" , spotType: "religious", spotDescAr: "مقام النبي أيوب عليه السلام في جبل إيثيوم بأجواء روحانية هادئة.", spotDescEn: "The shrine of Prophet Ayoub (Job) on Jabal Ithoum, with a peaceful spiritual atmosphere."},
-      { nAr: "متحف ارض اللبان", nEn: "Land of Frankincense Museum", km: 6, crowdBase: "cultureMid" , spotType: "museum", spotDescAr: "متحف متخصص في تاريخ طريق اللبان، مدرج مع البليد على قائمة التراث العالمي.", spotDescEn: "A museum specialising in the history of the frankincense trade route, UNESCO-listed with Al Baleed."},
-      { nAr: "اكشاك جوز الهند", nEn: "Coconut Stalls", km: 4, crowdBase: "cultureMid" , spotType: "market", spotDescAr: "أكشاك شعبية تبيع جوز الهند الطازج وسط الطبيعة — توقف لا يُفوَّت.", spotDescEn: "Popular stalls selling fresh coconuts in nature — a stop not to be missed."},
-      { nAr: "النبي عمران", nEn: "Prophet Imran's Tomb (Nabi Imran)", km: 1, crowdBase: "natureLow" , spotType: "religious", spotDescAr: "موقع ديني وتراثي يُقال إنه ضريح النبي عمران، يزوره كثيرون للتباركيّة.", spotDescEn: "A religious and heritage site said to be the tomb of Prophet Imran, visited by many for blessings."},
+      { nAr: "عين ارزات", nEn: "Ayn Razat", km: 23, crowdBase: "natureHigh" , spotType: "spring", spotDescAr: "من أشهر عيون ظفار وأجملها، تتدفق مياهها وسط الأشجار الكثيفة المعمّرة.", spotDescEn: "One of Dhofar's most famous springs, with water flowing through ancient dense trees.", lat: 17.0241, lng: 54.1261},
+      { nAr: "جبل السان", nEn: "Jabal Al San", km: 33, crowdBase: "natureMid" , spotType: "mountain", spotDescAr: "قمة جبلية خضراء في موسم الخريف تكسوها الضباب والسحاب.", spotDescEn: "A green mountain peak during khareef season, draped in mist and clouds.", lat: 17.0156, lng: 54.0823},
+      { nAr: "عين صحلنوت", nEn: "Ayn Sahalnaut", km: 18, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "منبع ماء طبيعي تحيط به الأشجار والمتحجرات، مثالي للاسترخاء العائلي.", spotDescEn: "A natural spring surrounded by trees and petrified wood, ideal for family relaxation.", lat: 17.0201, lng: 54.1402},
+      { nAr: "جبل شير", nEn: "Jabal Shir", km: 23, crowdBase: "natureMid" , spotType: "mountain", spotDescAr: "قمة جبلية خضراء هادئة تناسب المشي والتأمل في أجواء الخريف.", spotDescEn: "A quiet green mountain peak ideal for walking and contemplation during khareef.", lat: 17.0189, lng: 54.1024},
+      { nAr: "عين جوجب", nEn: "Ayn Jujub", km: 31, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين مائية جميلة بالقرب من منطقة جوجب الجبلية الخلابة.", spotDescEn: "A beautiful spring near the stunning Jujub mountain area.", lat: 17.203, lng: 54.296},
+      { nAr: "وادي نحيز", nEn: "Wadi Nuheiz", km: 29, crowdBase: "natureMid" , spotType: "wadi", spotDescAr: "واد طبيعي تحيط به الجبال يزخر بجمال النباتات والتكوينات الصخرية.", spotDescEn: "A natural wadi surrounded by mountains, rich with plants and rock formations.", lat: 17.155, lng: 54.115},
+      { nAr: "عين جرزيز", nEn: "Ayn Jarziz", km: 17, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين مائية خفية بمجرى قصير بين الأشجار وأجواء باردة منعشة.", spotDescEn: "A hidden spring along a short trail through cool, refreshing trees.", lat: 17.0198, lng: 54.1175},
+      { nAr: "جبل اتين", nEn: "Jabal Atin", km: 21, crowdBase: "natureHigh" , spotType: "mountain", spotDescAr: "قمة جبلية تطل على السحاب والوديان، وجهة مفضلة لعشاق التصوير.", spotDescEn: "A mountain peak overlooking clouds and valleys, a favourite for photographers.", lat: 17.0456, lng: 54.1733},
+      { nAr: "إطلالة حمرير", nEn: "Hamrir Viewpoint", km: 19, crowdBase: "natureMid" , spotType: "viewpoint", spotDescAr: "منظر بانورامي خلاب يطل على خضرة الجبال وأجواء ظفار الساحرة.", spotDescEn: "A stunning panoramic view over the green mountains and enchanting Dhofar scenery.", lat: 17.0312, lng: 54.1502},
+      { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", km: 48, crowdBase: "natureMid" , spotType: "marina", spotDescAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة بأجواء ترفيهية فريدة.", spotDescEn: "A lovely spot for boat rides surrounded by water and nature in a unique atmosphere.", lat: 17.0778, lng: 54.4389},
+      { nAr: "النبي ايوب", nEn: "Prophet Job's Tomb (Nabi Ayoub)", km: 29, crowdBase: "natureLow" , spotType: "religious", spotDescAr: "مقام النبي أيوب عليه السلام في جبل إيثيوم بأجواء روحانية هادئة.", spotDescEn: "The shrine of Prophet Ayoub (Job) on Jabal Ithoum, with a peaceful spiritual atmosphere.", lat: 17.0291, lng: 54.1428},
+      { nAr: "متحف ارض اللبان", nEn: "Land of Frankincense Museum", km: 6, crowdBase: "cultureMid" , spotType: "museum", spotDescAr: "متحف متخصص في تاريخ طريق اللبان، مدرج مع البليد على قائمة التراث العالمي.", spotDescEn: "A museum specialising in the history of the frankincense trade route, UNESCO-listed with Al Baleed.", lat: 17.0178, lng: 54.0934},
+      { nAr: "اكشاك جوز الهند", nEn: "Coconut Stalls", km: 4, crowdBase: "cultureMid" , spotType: "market", spotDescAr: "أكشاك شعبية تبيع جوز الهند الطازج وسط الطبيعة — توقف لا يُفوَّت.", spotDescEn: "Popular stalls selling fresh coconuts in nature — a stop not to be missed.", lat: 17.0165, lng: 54.0944},
+      { nAr: "النبي عمران", nEn: "Prophet Imran's Tomb (Nabi Imran)", km: 1, crowdBase: "natureLow" , spotType: "religious", spotDescAr: "موقع ديني وتراثي يُقال إنه ضريح النبي عمران، يزوره كثيرون للتباركيّة.", spotDescEn: "A religious and heritage site said to be the tomb of Prophet Imran, visited by many for blessings.", lat: 17.0142, lng: 54.0901},
     ],
   },
   east: {
@@ -488,25 +497,25 @@ const REGIONS = {
       fr: "Combine nature, sites archéologiques et la plage historique de Mirbat.",
     },
     spots: [
-      { nAr: "عين حمران", nEn: "Ayn Hamran", km: 24, crowdBase: "natureHigh" , spotType: "spring", spotDescAr: "واحة خضراء هادئة تحيط بها الأشجار وتتناسب فيها المياه وسط الطبيعة.", spotDescEn: "A lush, peaceful oasis where water flows gently through surrounding trees."},
-      { nAr: "عين طبرق", nEn: "Ayn Tabrouk", km: 33, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين طبيعية نضرة بمياه صافية وأجواء خلابة بين الجبال الخضراء.", spotDescEn: "A fresh natural spring with clear waters amid beautiful green mountain scenery."},
+      { nAr: "عين حمران", nEn: "Ayn Hamran", km: 24, crowdBase: "natureHigh" , spotType: "spring", spotDescAr: "واحة خضراء هادئة تحيط بها الأشجار وتتناسب فيها المياه وسط الطبيعة.", spotDescEn: "A lush, peaceful oasis where water flows gently through surrounding trees.", lat: 17.063, lng: 54.595},
+      { nAr: "عين طبرق", nEn: "Ayn Tabrouk", km: 33, crowdBase: "natureMid" , spotType: "spring", spotDescAr: "عين طبيعية نضرة بمياه صافية وأجواء خلابة بين الجبال الخضراء.", spotDescEn: "A fresh natural spring with clear waters amid beautiful green mountain scenery.", lat: 17.0421, lng: 54.5183},
       { nAr: "عين اثوم", nEn: "Ayn Athum", km: 36, crowdBase: "natureMid" },
-      { nAr: "جبل ناشب", nEn: "Jabal Nashib", km: 41, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "قمة هادئة بمناظر خضراء ضبابية تناسب عشاق الطبيعة والتأمل.", spotDescEn: "A quiet peak with green misty views, ideal for nature lovers and contemplation."},
-      { nAr: "مدينة الحق (جبل)", nEn: "City of Al Haq (Mountain)", km: 54, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "موقع تاريخي في قمة الجبل يُعرف بمدينة الحق القديمة.", spotDescEn: "A historical site on a mountain peak known as the ancient City of Al Haq."},
-      { nAr: "كورنيش طاقة", nEn: "Taqah Corniche", km: 32, crowdBase: "cultureMid" , spotType: "corniche", spotDescAr: "واجهة بحرية هادئة تطل على بحر العرب، مناسبة للتنزه والجلسات المسائية.", spotDescEn: "A peaceful seafront overlooking the Arabian Sea, ideal for strolling and evening gatherings."},
-      { nAr: "موقع السمهرم الأثري (خور روري)", nEn: "Samhuram Archaeological Site (Khor Rori)", km: 41, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "ميناء لبان قديم مدرج في التراث العالمي، قرب مصبّ نهر مفتون خور روري.", spotDescEn: "An ancient frankincense port UNESCO World Heritage site, near Khor Rori estuary."},
-      { nAr: "وادي دربات", nEn: "Wadi Darbat", km: 47, crowdBase: "natureHigh" , spotType: "wadi", spotDescAr: "من أجمل وديان ظفار: شلالات، مياه متدفقة، وبهائم تشرب — مشهد لا يُنسى.", spotDescEn: "One of Dhofar's most beautiful wadis: waterfalls, flowing water, and grazing cattle — unforgettable."},
-      { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", km: 48, crowdBase: "natureMid" , spotType: "marina", spotDescAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة بأجواء ترفيهية فريدة.", spotDescEn: "A lovely spot for boat rides surrounded by water and nature in a unique atmosphere."},
-      { nAr: "شاطئ الحمر", nEn: "Al Hamr Beach", km: 60, crowdBase: "natureMid" , spotType: "beach", spotDescAr: "شاطئ بانورامي يجمع بين زرقة البحر وروعة السواحل الشرقية.", spotDescEn: "A panoramic beach combining blue sea with the beauty of the eastern coastline."},
-      { nAr: "طريق انعدام الجاذبية", nEn: "Anti-Gravity Road", km: 62, crowdBase: "natureMid" , spotType: "road", spotDescAr: "طريق فريد يوهم بانعدام الجاذبية — تجربة بصرية مذهلة تتحدى المنطق!", spotDescEn: "A unique road creating an anti-gravity optical illusion — a mind-bending experience!"},
-      { nAr: "أشجار اللبان المعمرة", nEn: "Ancient Frankincense Trees", km: 64, crowdBase: "natureLow" , spotType: "forest", spotDescAr: "أشجار ضخمة نادرة عمرها مئات السنين تضيف طابعاً أسطورياً لطبيعة ظفار.", spotDescEn: "Rare giant trees hundreds of years old adding a legendary character to Dhofar's nature."},
-      { nAr: "جبل طوي اعتير", nEn: "Jabal Tawi Atair", km: 56, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "منطقة فريدة تحتضن إحدى أضخم حفر الانهيار الطبيعية في العالم.", spotDescEn: "A unique area home to one of the world's largest natural collapse sinkholes."},
-      { nAr: "حفرة الأذابة", nEn: "Al Adhbah Sinkhole", km: 58, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "حفرة طبيعية ضخمة تكشف أعماق الأرض بشكل دراماتيكي ومبهر.", spotDescEn: "A massive natural sinkhole dramatically revealing the depths of the earth."},
-      { nAr: "كهف طيق", nEn: "Tayq Cave", km: 68, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "أحد أكبر الحفر الطبيعية في العالم بعمق يتجاوز 250 متراً.", spotDescEn: "One of the world's largest natural sinkholes, with a depth exceeding 250 metres."},
-      { nAr: "جبل سمحان (فوق السحاب)", nEn: "Jabal Samhan (Above the Clouds)", km: 75, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "أعلى قمة في عُمان (~1800م) تعيش فوقها فوق غطاء السحاب السحري.", spotDescEn: "Oman's highest peak (~1,800m) — you live above the magical cloud cover here."},
-      { nAr: "شاطئ مرباط", nEn: "Mirbat Beach", km: 70, crowdBase: "cultureMid" , spotType: "beach", spotDescAr: "شاطئ تاريخي هادئ يجمع بين جمال البحر وعراقة ولاية مرباط.", spotDescEn: "A peaceful historic beach combining sea beauty with Mirbat Wilayat's ancient heritage."},
-      { nAr: "حصن مرباط", nEn: "Mirbat Castle", km: 71, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "حصن يعود للقرن 18م شهد معركة مرباط الشهيرة عام 1972.", spotDescEn: "A fort dating to the 18th century that witnessed the famous Battle of Mirbat in 1972."},
-      { nAr: "الحارة التراثية بمرباط", nEn: "Mirbat Heritage Quarter", km: 70, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "حارة قديمة بأبراج عريقة وبيوت تاريخية تحكي قصص ماضي مرباط.", spotDescEn: "An old quarter with ancient towers and historic houses narrating Mirbat's past stories."},
+      { nAr: "جبل ناشب", nEn: "Jabal Nashib", km: 41, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "قمة هادئة بمناظر خضراء ضبابية تناسب عشاق الطبيعة والتأمل.", spotDescEn: "A quiet peak with green misty views, ideal for nature lovers and contemplation.", lat: 17.04, lng: 54.495},
+      { nAr: "مدينة الحق (جبل)", nEn: "City of Al Haq (Mountain)", km: 54, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "موقع تاريخي في قمة الجبل يُعرف بمدينة الحق القديمة.", spotDescEn: "A historical site on a mountain peak known as the ancient City of Al Haq.", lat: 17.048, lng: 54.52},
+      { nAr: "كورنيش طاقة", nEn: "Taqah Corniche", km: 32, crowdBase: "cultureMid" , spotType: "corniche", spotDescAr: "واجهة بحرية هادئة تطل على بحر العرب، مناسبة للتنزه والجلسات المسائية.", spotDescEn: "A peaceful seafront overlooking the Arabian Sea, ideal for strolling and evening gatherings.", lat: 17.0291, lng: 54.3873},
+      { nAr: "موقع السمهرم الأثري (خور روري)", nEn: "Samhuram Archaeological Site (Khor Rori)", km: 41, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "ميناء لبان قديم مدرج في التراث العالمي، قرب مصبّ نهر مفتون خور روري.", spotDescEn: "An ancient frankincense port UNESCO World Heritage site, near Khor Rori estuary.", lat: 17.0567, lng: 54.4312},
+      { nAr: "وادي دربات", nEn: "Wadi Darbat", km: 47, crowdBase: "natureHigh" , spotType: "wadi", spotDescAr: "من أجمل وديان ظفار: شلالات، مياه متدفقة، وبهائم تشرب — مشهد لا يُنسى.", spotDescEn: "One of Dhofar's most beautiful wadis: waterfalls, flowing water, and grazing cattle — unforgettable.", lat: 17.0778, lng: 54.4389},
+      { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", km: 48, crowdBase: "natureMid" , spotType: "marina", spotDescAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة بأجواء ترفيهية فريدة.", spotDescEn: "A lovely spot for boat rides surrounded by water and nature in a unique atmosphere.", lat: 17.0778, lng: 54.4389},
+      { nAr: "شاطئ الحمر", nEn: "Al Hamr Beach", km: 60, crowdBase: "natureMid" , spotType: "beach", spotDescAr: "شاطئ بانورامي يجمع بين زرقة البحر وروعة السواحل الشرقية.", spotDescEn: "A panoramic beach combining blue sea with the beauty of the eastern coastline.", lat: 17.02, lng: 54.4801},
+      { nAr: "طريق انعدام الجاذبية", nEn: "Anti-Gravity Road", km: 62, crowdBase: "natureMid" , spotType: "road", spotDescAr: "طريق فريد يوهم بانعدام الجاذبية — تجربة بصرية مذهلة تتحدى المنطق!", spotDescEn: "A unique road creating an anti-gravity optical illusion — a mind-bending experience!", lat: 17.0156, lng: 54.4632},
+      { nAr: "أشجار اللبان المعمرة", nEn: "Ancient Frankincense Trees", km: 64, crowdBase: "natureLow" , spotType: "forest", spotDescAr: "أشجار ضخمة نادرة عمرها مئات السنين تضيف طابعاً أسطورياً لطبيعة ظفار.", spotDescEn: "Rare giant trees hundreds of years old adding a legendary character to Dhofar's nature.", lat: 17.0321, lng: 54.5102},
+      { nAr: "جبل طوي اعتير", nEn: "Jabal Tawi Atair", km: 56, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "منطقة فريدة تحتضن إحدى أضخم حفر الانهيار الطبيعية في العالم.", spotDescEn: "A unique area home to one of the world's largest natural collapse sinkholes.", lat: 17.1237, lng: 54.5867},
+      { nAr: "حفرة الأذابة", nEn: "Al Adhbah Sinkhole", km: 58, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "حفرة طبيعية ضخمة تكشف أعماق الأرض بشكل دراماتيكي ومبهر.", spotDescEn: "A massive natural sinkhole dramatically revealing the depths of the earth.", lat: 17.135, lng: 54.59},
+      { nAr: "كهف طيق", nEn: "Tayq Cave", km: 68, crowdBase: "natureLow" , spotType: "cave", spotDescAr: "أحد أكبر الحفر الطبيعية في العالم بعمق يتجاوز 250 متراً.", spotDescEn: "One of the world's largest natural sinkholes, with a depth exceeding 250 metres.", lat: 17.1237, lng: 54.5867},
+      { nAr: "جبل سمحان (فوق السحاب)", nEn: "Jabal Samhan (Above the Clouds)", km: 75, crowdBase: "natureLow" , spotType: "mountain", spotDescAr: "أعلى قمة في عُمان (~1800م) تعيش فوقها فوق غطاء السحاب السحري.", spotDescEn: "Oman's highest peak (~1,800m) — you live above the magical cloud cover here.", lat: 17.1121, lng: 54.7119},
+      { nAr: "شاطئ مرباط", nEn: "Mirbat Beach", km: 70, crowdBase: "cultureMid" , spotType: "beach", spotDescAr: "شاطئ تاريخي هادئ يجمع بين جمال البحر وعراقة ولاية مرباط.", spotDescEn: "A peaceful historic beach combining sea beauty with Mirbat Wilayat's ancient heritage.", lat: 16.9894, lng: 54.6917},
+      { nAr: "حصن مرباط", nEn: "Mirbat Castle", km: 71, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "حصن يعود للقرن 18م شهد معركة مرباط الشهيرة عام 1972.", spotDescEn: "A fort dating to the 18th century that witnessed the famous Battle of Mirbat in 1972.", lat: 16.989, lng: 54.6912},
+      { nAr: "الحارة التراثية بمرباط", nEn: "Mirbat Heritage Quarter", km: 70, crowdBase: "cultureLow" , spotType: "heritage", spotDescAr: "حارة قديمة بأبراج عريقة وبيوت تاريخية تحكي قصص ماضي مرباط.", spotDescEn: "An old quarter with ancient towers and historic houses narrating Mirbat's past stories.", lat: 16.9888, lng: 54.691},
     ],
   },
   fuel: {
@@ -577,41 +586,41 @@ const SPONSORED_LISTINGS = [
 
 const EVENING = {
   malls: [
-    { nAr: "جراند مول (الدهاريز)", nEn: "Grand Mall (Al Dahariz)" },
-    { nAr: "جاردنز مول (الوادي)", nEn: "Gardens Mall (Al Wadi)" },
-    { nAr: "الواحة مول (الصناعية)", nEn: "Al Waha Mall (Al Sinaiya)" },
-    { nAr: "الوفاء ووك (الدهاريز)", nEn: "Al Wafa Walk (Al Dahariz)" },
+    { nAr: "جراند مول (الدهاريز)", nEn: "Grand Mall (Al Dahariz)" , lat: 17.0078, lng: 54.1128},
+    { nAr: "جاردنز مول (الوادي)", nEn: "Gardens Mall (Al Wadi)" , lat: 17.0112, lng: 54.1204},
+    { nAr: "الواحة مول (الصناعية)", nEn: "Al Waha Mall (Al Sinaiya)" , lat: 17.0098, lng: 54.1015},
+    { nAr: "الوفاء ووك (الدهاريز)", nEn: "Al Wafa Walk (Al Dahariz)" , lat: 17.0082, lng: 54.113},
   ],
   festivals: [
-    { nAr: "اتين سكوير (المهرجان العام) - سهل اتين", nEn: "Atin Square (Main Festival) – Atin Plain" },
-    { nAr: "اب تاون (ممشى وفود ترك) - سهل اتين", nEn: "Uptown (Food Truck Walk) – Atin Plain" },
-    { nAr: "الغارف (مقاهي في بيئة زراعية) - صلالة", nEn: "Al Gharef (Cafés in a Farm Setting) – Salalah" },
-    { nAr: "عودة الماضي (مهرجان شعبي تراثي) - السعادة", nEn: "Return of the Past (Folk Heritage Festival) – Al Saada" },
-    { nAr: "كيدي تايم (العاب الاطفال) - حديقة عوقد", nEn: "Kiddy Time (Kids' Rides) – Auqad Park" },
-    { nAr: "حديقة صلالة (للرياضة)", nEn: "Salalah Park (Sports)" },
-    { nAr: "قرية السمهرم", nEn: "Samhuram Village" },
+    { nAr: "اتين سكوير (المهرجان العام) - سهل اتين", nEn: "Atin Square (Main Festival) – Atin Plain" , lat: 17.006, lng: 54.12},
+    { nAr: "اب تاون (ممشى وفود ترك) - سهل اتين", nEn: "Uptown (Food Truck Walk) – Atin Plain" , lat: 17.006, lng: 54.12},
+    { nAr: "الغارف (مقاهي في بيئة زراعية) - صلالة", nEn: "Al Gharef (Cafés in a Farm Setting) – Salalah" , lat: 17.017, lng: 54.108},
+    { nAr: "عودة الماضي (مهرجان شعبي تراثي) - السعادة", nEn: "Return of the Past (Folk Heritage Festival) – Al Saada" , lat: 17.0092, lng: 54.1045},
+    { nAr: "كيدي تايم (العاب الاطفال) - حديقة عوقد", nEn: "Kiddy Time (Kids' Rides) – Auqad Park" , lat: 17.0102, lng: 54.0955},
+    { nAr: "حديقة صلالة (للرياضة)", nEn: "Salalah Park (Sports)" , lat: 17.0088, lng: 54.1},
+    { nAr: "قرية السمهرم", nEn: "Samhuram Village" , lat: 17.0567, lng: 54.4312},
   ],
   beaches: [
-    { nAr: "سوق شاطيء الحافه", nEn: "Al Hafa Beach Market" },
-    { nAr: "كورنيش الدهاريز", nEn: "Al Dahariz Corniche" },
-    { nAr: "اوسارا (شاطيء ريسوت)", nEn: "Ausara (Raysut Beach)" },
-    { nAr: "مرسى هوانا صلالة (فندق جويرة)", nEn: "Salalah Marina (Juweira Hotel)" },
+    { nAr: "سوق شاطيء الحافه", nEn: "Al Hafa Beach Market" , lat: 17.0158, lng: 54.0915},
+    { nAr: "كورنيش الدهاريز", nEn: "Al Dahariz Corniche" , lat: 17.0082, lng: 54.113},
+    { nAr: "اوسارا (شاطيء ريسوت)", nEn: "Ausara (Raysut Beach)" , lat: 17.019, lng: 54.0865},
+    { nAr: "مرسى هوانا صلالة (فندق جويرة)", nEn: "Salalah Marina (Juweira Hotel)" , lat: 17.019, lng: 54.086},
   ],
   souqs: [
-    { nAr: "سوق الحصن القديم", nEn: "Old Husn Souq" },
-    { nAr: "سوق القوف", nEn: "Al Quwaf Souq" },
-    { nAr: "سن مارت", nEn: "Sun Mart" },
-    { nAr: "القريه الصينية", nEn: "Chinese Village" },
+    { nAr: "سوق الحصن القديم", nEn: "Old Husn Souq" , lat: 17.0158, lng: 54.0915},
+    { nAr: "سوق القوف", nEn: "Al Quwaf Souq" , lat: 17.0142, lng: 54.0901},
+    { nAr: "سن مارت", nEn: "Sun Mart" , lat: 17.0095, lng: 54.105},
+    { nAr: "القريه الصينية", nEn: "Chinese Village" , lat: 17.0102, lng: 54.096},
   ],
   cafes: [
-    { nAr: "منتجع البلازا (السعادة)", nEn: "Plaza Resort (Al Saada)" },
-    { nAr: "كورنيش البليد (الحافة)", nEn: "Al Baleed Corniche (Al Hafa)" },
-    { nAr: "واجهة الشاطئ (الدهاريز)", nEn: "Beach Front (Al Dahariz)" },
-    { nAr: "مجمع اثأل (السعادة)", nEn: "Ethal Complex (Al Saada)" },
-    { nAr: "السعادة سيتي (السعادة)", nEn: "Al Saada City (Al Saada)" },
-    { nAr: "النهضة سنتر (السعادة)", nEn: "Al Nahda Center (Al Saada)" },
-    { nAr: "النور سكوير (السعادة)", nEn: "Al Noor Square (Al Saada)" },
-    { nAr: "محطة نفط عمان (عوقد)", nEn: "Oman Oil Station (Auqad)" },
+    { nAr: "منتجع البلازا (السعادة)", nEn: "Plaza Resort (Al Saada)" , lat: 17.0093, lng: 54.1048},
+    { nAr: "كورنيش البليد (الحافة)", nEn: "Al Baleed Corniche (Al Hafa)" , lat: 17.0178, lng: 54.0934},
+    { nAr: "واجهة الشاطئ (الدهاريز)", nEn: "Beach Front (Al Dahariz)" , lat: 17.0082, lng: 54.113},
+    { nAr: "مجمع اثأل (السعادة)", nEn: "Ethal Complex (Al Saada)" , lat: 17.009, lng: 54.1042},
+    { nAr: "السعادة سيتي (السعادة)", nEn: "Al Saada City (Al Saada)" , lat: 17.0088, lng: 54.1038},
+    { nAr: "النهضة سنتر (السعادة)", nEn: "Al Nahda Center (Al Saada)" , lat: 17.0085, lng: 54.106},
+    { nAr: "النور سكوير (السعادة)", nEn: "Al Noor Square (Al Saada)" , lat: 17.0091, lng: 54.1044},
+    { nAr: "محطة نفط عمان (عوقد)", nEn: "Oman Oil Station (Auqad)" , lat: 17.0102, lng: 54.0955},
   ],
 };
 
@@ -630,25 +639,25 @@ const HOURS_LABELS = {
 };
 
 const HERITAGE = [
-  { nAr: "متحف ارض اللبان + موقع البليد الاثري", nEn: "Land of Frankincense Museum + Al Baleed Archaeological Site", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureMid", hoursKey: "museumTypical" },
-  { nAr: "متحف ظفار (خاص)", nEn: "Dhofar Museum (Private)", locAr: "صلالة الوسطى", locEn: "Central Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" },
-  { nAr: "المنطقة التراثية (قيد الترميم)", nEn: "Heritage Quarter (Under Restoration)", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureLow", hoursKey: "restorationClosed" },
-  { nAr: "موقع السمهرم الاثري", nEn: "Samhuram Archaeological Site", locAr: "(خوروري) طاقة", locEn: "(Khor Rori) Taqah", crowdBase: "cultureLow", hoursKey: "archDaylight" },
-  { nAr: "برج العسكر", nEn: "Al Askar Tower", locAr: "طاقة", locEn: "Taqah", crowdBase: "cultureLow", hoursKey: "archDaylight" },
-  { nAr: "بيت كوفان (نزل)", nEn: "Bait Kawfan (Heritage Lodge)", locAr: "طاقة", locEn: "Taqah", crowdBase: "cultureLow", hoursKey: "callAhead" },
+  { nAr: "متحف ارض اللبان + موقع البليد الاثري", nEn: "Land of Frankincense Museum + Al Baleed Archaeological Site", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureMid", hoursKey: "museumTypical" , lat: 17.0178, lng: 54.0934},
+  { nAr: "متحف ظفار (خاص)", nEn: "Dhofar Museum (Private)", locAr: "صلالة الوسطى", locEn: "Central Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" , lat: 17.012, lng: 54.0975},
+  { nAr: "المنطقة التراثية (قيد الترميم)", nEn: "Heritage Quarter (Under Restoration)", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureLow", hoursKey: "restorationClosed" , lat: 17.0158, lng: 54.0915},
+  { nAr: "موقع السمهرم الاثري", nEn: "Samhuram Archaeological Site", locAr: "(خوروري) طاقة", locEn: "(Khor Rori) Taqah", crowdBase: "cultureLow", hoursKey: "archDaylight" , lat: 17.0567, lng: 54.4312},
+  { nAr: "برج العسكر", nEn: "Al Askar Tower", locAr: "طاقة", locEn: "Taqah", crowdBase: "cultureLow", hoursKey: "archDaylight" , lat: 17.0288, lng: 54.3869},
+  { nAr: "بيت كوفان (نزل)", nEn: "Bait Kawfan (Heritage Lodge)", locAr: "طاقة", locEn: "Taqah", crowdBase: "cultureLow", hoursKey: "callAhead" , lat: 17.0293, lng: 54.3875},
   { nAr: "متحف تواصل الاجيال (خاص)", nEn: "Generations Connect Museum (Private)", locAr: "طاقة", locEn: "Taqah", crowdBase: "cultureLow", hoursKey: "callAhead" },
-  { nAr: "حصن مرباط", nEn: "Mirbat Castle", locAr: "مرباط", locEn: "Mirbat", crowdBase: "cultureMid", hoursKey: "fortTypical" },
-  { nAr: "الحارة القديمة", nEn: "Old Quarter", locAr: "مرباط", locEn: "Mirbat", crowdBase: "cultureLow", hoursKey: "openAccess" },
-  { nAr: "مهرجان عودة الماضي (الأكبر والأهم)", nEn: "Return of the Past Festival (Largest & Most Important)", locAr: "في السعادة", locEn: "Al Saada", crowdBase: "festHigh", hoursKey: "festivalEvening" },
+  { nAr: "حصن مرباط", nEn: "Mirbat Castle", locAr: "مرباط", locEn: "Mirbat", crowdBase: "cultureMid", hoursKey: "fortTypical" , lat: 16.989, lng: 54.6912},
+  { nAr: "الحارة القديمة", nEn: "Old Quarter", locAr: "مرباط", locEn: "Mirbat", crowdBase: "cultureLow", hoursKey: "openAccess" , lat: 16.9888, lng: 54.691},
+  { nAr: "مهرجان عودة الماضي (الأكبر والأهم)", nEn: "Return of the Past Festival (Largest & Most Important)", locAr: "في السعادة", locEn: "Al Saada", crowdBase: "festHigh", hoursKey: "festivalEvening" , lat: 17.0092, lng: 54.1045},
 ];
 
 const MUSEUMS_FARMS = [
-  { nAr: "متحف أرض اللبان", nEn: "Land of Frankincense Museum", type: "govMuseum", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureMid", hoursKey: "museumTypical" },
-  { nAr: "متحف الفرنسيين (بيت فرنسا)", nEn: "The French Museum (Bait France)", type: "govMuseum", locAr: "صلالة", locEn: "Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" },
-  { nAr: "متحف ظفار للتاريخ الطبيعي", nEn: "Dhofar Natural History Museum", type: "govMuseum", locAr: "صلالة", locEn: "Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" },
-  { nAr: "مزرعة السلطان قابوس (الوطنية للزراعة)", nEn: "Sultan Qaboos Farm (National Agriculture)", type: "royalFarm", locAr: "صلالة", locEn: "Salalah", crowdBase: "natureMid", hoursKey: "restrictedAccess" },
-  { nAr: "مزرعة جربيب", nEn: "Jarbeeb Farm", type: "royalFarmPartial", locAr: "جربيب", locEn: "Jarbeeb", crowdBase: "natureLow", hoursKey: "restrictedAccess" },
-  { nAr: "حديقة الحيوان بصلالة", nEn: "Salalah Zoo", type: "govPark", locAr: "عوقد", locEn: "Auqad", crowdBase: "cultureMid", hoursKey: "parkTypical" },
+  { nAr: "متحف أرض اللبان", nEn: "Land of Frankincense Museum", type: "govMuseum", locAr: "الحافة", locEn: "Al Hafa", crowdBase: "cultureMid", hoursKey: "museumTypical" , lat: 17.0178, lng: 54.0934},
+  { nAr: "متحف الفرنسيين (بيت فرنسا)", nEn: "The French Museum (Bait France)", type: "govMuseum", locAr: "صلالة", locEn: "Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" , lat: 17.0165, lng: 54.096},
+  { nAr: "متحف ظفار للتاريخ الطبيعي", nEn: "Dhofar Natural History Museum", type: "govMuseum", locAr: "صلالة", locEn: "Salalah", crowdBase: "cultureLow", hoursKey: "callAhead" , lat: 17.012, lng: 54.0975},
+  { nAr: "مزرعة السلطان قابوس (الوطنية للزراعة)", nEn: "Sultan Qaboos Farm (National Agriculture)", type: "royalFarm", locAr: "صلالة", locEn: "Salalah", crowdBase: "natureMid", hoursKey: "restrictedAccess" , lat: 17.0145, lng: 54.11},
+  { nAr: "مزرعة جربيب", nEn: "Jarbeeb Farm", type: "royalFarmPartial", locAr: "جربيب", locEn: "Jarbeeb", crowdBase: "natureLow", hoursKey: "restrictedAccess" , lat: 17.04, lng: 54.25},
+  { nAr: "حديقة الحيوان بصلالة", nEn: "Salalah Zoo", type: "govPark", locAr: "عوقد", locEn: "Auqad", crowdBase: "cultureMid", hoursKey: "parkTypical" , lat: 17.0102, lng: 54.0955},
 ];
 
 const ACCESS_LAND = [
@@ -702,101 +711,101 @@ const ACCOM_AREAS = {
 const ACCOMMODATIONS = [
   // ── 5-STAR HOTELS ─────────────────────────────────────────────
   { nAr: "فندق كراون بلازا صلالة", nEn: "Crowne Plaza Salalah",
-    type: "hotel", area: "hafa", stars: 5, phone: "+968 23235333",
+    type: "hotel", area: "hafa", stars: 5, phone: "+968 23235333", lat: 17.0155, lng: 54.092,
     descAr: "فندق خمس نجوم بشاطئ خاص وحمام سباحة ومطاعم متنوعة على كورنيش الحافة.",
     descEn: "5-star hotel with a private beach, swimming pool and varied restaurants on Al Hafa corniche." },
   { nAr: "فندق هيلتون صلالة", nEn: "Hilton Salalah Resort",
-    type: "resort", area: "hafa", stars: 5, phone: "+968 23211234",
+    type: "resort", area: "hafa", stars: 5, phone: "+968 23211234", lat: 17.0183, lng: 54.0878,
     descAr: "منتجع هيلتون الأيقوني بشاطئ خاص وحدائق استوائية وتجربة فندقية عالمية.",
     descEn: "The iconic Hilton resort with a private beach, tropical gardens and a world-class hotel experience." },
   { nAr: "فندق جاز صلالة (سابقاً ماريوت)", nEn: "Jaz Salalah Hotel (formerly Marriott)",
-    type: "hotel", area: "hafa", stars: 5, phone: "+968 23232000",
+    type: "hotel", area: "hafa", stars: 5, phone: "+968 23232000", lat: 17.017, lng: 54.09,
     descAr: "فندق فاخر بإطلالة مباشرة على بحر العرب ومرافق ترفيهية وعائلية متكاملة.",
     descEn: "Luxury hotel with a direct Arabian Sea view and comprehensive entertainment and family facilities." },
   { nAr: "فندق إيتاب صلالة", nEn: "Itaab Salalah Hotel",
-    type: "hotel", area: "saada", stars: 5, phone: "+968 23295555",
+    type: "hotel", area: "saada", stars: 5, phone: "+968 23295555", lat: 17.009, lng: 54.1042,
     descAr: "فندق حديث في قلب السعادة بتصميم عصري وخدمات خمس نجوم.",
     descEn: "A modern hotel in the heart of Al Saada with contemporary design and five-star services." },
 
   // ── 4-STAR HOTELS ─────────────────────────────────────────────
   { nAr: "فندق هوليداي إن صلالة", nEn: "Holiday Inn Salalah",
-    type: "hotel", area: "salalah", stars: 4, phone: "+968 23211111",
+    type: "hotel", area: "salalah", stars: 4, phone: "+968 23211111", lat: 17.012, lng: 54.098,
     descAr: "فندق أربع نجوم في وسط صلالة قريب من المراكز التجارية والمطاعم.",
     descEn: "4-star hotel in central Salalah, close to commercial centres and restaurants." },
   { nAr: "فندق رمادا صلالة", nEn: "Ramada Salalah Hotel",
-    type: "hotel", area: "salalah", stars: 4, phone: "+968 23200200",
+    type: "hotel", area: "salalah", stars: 4, phone: "+968 23200200", lat: 17.01, lng: 54.097,
     descAr: "فندق رمادا بموقع مركزي وخدمات أعمال ومرافق عائلية مميزة.",
     descEn: "Ramada hotel with a central location and excellent business and family facilities." },
   { nAr: "فندق صلالة روتانا", nEn: "Salalah Rotana Hotel",
-    type: "hotel", area: "saada", stars: 4, phone: "+968 23210888",
+    type: "hotel", area: "saada", stars: 4, phone: "+968 23210888", lat: 17.0095, lng: 54.105,
     descAr: "فندق روتانا بالسعادة بتصميم أنيق وقريب من مراكز الترفيه والفعاليات.",
     descEn: "Rotana hotel in Al Saada with elegant design, close to entertainment and events centres." },
   { nAr: "فندق الحارة التراثي", nEn: "Al Hara Heritage Hotel",
-    type: "hotel", area: "hafa", stars: 4, phone: "+968 23295999",
+    type: "hotel", area: "hafa", stars: 4, phone: "+968 23295999", lat: 17.0158, lng: 54.0915,
     descAr: "فندق بطابع تراثي عُماني بالحافة يعكس جمال العمارة المحلية.",
     descEn: "A hotel with Omani heritage character in Al Hafa, reflecting the beauty of local architecture." },
   { nAr: "فندق سفاري صلالة", nEn: "Safari Hotel Salalah",
-    type: "hotel", area: "salalah", stars: 4, phone: "+968 23215777",
+    type: "hotel", area: "salalah", stars: 4, phone: "+968 23215777", lat: 17.011, lng: 54.096,
     descAr: "فندق راسخ في صلالة بخدمات موثوقة وموقع مناسب لجميع الفئات.",
     descEn: "A well-established hotel in Salalah with reliable services and a convenient location for all." },
 
   // ── HOTEL APARTMENTS ──────────────────────────────────────────
   { nAr: "شقق سدر السعادة الفندقية", nEn: "Sidr Al Saada Hotel Apartments",
-    type: "apartment", area: "saada", stars: 4, phone: "+968 23219900",
+    type: "apartment", area: "saada", stars: 4, phone: "+968 23219900", lat: 17.0092, lng: 54.1045,
     descAr: "شقق فندقية فسيحة للعائلات في السعادة بمطبخ كامل وخدمات فندقية.",
     descEn: "Spacious family hotel apartments in Al Saada with a full kitchen and hotel services." },
   { nAr: "شقق الياسمين الفندقية", nEn: "Al Yasmin Hotel Apartments",
-    type: "apartment", area: "salalah", stars: 3, phone: "+968 23211500",
+    type: "apartment", area: "salalah", stars: 3, phone: "+968 23211500", lat: 17.0115, lng: 54.0975,
     descAr: "شقق فندقية اقتصادية في قلب صلالة مناسبة للعائلات والزوار للإقامة الطويلة.",
     descEn: "Economical hotel apartments in central Salalah, suitable for families and long stays." },
   { nAr: "شقق العقيدة الفندقية", nEn: "Al Aqeedah Hotel Apartments",
-    type: "apartment", area: "salalah", stars: 3, phone: "+968 23216666",
+    type: "apartment", area: "salalah", stars: 3, phone: "+968 23216666", lat: 17.0108, lng: 54.0968,
     descAr: "شقق مجهزة بالكامل بموقع مركزي مريح وأسعار مناسبة لموسم الخريف.",
     descEn: "Fully equipped apartments with a convenient central location and good-value rates for khareef season." },
   { nAr: "شقق وادي دربات الفندقية", nEn: "Wadi Darbat Hotel Apartments",
-    type: "apartment", area: "saada", stars: 3, phone: "+968 23212255",
+    type: "apartment", area: "saada", stars: 3, phone: "+968 23212255", lat: 17.0088, lng: 54.1038,
     descAr: "شقق فندقية حديثة بمطابخ مجهزة، خيار عملي للعائلات.",
     descEn: "Modern hotel apartments with equipped kitchens — a practical choice for families." },
   { nAr: "شقق أريج السعادة", nEn: "Areej Al Saada Apartments",
-    type: "apartment", area: "saada", stars: 3, phone: "+968 23290100",
+    type: "apartment", area: "saada", stars: 3, phone: "+968 23290100", lat: 17.0085, lng: 54.106,
     descAr: "شقق واسعة بالسعادة قريبة من الفعاليات ومناسبة للعائلات الكبيرة.",
     descEn: "Spacious apartments in Al Saada, close to events and suitable for large families." },
 
   // ── RESORTS & MARINA ──────────────────────────────────────────
   { nAr: "منتجع جويرة (مرسى هوانا)", nEn: "Juweira Resort (Howana Marina)",
-    type: "resort", area: "hafa", stars: 5, phone: "+968 23230000",
+    type: "resort", area: "hafa", stars: 5, phone: "+968 23230000", lat: 17.019, lng: 54.086,
     descAr: "منتجع بحري فاخر على مرسى هوانا بإطلالات بانورامية وأجواء هادئة على البحر.",
     descEn: "A luxury marina resort on Howana Marina with panoramic views and a peaceful sea atmosphere." },
   { nAr: "منتجع البلازا صلالة", nEn: "Plaza Salalah Resort",
-    type: "resort", area: "saada", stars: 4, phone: "+968 23299888",
+    type: "resort", area: "saada", stars: 4, phone: "+968 23299888", lat: 17.0093, lng: 54.1048,
     descAr: "منتجع عائلي في السعادة بمسابح ومرافق ترفيهية وأجواء استجمام مميزة.",
     descEn: "A family resort in Al Saada with pools, entertainment facilities and relaxing atmosphere." },
 
   // ── VILLAS & REST HOUSES ──────────────────────────────────────
   { nAr: "استراحات وفيلل النسيم صلالة", nEn: "Al Naseem Villas & Rest Houses",
-    type: "villa", area: "saada", stars: 0, phone: "+968 92345678",
+    type: "villa", area: "saada", stars: 0, phone: "+968 92345678", lat: 17.0091, lng: 54.1044,
     descAr: "فيلل واستراحات مجهزة بالكامل للعائلات والمجموعات بأجواء خاصة ومريحة.",
     descEn: "Fully equipped villas and rest houses for families and groups with a private, comfortable atmosphere." },
   { nAr: "استراحة ظفار الخضراء", nEn: "Dhofar Al Khadra Rest House",
-    type: "villa", area: "auqad", stars: 0, phone: "+968 99123456",
+    type: "villa", area: "auqad", stars: 0, phone: "+968 99123456", lat: 17.0102, lng: 54.0955,
     descAr: "استراحة عائلية في عوقد بحديقة خضراء وملحقات مكيفة للمجموعات.",
     descEn: "A family rest house in Auqad with a green garden and air-conditioned annexes for groups." },
   { nAr: "فيلل الشرفة الخريف", nEn: "Al Shurfa Khareef Villas",
-    type: "villa", area: "saada", stars: 0, phone: "+968 91234567",
+    type: "villa", area: "saada", stars: 0, phone: "+968 91234567", lat: 17.0088, lng: 54.104,
     descAr: "فيلل خاصة بإطلالات خضراء في موسم الخريف، مناسبة للعائلات.",
     descEn: "Private villas with green khareef views, ideal for families seeking privacy." },
   { nAr: "شاليهات الواحة صلالة", nEn: "Al Waha Chalets Salalah",
-    type: "chalet", area: "dahariz", stars: 0, phone: "+968 93456789",
+    type: "chalet", area: "dahariz", stars: 0, phone: "+968 93456789", lat: 17.0135, lng: 54.0928,
     descAr: "شاليهات مجهزة في الدهاريز قريبة من المولات والمراكز التجارية.",
     descEn: "Equipped chalets in Al Dahariz, close to malls and commercial centres." },
 
   // ── TAQAH & MIRBAT ────────────────────────────────────────────
   { nAr: "استراحة طاقة الساحلية", nEn: "Taqah Coastal Rest House",
-    type: "villa", area: "taqah", stars: 0, phone: "+968 92876543",
+    type: "villa", area: "taqah", stars: 0, phone: "+968 92876543", lat: 17.0291, lng: 54.3873,
     descAr: "استراحة ساحلية هادئة في طاقة بعيداً عن ازدحام المدينة وقريبة من المعالم التراثية.",
     descEn: "A peaceful coastal rest house in Taqah, away from city crowds and close to heritage landmarks." },
   { nAr: "فندق ميناء مرباط", nEn: "Mirbat Port Hotel",
-    type: "hotel", area: "mirbat", stars: 3, phone: "+968 23214500",
+    type: "hotel", area: "mirbat", stars: 3, phone: "+968 23214500", lat: 16.9894, lng: 54.6917,
     descAr: "فندق بسيط في قلب مرباط يخدم زوار المنطقة الشرقية والحصن التاريخي.",
     descEn: "A simple hotel in the heart of Mirbat serving visitors to the eastern area and historic castle." },
 ];
@@ -809,72 +818,32 @@ const ACCOM_STARS_LABEL = {
 };
 
 // Trusted booking platforms — Masarrah is the local Omani platform (recommended first)
+// Only the local Omani app — المسرة
 const BOOKING_PLATFORMS = [
   {
-    key: "masarrah",
-    local: true,
-    nameAr: "مسارة للإقامة",
-    nameEn: "Masarrah",
-    descAr: "تطبيق عُماني محلي موثوق متخصص في الإقامة والشاليهات والاستراحات في سلطنة عُمان — الأفضل للإقامة المحلية.",
-    descEn: "A trusted local Omani app specialising in accommodation, chalets and rest houses across Oman — best for local stays.",
-    descHi: "ओमान में आवास, चालेट और रेस्ट हाउस के लिए विश्वसनीय स्थानीय ओमानी ऐप — स्थानीय ठहराव के लिए सर्वोत्तम।",
-    descFr: "Application omanaise locale de confiance spécialisée dans l'hébergement, les chalets et les maisons de repos à Oman — idéale pour les séjours locaux.",
+    key: "masarra",
+    nameAr: "تطبيق المسرة",
+    nameEn: "Al Masarra App",
+    descAr: "تطبيق عُماني محلي موثوق ومتخصص في الإقامة والشاليهات والاستراحات في سلطنة عُمان. الخيار الأول للحجز المحلي بثقة.",
+    descEn: "A trusted local Omani app specialising in accommodation, chalets and rest houses across Oman — the first choice for local bookings.",
+    descHi: "ओमान में आवास, चालेट और रेस्ट हाउस के लिए विश्वसनीय स्थानीय ओमानी ऐप — स्थानीय बुकिंग के लिए पहली पसंद।",
+    descFr: "Application omanaise locale de confiance spécialisée dans l'hébergement, les chalets et les maisons de repos à Oman — premier choix pour les réservations locales.",
     playUrl: "https://play.google.com/store/apps/details?id=com.hanidev.massarh",
-    webUrl: "https://play.google.com/store/apps/details?id=com.hanidev.massarh",
     color: "#2F5D45",
     emoji: "🇴🇲",
-  },
-  {
-    key: "booking",
-    local: false,
-    nameAr: "Booking.com",
-    nameEn: "Booking.com",
-    descAr: "أشهر منصة حجز عالمية، تتوفر فيها معظم فنادق صلالة مع تقييمات حقيقية من الزوار.",
-    descEn: "The world's most popular booking platform, with most Salalah hotels listed and real guest reviews.",
-    descHi: "दुनिया का सबसे लोकप्रिय बुकिंग प्लेटफॉर्म, अधिकांश सलालाह होटल और वास्तविक अतिथि समीक्षाओं के साथ।",
-    descFr: "La plateforme de réservation mondiale la plus populaire, avec la plupart des hôtels de Salalah et des avis authentiques.",
-    webUrl: "https://www.booking.com/searchresults.ar.html?ss=Salalah&checkin_year=2026&checkout_year=2026",
-    color: "#003580",
-    emoji: "🌐",
-  },
-  {
-    key: "agoda",
-    local: false,
-    nameAr: "Agoda",
-    nameEn: "Agoda",
-    descAr: "منصة حجز شهيرة في آسيا والشرق الأوسط، تقدم أسعاراً تنافسية لفنادق صلالة.",
-    descEn: "A popular booking platform in Asia and the Middle East, offering competitive rates for Salalah hotels.",
-    descHi: "एशिया और मध्य पूर्व में एक लोकप्रिय बुकिंग प्लेटफॉर्म, सलालाह होटलों के लिए प्रतिस्पर्धी दरें।",
-    descFr: "Plateforme de réservation populaire en Asie et au Moyen-Orient, avec des tarifs compétitifs pour les hôtels de Salalah.",
-    webUrl: "https://www.agoda.com/search?city=15479&checkIn=2026-07-01&checkOut=2026-07-02",
-    color: "#E2231A",
-    emoji: "🅰️",
-  },
-  {
-    key: "airbnb",
-    local: false,
-    nameAr: "Airbnb",
-    nameEn: "Airbnb",
-    descAr: "خيار مميز للفيلل والشقق الخاصة في ظفار — أجواء منزلية بعيداً عن الفنادق التقليدية.",
-    descEn: "A great option for private villas and apartments in Dhofar — a home-like atmosphere away from traditional hotels.",
-    descHi: "ज़ुफ़ार में निजी विला और अपार्टमेंट के लिए एक बढ़िया विकल्प — पारंपरिक होटलों से दूर घरेलू माहौल।",
-    descFr: "Une excellente option pour les villas et appartements privés à Dhofar — une atmosphère conviviale loin des hôtels traditionnels.",
-    webUrl: "https://www.airbnb.com/s/Salalah--Oman/homes",
-    color: "#FF5A5F",
-    emoji: "🏠",
   },
 ];
 
 const HOSPITALS = [
   { nAr: "مستشفى السلطان قابوس", nEn: "Sultan Qaboos Hospital", type: "govHospital", url: "https://maps.app.goo.gl/T9pL5XufvvAy62Q79?g_st=ac" },
-  { nAr: "مستشفى القوات المسلحة بصلالة", nEn: "Armed Forces Hospital Salalah", type: "gov", locAr: "صلالة", locEn: "Salalah" },
-  { nAr: "مستشفى ضحار", nEn: "Dahar Hospital", type: "gov", locAr: "ضحار، صلالة", locEn: "Dahar, Salalah" },
-  { nAr: "مجمع صلالة الصحي", nEn: "Salalah Health Complex", type: "govHealthCenter", locAr: "صلالة", locEn: "Salalah" },
-  { nAr: "مستشفى بدر السماء", nEn: "Badr Al Samaa Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" },
-  { nAr: "مستشفى الرفاه", nEn: "Al Raffah Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" },
-  { nAr: "مستشفى دار الشفاء", nEn: "Dar Al Shifa Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" },
-  { nAr: "عيادات النهضة الطبية", nEn: "Al Nahda Medical Clinics", type: "privateClinic", locAr: "السعادة", locEn: "Al Saada" },
-  { nAr: "مركز اليسر الطبي", nEn: "Al Yusr Medical Center", type: "privateClinic", locAr: "صلالة", locEn: "Salalah" },
+  { nAr: "مستشفى القوات المسلحة بصلالة", nEn: "Armed Forces Hospital Salalah", type: "gov", locAr: "صلالة", locEn: "Salalah" , lat: 17.0098, lng: 54.101},
+  { nAr: "مستشفى ضحار", nEn: "Dahar Hospital", type: "gov", locAr: "ضحار، صلالة", locEn: "Dahar, Salalah" , lat: 17.0078, lng: 54.098},
+  { nAr: "مجمع صلالة الصحي", nEn: "Salalah Health Complex", type: "govHealthCenter", locAr: "صلالة", locEn: "Salalah" , lat: 17.0115, lng: 54.0972},
+  { nAr: "مستشفى بدر السماء", nEn: "Badr Al Samaa Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" , lat: 17.0105, lng: 54.0965},
+  { nAr: "مستشفى الرفاه", nEn: "Al Raffah Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" , lat: 17.0108, lng: 54.0968},
+  { nAr: "مستشفى دار الشفاء", nEn: "Dar Al Shifa Hospital", type: "private", locAr: "صلالة", locEn: "Salalah" , lat: 17.0112, lng: 54.097},
+  { nAr: "عيادات النهضة الطبية", nEn: "Al Nahda Medical Clinics", type: "privateClinic", locAr: "السعادة", locEn: "Al Saada" , lat: 17.0085, lng: 54.106},
+  { nAr: "مركز اليسر الطبي", nEn: "Al Yusr Medical Center", type: "privateClinic", locAr: "صلالة", locEn: "Salalah" , lat: 17.0102, lng: 54.096},
 ];
 
 const TIP_CATEGORIES = [
@@ -1136,12 +1105,12 @@ const ITIN_REGIONS = {
         descEn: "Start at Al Baleed, take in Hamrir Viewpoint, continue to Wadi Nuheiz and the mountain area of Jujub, end at Ayn Sahalnaut.",
         spots: [
           { nAr: "متحف أرض اللبان + منتزه البليد الأثري", nEn: "Land of Frankincense Museum + Al Baleed Park", descAr: "موقع تاريخي مدرج بالتراث العالمي يروي حضارة عُمان العريقة وسط الأطلال والأسوار القديمة.", descEn: "UNESCO World Heritage site narrating Oman's ancient civilisation among ruins and old walls.", styles: ["heritage","family"] },
-          { nAr: "اكشاك جوز الهند", nEn: "Coconut Stalls", descAr: "أكشاك مميزة تبيع جوز الهند الطازج وسط الطبيعة على مقربة من البليد.", descEn: "Charming stalls selling fresh coconuts near Al Baleed, a refreshing stop.", styles: ["family","entertainment"] },
-          { nAr: "النبي عمران", nEn: "Prophet Imran's Tomb (Nabi Imran)", descAr: "موقع ديني وتاريخي هادئ في قلب المدينة، يزوره كثيرون تباركاً وتأملاً.", descEn: "A peaceful religious and historic site in the heart of the city, visited for reflection.", styles: ["heritage","family"] },
-          { nAr: "إطلالة حمرير", nEn: "Hamrir Viewpoint", descAr: "منظر بانورامي خلاب يطل على خضرة الجبال وأجواء ظفار الساحرة.", descEn: "A stunning panoramic view over the green mountains and enchanting Dhofar scenery.", styles: ["nature","youth"] },
-          { nAr: "وادي نحيز", nEn: "Wadi Nuheiz", descAr: "واد طبيعي تحيط به الجبال ويزخر بجمال النباتات والتكوينات الصخرية.", descEn: "A natural valley rich with beautiful plants and rock formations.", styles: ["nature","family","youth"] },
-          { nAr: "منطقة جوجب (المنطقة الزلقة)", nEn: "Jujub Area (Slippery Zone)", descAr: "منطقة جبلية مدهشة تجذب عشاق المغامرة — المنطقة الزلقة الشهيرة.", descEn: "A stunning mountain zone famous with adventure lovers — the slippery zone.", styles: ["youth","nature"] },
-          { nAr: "عين صحلنوت", nEn: "Ayn Sahalnaut", descAr: "منبع ماء طبيعي تحيط به الأشجار والمتحجرات، مثالي للاسترخاء العائلي.", descEn: "A natural spring surrounded by trees and petrified wood, perfect for family relaxation.", styles: ["nature","family"] },
+          { nAr: "اكشاك جوز الهند", nEn: "Coconut Stalls", descAr: "أكشاك مميزة تبيع جوز الهند الطازج وسط الطبيعة على مقربة من البليد.", descEn: "Charming stalls selling fresh coconuts near Al Baleed, a refreshing stop.", styles: ["family","entertainment"] , lat: 17.0165, lng: 54.0944},
+          { nAr: "النبي عمران", nEn: "Prophet Imran's Tomb (Nabi Imran)", descAr: "موقع ديني وتاريخي هادئ في قلب المدينة، يزوره كثيرون تباركاً وتأملاً.", descEn: "A peaceful religious and historic site in the heart of the city, visited for reflection.", styles: ["heritage","family"] , lat: 17.0142, lng: 54.0901},
+          { nAr: "إطلالة حمرير", nEn: "Hamrir Viewpoint", descAr: "منظر بانورامي خلاب يطل على خضرة الجبال وأجواء ظفار الساحرة.", descEn: "A stunning panoramic view over the green mountains and enchanting Dhofar scenery.", styles: ["nature","youth"] , lat: 17.0312, lng: 54.1502},
+          { nAr: "وادي نحيز", nEn: "Wadi Nuheiz", descAr: "واد طبيعي تحيط به الجبال ويزخر بجمال النباتات والتكوينات الصخرية.", descEn: "A natural valley rich with beautiful plants and rock formations.", styles: ["nature","family","youth"] , lat: 17.155, lng: 54.115},
+          { nAr: "منطقة جوجب (المنطقة الزلقة)", nEn: "Jujub Area (Slippery Zone)", descAr: "منطقة جبلية مدهشة تجذب عشاق المغامرة — المنطقة الزلقة الشهيرة.", descEn: "A stunning mountain zone famous with adventure lovers — the slippery zone.", styles: ["youth","nature"] , lat: 17.203, lng: 54.296},
+          { nAr: "عين صحلنوت", nEn: "Ayn Sahalnaut", descAr: "منبع ماء طبيعي تحيط به الأشجار والمتحجرات، مثالي للاسترخاء العائلي.", descEn: "A natural spring surrounded by trees and petrified wood, perfect for family relaxation.", styles: ["nature","family"] , lat: 17.0201, lng: 54.1402},
         ],
       },
       {
@@ -1150,13 +1119,13 @@ const ITIN_REGIONS = {
         descAr: "جولة شاملة في عيون ظفار وشلالاتها الخلابة، صعوداً لجبل اتين، ثم هدوء وادي دربات وأجواء مارينا هوانا المسائية.",
         descEn: "A full tour of Dhofar's springs and waterfalls, up to Jabal Atin, then the calm of Wadi Darbat and Howana Marina's evening atmosphere.",
         spots: [
-          { nAr: "عين ارزات", nEn: "Ayn Razat", descAr: "واحة خضراء من أشهر عيون ظفار، تتدفق مياهها وسط الأشجار الكثيفة.", descEn: "One of Dhofar's most famous springs, with water flowing through dense trees.", styles: ["nature","family"] },
-          { nAr: "عين جرزيز", nEn: "Ayn Jarziz", descAr: "عين مائية خفية تكتشفها عبر مسار قصير بين الأشجار بأجواء باردة منعشة.", descEn: "A hidden spring discovered along a short trail through cool, refreshing trees.", styles: ["nature","youth"] },
-          { nAr: "جبل اتين", nEn: "Jabal Atin", descAr: "قمة جبلية تطل على السحاب والوديان، وجهة مفضلة لعشاق التصوير والطبيعة.", descEn: "A mountain peak overlooking clouds and valleys, a favourite for photography and nature lovers.", styles: ["nature","youth"] },
-          { nAr: "وادي دربات", nEn: "Wadi Darbat", descAr: "واد ساحر يجمع الشلالات والطبيعة الخلابة مع أجواء مثالية للعائلات.", descEn: "A magical wadi combining waterfalls and stunning nature, perfect for families.", styles: ["nature","family","youth"] },
-          { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", descAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة في أجواء ترفيهية فريدة.", descEn: "A unique spot for boat rides surrounded by nature and water in a fun atmosphere.", styles: ["family","entertainment"] },
-          { nAr: "منتزه سمهرم الأثري (خور روري)", nEn: "Samhuram Archaeological Park (Khor Rori)", descAr: "موقع تاريخي مدرج في التراث العالمي، يحكي قصة ميناء اللبان القديم وحضارة أرض اللبان.", descEn: "A UNESCO-listed historical site telling the story of the ancient frankincense port.", styles: ["heritage","family"] },
-          { nAr: "مارينا هوانا صلالة", nEn: "Salalah Howana Marina", descAr: "واجهة بحرية أنيقة بمطاعم وممشى بحري، وجهة مسائية مميزة.", descEn: "An elegant seafront with restaurants and a marina promenade, a great evening destination.", styles: ["entertainment","family"] },
+          { nAr: "عين ارزات", nEn: "Ayn Razat", descAr: "واحة خضراء من أشهر عيون ظفار، تتدفق مياهها وسط الأشجار الكثيفة.", descEn: "One of Dhofar's most famous springs, with water flowing through dense trees.", styles: ["nature","family"] , lat: 17.0241, lng: 54.1261},
+          { nAr: "عين جرزيز", nEn: "Ayn Jarziz", descAr: "عين مائية خفية تكتشفها عبر مسار قصير بين الأشجار بأجواء باردة منعشة.", descEn: "A hidden spring discovered along a short trail through cool, refreshing trees.", styles: ["nature","youth"] , lat: 17.0198, lng: 54.1175},
+          { nAr: "جبل اتين", nEn: "Jabal Atin", descAr: "قمة جبلية تطل على السحاب والوديان، وجهة مفضلة لعشاق التصوير والطبيعة.", descEn: "A mountain peak overlooking clouds and valleys, a favourite for photography and nature lovers.", styles: ["nature","youth"] , lat: 17.0456, lng: 54.1733},
+          { nAr: "وادي دربات", nEn: "Wadi Darbat", descAr: "واد ساحر يجمع الشلالات والطبيعة الخلابة مع أجواء مثالية للعائلات.", descEn: "A magical wadi combining waterfalls and stunning nature, perfect for families.", styles: ["nature","family","youth"] , lat: 17.0778, lng: 54.4389},
+          { nAr: "حديقة القوارب – دربات", nEn: "Darbat Boat Park", descAr: "مكان مميز لركوب القوارب وسط المياه والطبيعة في أجواء ترفيهية فريدة.", descEn: "A unique spot for boat rides surrounded by nature and water in a fun atmosphere.", styles: ["family","entertainment"] , lat: 17.0778, lng: 54.4389},
+          { nAr: "منتزه سمهرم الأثري (خور روري)", nEn: "Samhuram Archaeological Park (Khor Rori)", descAr: "موقع تاريخي مدرج في التراث العالمي، يحكي قصة ميناء اللبان القديم وحضارة أرض اللبان.", descEn: "A UNESCO-listed historical site telling the story of the ancient frankincense port.", styles: ["heritage","family"] , lat: 17.0567, lng: 54.4312},
+          { nAr: "مارينا هوانا صلالة", nEn: "Salalah Howana Marina", descAr: "واجهة بحرية أنيقة بمطاعم وممشى بحري، وجهة مسائية مميزة.", descEn: "An elegant seafront with restaurants and a marina promenade, a great evening destination.", styles: ["entertainment","family"] , lat: 17.019, lng: 54.086},
         ],
       },
     ],
@@ -1171,15 +1140,15 @@ const ITIN_REGIONS = {
         descAr: "انطلق لعين حمران وعين أثوم بين الصخور والمياه، ثم كورنيش طاقة المطل على البحر، فمدينة طاقة التراثية بحصنها وبيت كومان ومتحف تواصل الأجيال وسفح طاقة.",
         descEn: "Head to Ayn Hamran and Ayn Athum, then Taqah Corniche overlooking the sea, followed by Taqah's heritage with its castle, Bait Kowan, Generations Museum, and the Taqah Slope.",
         spots: [
-          { nAr: "عين حمران", nEn: "Ayn Hamran", descAr: "واحة خضراء هادئة تحيط بها الأشجار وتتناسب فيها المياه وسط الطبيعة.", descEn: "A lush, peaceful oasis where water flows gently through nature.", styles: ["nature","family"] },
-          { nAr: "عين أثوم", nEn: "Ayn Athum", descAr: "عين مائية تنبع من بين الصخور بجمال طبيعي وأجواء باردة منعشة.", descEn: "A spring emerging from the rocks with natural beauty and cool air.", styles: ["nature","youth"] },
-          { nAr: "عين طبرق", nEn: "Ayn Tabrouk", descAr: "عين طبيعية نضرة بمياه صافية وأجواء خلابة بين الجبال الخضراء.", descEn: "A fresh natural spring with clear waters and beautiful scenery among green mountains.", styles: ["nature","family"] },
-          { nAr: "كورنيش طاقة", nEn: "Taqah Corniche", descAr: "واجهة بحرية هادئة تطل على بحر العرب، مناسبة للتنزه والاسترخاء.", descEn: "A peaceful seafront overlooking the Arabian Sea, ideal for strolling and relaxing.", styles: ["family","entertainment"] },
-          { nAr: "مدينة طاقة التراثية", nEn: "Taqah Heritage Town", descAr: "بلدة تاريخية تحتضن معالم عريقة تروي قصص الماضي بجماليات معمارية فريدة.", descEn: "A historic town holding ancient landmarks that narrate stories of the past.", styles: ["heritage","family"] },
-          { nAr: "حصن طاقة", nEn: "Taqah Castle", descAr: "حصن أثري متين يطل على المدينة والبحر، شاهد على التاريخ العُماني العريق.", descEn: "A solid historical fortress overlooking the city and sea, witness to Oman's ancient history.", styles: ["heritage"] },
-          { nAr: "بيت كومان التراثي", nEn: "Bait Kowan Heritage House", descAr: "بيت قديم يعكس تفاصيل الحياة الأُمانية التقليدية بلمسة تاريخية أصيلة.", descEn: "An old house reflecting traditional Omani life with an authentic historical touch.", styles: ["heritage"] },
-          { nAr: "متحف تواصل الأجيال", nEn: "Generations Museum", descAr: "متحف ثقافي يعرض تاريخ عُمان وحكاياته بين الماضي والحاضر.", descEn: "A cultural museum displaying Oman's history between past and present.", styles: ["heritage","family"] },
-          { nAr: "برج العسكر وسفح طاقة", nEn: "Al Askar Tower & Taqah Slope", descAr: "برج دفاعي قديم ومنطقة مرتفعة توفر إطلالة بانورامية رائعة على البحر والمدينة.", descEn: "Ancient defensive tower and elevated area with a stunning panoramic sea view.", styles: ["heritage","youth"] },
+          { nAr: "عين حمران", nEn: "Ayn Hamran", descAr: "واحة خضراء هادئة تحيط بها الأشجار وتتناسب فيها المياه وسط الطبيعة.", descEn: "A lush, peaceful oasis where water flows gently through nature.", styles: ["nature","family"] , lat: 17.063, lng: 54.595},
+          { nAr: "عين أثوم", nEn: "Ayn Athum", descAr: "عين مائية تنبع من بين الصخور بجمال طبيعي وأجواء باردة منعشة.", descEn: "A spring emerging from the rocks with natural beauty and cool air.", styles: ["nature","youth"] , lat: 17.0556, lng: 54.5744},
+          { nAr: "عين طبرق", nEn: "Ayn Tabrouk", descAr: "عين طبيعية نضرة بمياه صافية وأجواء خلابة بين الجبال الخضراء.", descEn: "A fresh natural spring with clear waters and beautiful scenery among green mountains.", styles: ["nature","family"] , lat: 17.0421, lng: 54.5183},
+          { nAr: "كورنيش طاقة", nEn: "Taqah Corniche", descAr: "واجهة بحرية هادئة تطل على بحر العرب، مناسبة للتنزه والاسترخاء.", descEn: "A peaceful seafront overlooking the Arabian Sea, ideal for strolling and relaxing.", styles: ["family","entertainment"] , lat: 17.0291, lng: 54.3873},
+          { nAr: "مدينة طاقة التراثية", nEn: "Taqah Heritage Town", descAr: "بلدة تاريخية تحتضن معالم عريقة تروي قصص الماضي بجماليات معمارية فريدة.", descEn: "A historic town holding ancient landmarks that narrate stories of the past.", styles: ["heritage","family"] , lat: 17.0291, lng: 54.3873},
+          { nAr: "حصن طاقة", nEn: "Taqah Castle", descAr: "حصن أثري متين يطل على المدينة والبحر، شاهد على التاريخ العُماني العريق.", descEn: "A solid historical fortress overlooking the city and sea, witness to Oman's ancient history.", styles: ["heritage"] , lat: 17.0289, lng: 54.3871},
+          { nAr: "بيت كومان التراثي", nEn: "Bait Kowan Heritage House", descAr: "بيت قديم يعكس تفاصيل الحياة الأُمانية التقليدية بلمسة تاريخية أصيلة.", descEn: "An old house reflecting traditional Omani life with an authentic historical touch.", styles: ["heritage"] , lat: 17.0293, lng: 54.3875},
+          { nAr: "متحف تواصل الأجيال", nEn: "Generations Museum", descAr: "متحف ثقافي يعرض تاريخ عُمان وحكاياته بين الماضي والحاضر.", descEn: "A cultural museum displaying Oman's history between past and present.", styles: ["heritage","family"] , lat: 17.0291, lng: 54.387},
+          { nAr: "برج العسكر وسفح طاقة", nEn: "Al Askar Tower & Taqah Slope", descAr: "برج دفاعي قديم ومنطقة مرتفعة توفر إطلالة بانورامية رائعة على البحر والمدينة.", descEn: "Ancient defensive tower and elevated area with a stunning panoramic sea view.", styles: ["heritage","youth"] , lat: 17.0288, lng: 54.3869},
         ],
       },
       {
@@ -1188,16 +1157,16 @@ const ITIN_REGIONS = {
         descAr: "يوم استثنائي شرقاً: بانوراما شاطئ الحمر، طريق انعدام الجاذبية الفريد، ضخامة اللبان المعمرة، قمة جبل سمحان فوق السحاب، وتراث مرباط العريق.",
         descEn: "An exceptional day eastward: Al Hamr Beach panorama, the unique anti-gravity road, giant frankincense trees, Samhan's peak above the clouds, and Mirbat's ancient heritage.",
         spots: [
-          { nAr: "شاطئ الحمر", nEn: "Al Hamr Beach", descAr: "شاطئ بانورامي يجمع بين زرقة البحر وروعة المناظر الشرقية الخلابة.", descEn: "A panoramic beach combining blue sea with stunning eastern scenery.", styles: ["nature","youth","family"] },
-          { nAr: "طريق انعدام الجاذبية", nEn: "Anti-Gravity Road", descAr: "طريق فريد يوهم بانعدام الجاذبية وكأنه يتحدى قوانين الفيزياء — تجربة لا تُنسى!", descEn: "A unique road creating an anti-gravity illusion as if defying physics — an unforgettable experience!", styles: ["youth","entertainment","family"] },
-          { nAr: "أشجار اللبان المعمرة", nEn: "Ancient Frankincense Trees", descAr: "أشجار ضخمة نادرة تضيف طابعاً أسطورياً لطبيعة ظفار الخضراء.", descEn: "Rare giant trees adding a legendary character to Dhofar's lush nature.", styles: ["nature","heritage","family"] },
-          { nAr: "جبل ناشب", nEn: "Jabal Nashib", descAr: "قمة هادئة بمناظر خضراء ضبابية تناسب عشاق الطبيعة والتأمل.", descEn: "A quiet peak with green misty views, ideal for nature lovers and contemplation.", styles: ["nature","youth"] },
-          { nAr: "جبل سمحان (فوق السحاب)", nEn: "Jabal Samhan (Above the Clouds)", descAr: "أعلى قمة في عُمان — تلامس الغيوم وتكشف من فوقها سحر الطبيعة والسحاب.", descEn: "Oman's highest peak — touching the clouds and revealing the magic of nature from above.", styles: ["youth","nature"] },
-          { nAr: "وادي دربات", nEn: "Wadi Darbat", descAr: "واد ساحر جامع للشلالات والطبيعة الخلابة، محطة مثالية في طريق العودة.", descEn: "A magical wadi with waterfalls and stunning nature, a perfect stop on the way back.", styles: ["nature","family"] },
-          { nAr: "كهف طيق", nEn: "Tayq Cave (Sinkhole)", descAr: "أحد أكبر الحفر الطبيعية في العالم، تجربة جيولوجية مذهلة يندر مثيلها.", descEn: "One of the world's largest natural sinkholes — a remarkable geological experience.", styles: ["youth","nature"] },
-          { nAr: "حفرة الأذابة", nEn: "Al Adhbah Sinkhole", descAr: "حفرة طبيعية ضخمة تكشف أعماق الأرض بشكل دراماتيكي ومبهر.", descEn: "A massive natural sinkhole dramatically revealing the depths of the earth.", styles: ["youth","nature"] },
-          { nAr: "حصن مرباط والحارة القديمة", nEn: "Mirbat Castle & Old Quarter", descAr: "حصن مرباط شاهد التاريخ العريق والحارة القديمة تعيش بتفاصيلها الأصيلة.", descEn: "Mirbat Castle as witness to ancient history, and the Old Quarter still alive in authentic detail.", styles: ["heritage","family"] },
-          { nAr: "شاطئ مرباط", nEn: "Mirbat Beach", descAr: "شاطئ تاريخي هادئ يجمع بين جمال البحر وعراقة المدينة التاريخية.", descEn: "A peaceful historic beach combining sea beauty with the city's ancient heritage.", styles: ["nature","family"] },
+          { nAr: "شاطئ الحمر", nEn: "Al Hamr Beach", descAr: "شاطئ بانورامي يجمع بين زرقة البحر وروعة المناظر الشرقية الخلابة.", descEn: "A panoramic beach combining blue sea with stunning eastern scenery.", styles: ["nature","youth","family"] , lat: 17.02, lng: 54.4801},
+          { nAr: "طريق انعدام الجاذبية", nEn: "Anti-Gravity Road", descAr: "طريق فريد يوهم بانعدام الجاذبية وكأنه يتحدى قوانين الفيزياء — تجربة لا تُنسى!", descEn: "A unique road creating an anti-gravity illusion as if defying physics — an unforgettable experience!", styles: ["youth","entertainment","family"] , lat: 17.0156, lng: 54.4632},
+          { nAr: "أشجار اللبان المعمرة", nEn: "Ancient Frankincense Trees", descAr: "أشجار ضخمة نادرة تضيف طابعاً أسطورياً لطبيعة ظفار الخضراء.", descEn: "Rare giant trees adding a legendary character to Dhofar's lush nature.", styles: ["nature","heritage","family"] , lat: 17.0321, lng: 54.5102},
+          { nAr: "جبل ناشب", nEn: "Jabal Nashib", descAr: "قمة هادئة بمناظر خضراء ضبابية تناسب عشاق الطبيعة والتأمل.", descEn: "A quiet peak with green misty views, ideal for nature lovers and contemplation.", styles: ["nature","youth"] , lat: 17.04, lng: 54.495},
+          { nAr: "جبل سمحان (فوق السحاب)", nEn: "Jabal Samhan (Above the Clouds)", descAr: "أعلى قمة في عُمان — تلامس الغيوم وتكشف من فوقها سحر الطبيعة والسحاب.", descEn: "Oman's highest peak — touching the clouds and revealing the magic of nature from above.", styles: ["youth","nature"] , lat: 17.1121, lng: 54.7119},
+          { nAr: "وادي دربات", nEn: "Wadi Darbat", descAr: "واد ساحر جامع للشلالات والطبيعة الخلابة، محطة مثالية في طريق العودة.", descEn: "A magical wadi with waterfalls and stunning nature, a perfect stop on the way back.", styles: ["nature","family"] , lat: 17.0778, lng: 54.4389},
+          { nAr: "كهف طيق", nEn: "Tayq Cave (Sinkhole)", descAr: "أحد أكبر الحفر الطبيعية في العالم، تجربة جيولوجية مذهلة يندر مثيلها.", descEn: "One of the world's largest natural sinkholes — a remarkable geological experience.", styles: ["youth","nature"] , lat: 17.1237, lng: 54.5867},
+          { nAr: "حفرة الأذابة", nEn: "Al Adhbah Sinkhole", descAr: "حفرة طبيعية ضخمة تكشف أعماق الأرض بشكل دراماتيكي ومبهر.", descEn: "A massive natural sinkhole dramatically revealing the depths of the earth.", styles: ["youth","nature"] , lat: 17.135, lng: 54.59},
+          { nAr: "حصن مرباط والحارة القديمة", nEn: "Mirbat Castle & Old Quarter", descAr: "حصن مرباط شاهد التاريخ العريق والحارة القديمة تعيش بتفاصيلها الأصيلة.", descEn: "Mirbat Castle as witness to ancient history, and the Old Quarter still alive in authentic detail.", styles: ["heritage","family"] , lat: 16.989, lng: 54.6912},
+          { nAr: "شاطئ مرباط", nEn: "Mirbat Beach", descAr: "شاطئ تاريخي هادئ يجمع بين جمال البحر وعراقة المدينة التاريخية.", descEn: "A peaceful historic beach combining sea beauty with the city's ancient heritage.", styles: ["nature","family"] , lat: 16.9894, lng: 54.6917},
         ],
       },
     ],
@@ -1212,13 +1181,13 @@ const ITIN_REGIONS = {
         descAr: "انطلق لإطلالة افتلقوت الخلابة، ثم عين كور الجبلية، شاطئ المغسيل بتوافيره وكهوفه الطبيعية، وجبل السان المميز، فمنطقة شعت الساحرة على بحر العرب، واختتم في سهل أتين الأخضر.",
         descEn: "Head to Aftalqut Viewpoint, then Ayn Kour, Mughsail Beach with its blowholes and caves, the distinctive Jabal Al San, the magical Sha'at overlooking the Arabian Sea, and end at Atin Plain.",
         spots: [
-          { nAr: "إطلالة افتلقوت", nEn: "Aftalqut Viewpoint", descAr: "موقع مرتفع يوفر منظراً بانورامياً يخطف الأنفاس للجبال والبحر معاً.", descEn: "An elevated spot offering a breathtaking panoramic view of mountains and sea.", styles: ["nature","youth"] },
-          { nAr: "عين كور (فوروفيل)", nEn: "Ayn Kour (4x4)", descAr: "عين مخفية في قلب الجبال يصلها أصحاب المغامرة بدفع رباعي.", descEn: "A hidden spring in the heart of the mountains, reached by 4×4 adventurers.", styles: ["youth","nature"] },
-          { nAr: "شاطئ المغسيل وكهف المرنيف", nEn: "Mughsail Beach & Marnif Cave", descAr: "شاطئ فريد برماله النظيفة وتوافيره الطبيعية المدهشة وكهف المرنيف المبهر.", descEn: "A unique beach with clean sands, amazing natural blowholes, and the spectacular Marnif Cave.", styles: ["nature","family","youth","entertainment"] },
-          { nAr: "نوافير المغسيل الطبيعية", nEn: "Mughsail Natural Blowholes", descAr: "ظاهرة طبيعية مدهشة: مياه البحر تتدفق من شقوق الصخور لتشكّل توافير عملاقة!", descEn: "A stunning natural phenomenon: seawater rushing through rock cracks to form giant jets!", styles: ["nature","family","entertainment"] },
-          { nAr: "جبل السان", nEn: "Jabal Al San", descAr: "قمة جبلية مميزة تكسوها الضباب والخضرة، تناسب التنزه والتصوير الفوتوغرافي.", descEn: "A distinctive misty green mountain peak, perfect for hiking and photography.", styles: ["nature","youth"] },
-          { nAr: "منطقة شعت", nEn: "Sha'at Area", descAr: "إطلالة ساحرة على بحر العرب من فوق السحاب في أجواء هادئة ومهيبة.", descEn: "A magical view over the Arabian Sea from above the clouds in calm, majestic surroundings.", styles: ["nature","youth"] },
-          { nAr: "سهل اتين", nEn: "Atin Plain", descAr: "مساحة خضراء فسيحة تُقام فيها فعاليات خريف ظفار وسط الطبيعة البديعة.", descEn: "A vast green area alive with khareef season events surrounded by beautiful nature.", styles: ["entertainment","family"] },
+          { nAr: "إطلالة افتلقوت", nEn: "Aftalqut Viewpoint", descAr: "موقع مرتفع يوفر منظراً بانورامياً يخطف الأنفاس للجبال والبحر معاً.", descEn: "An elevated spot offering a breathtaking panoramic view of mountains and sea.", styles: ["nature","youth"] , lat: 17.0512, lng: 53.9823},
+          { nAr: "عين كور (فوروفيل)", nEn: "Ayn Kour (4x4)", descAr: "عين مخفية في قلب الجبال يصلها أصحاب المغامرة بدفع رباعي.", descEn: "A hidden spring in the heart of the mountains, reached by 4×4 adventurers.", styles: ["youth","nature"] , lat: 16.923, lng: 53.815},
+          { nAr: "شاطئ المغسيل وكهف المرنيف", nEn: "Mughsail Beach & Marnif Cave", descAr: "شاطئ فريد برماله النظيفة وتوافيره الطبيعية المدهشة وكهف المرنيف المبهر.", descEn: "A unique beach with clean sands, amazing natural blowholes, and the spectacular Marnif Cave.", styles: ["nature","family","youth","entertainment"] , lat: 16.9602, lng: 53.8701},
+          { nAr: "نوافير المغسيل الطبيعية", nEn: "Mughsail Natural Blowholes", descAr: "ظاهرة طبيعية مدهشة: مياه البحر تتدفق من شقوق الصخور لتشكّل توافير عملاقة!", descEn: "A stunning natural phenomenon: seawater rushing through rock cracks to form giant jets!", styles: ["nature","family","entertainment"] , lat: 16.9602, lng: 53.8701},
+          { nAr: "جبل السان", nEn: "Jabal Al San", descAr: "قمة جبلية مميزة تكسوها الضباب والخضرة، تناسب التنزه والتصوير الفوتوغرافي.", descEn: "A distinctive misty green mountain peak, perfect for hiking and photography.", styles: ["nature","youth"] , lat: 17.0156, lng: 54.0823},
+          { nAr: "منطقة شعت", nEn: "Sha'at Area", descAr: "إطلالة ساحرة على بحر العرب من فوق السحاب في أجواء هادئة ومهيبة.", descEn: "A magical view over the Arabian Sea from above the clouds in calm, majestic surroundings.", styles: ["nature","youth"] , lat: 16.825, lng: 53.776},
+          { nAr: "سهل اتين", nEn: "Atin Plain", descAr: "مساحة خضراء فسيحة تُقام فيها فعاليات خريف ظفار وسط الطبيعة البديعة.", descEn: "A vast green area alive with khareef season events surrounded by beautiful nature.", styles: ["entertainment","family"] , lat: 17.006, lng: 54.12},
         ],
       },
       {
@@ -1227,11 +1196,11 @@ const ITIN_REGIONS = {
         descAr: "يوم مغامرة بامتياز في أقصى الغرب: رخيوت الجبلية، ضلكوت الضبابية، شجرة التبلدي العملاقة، قرية ديم المعلقة في السحاب، وهدوء شاطئ ضلكوت.",
         descEn: "A full adventure day in the far west: mountainous Rakhyut, misty Dalkut, the giant Baobab tree, cloud-perched Daim Village, and the peaceful Dalkut Beach.",
         spots: [
-          { nAr: "رخيوت", nEn: "Rakhyut", descAr: "ولاية ساحلية جبلية نائية بطبيعة بكر ومناظر لا تُصدّق بين الجبال والبحر.", descEn: "A remote coastal mountain wilayat with pristine nature and incredible scenery between mountains and sea.", styles: ["nature","youth"] },
+          { nAr: "رخيوت", nEn: "Rakhyut", descAr: "ولاية ساحلية جبلية نائية بطبيعة بكر ومناظر لا تُصدّق بين الجبال والبحر.", descEn: "A remote coastal mountain wilayat with pristine nature and incredible scenery between mountains and sea.", styles: ["nature","youth"] , lat: 16.775, lng: 53.32},
           { nAr: "ولاية ضلكوت (المسارات الجبلية)", nEn: "Dalkut Wilayat (Mountain Trails)", descAr: "ضلكوت تتميز بطبيعتها الجبلية الخلابة وإطلالاتها الضبابية التي تجذب عشاق الهدوء والمغامرة.", descEn: "Dalkut's stunning mountain nature and misty views attract lovers of tranquility and adventure.", styles: ["nature","youth"] },
-          { nAr: "شجرة التبلدي (البولاب) – ضلكوت", nEn: "Dalkut Baobab Tree", descAr: "من أضخم وأندر الأشجار في شبه الجزيرة العربية، معلم طبيعي فريد يستحق الزيارة.", descEn: "One of the largest and rarest trees on the Arabian Peninsula — a unique natural landmark.", styles: ["nature","family","youth"] },
-          { nAr: "قرية ديم", nEn: "Daim Village", descAr: "قرية جبلية عالية تغمرها سحب الخريف الكثيفة — تجربة فوتوغرافية استثنائية.", descEn: "A high mountain village engulfed by dense khareef clouds — an exceptional photography experience.", styles: ["nature","youth","heritage"] },
-          { nAr: "جبل القمر الغربي", nEn: "Western Jabal Al Qamar", descAr: "من أطول مسارات الهايكنج في ظفار، بمناظر خضراء وإطلالات بحرية مذهلة.", descEn: "One of Dhofar's longest hiking trails, with green scenery and stunning sea views.", styles: ["youth","nature"] },
+          { nAr: "شجرة التبلدي (البولاب) – ضلكوت", nEn: "Dalkut Baobab Tree", descAr: "من أضخم وأندر الأشجار في شبه الجزيرة العربية، معلم طبيعي فريد يستحق الزيارة.", descEn: "One of the largest and rarest trees on the Arabian Peninsula — a unique natural landmark.", styles: ["nature","family","youth"] , lat: 16.726, lng: 53.258},
+          { nAr: "قرية ديم", nEn: "Daim Village", descAr: "قرية جبلية عالية تغمرها سحب الخريف الكثيفة — تجربة فوتوغرافية استثنائية.", descEn: "A high mountain village engulfed by dense khareef clouds — an exceptional photography experience.", styles: ["nature","youth","heritage"] , lat: 16.74, lng: 53.27},
+          { nAr: "جبل القمر الغربي", nEn: "Western Jabal Al Qamar", descAr: "من أطول مسارات الهايكنج في ظفار، بمناظر خضراء وإطلالات بحرية مذهلة.", descEn: "One of Dhofar's longest hiking trails, with green scenery and stunning sea views.", styles: ["youth","nature"] , lat: 16.76, lng: 53.54},
           { nAr: "شاطئ ضلكوت", nEn: "Dalkut Beach", descAr: "شاطئ بمياه نقية ورمال داكنة، وجهة مثالية للراحة والتأمل بعيداً عن الزحام.", descEn: "A beach with pure waters and dark sands, a perfect spot for rest and contemplation away from crowds.", styles: ["nature","family"] },
         ],
       },
@@ -1344,7 +1313,7 @@ const I18N = {
     callReservation: "اتصل للحجز",
     staysNote: "الأسعار وتوفر الغرف تتغير حسب الموسم. يُنصح بالحجز المبكر خلال أغسطس (الذروة). تأكد من الأسعار مباشرة مع الفندق.",
         bookingTitle: "احجز عبر منصة موثوقة",
-    bookingNote: "مسارة هو التطبيق العُماني المحلي الموثوق للإقامة. المنصات الأخرى عالمية معتمدة.",
+    bookingNote: "المسرة هو تطبيق الإقامة العُماني المحلي الموثوق — الخيار الأول للحجز في ظفار وسلطنة عُمان.",
     downloadApp: "حمّل التطبيق",
     openWebsite: "فتح الموقع",
     localBadge: "محلي عُماني",
@@ -1435,7 +1404,7 @@ const I18N = {
     callReservation: "Call to Book",
     staysNote: "Prices and room availability change by season. Early booking is advised in August (peak). Confirm rates directly with the property.",
         bookingTitle: "Book via a trusted platform",
-    bookingNote: "Masarrah is the trusted local Omani accommodation app. Other platforms are globally recognised.",
+    bookingNote: "Al Masarra is the trusted local Omani accommodation app — the first choice for booking in Dhofar and Oman.",
     downloadApp: "Download App",
     openWebsite: "Open Website",
     localBadge: "Local Omani",
@@ -1716,11 +1685,12 @@ function Pill({ children, color }) {
   );
 }
 
-function MapLink({ name }) {
+function MapLink({ name, item }) {
   const { lang, t } = useLang();
+  const href = item ? bestUrl(item, lang) : mapsUrl(name, lang);
   return (
     <a
-      href={mapsUrl(name, lang)}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
@@ -1994,7 +1964,7 @@ function Home({ go }) {
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(e, lang)}</div>
                 <div className="mt-0.5 flex items-center gap-2 text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <span className="flex items-center gap-1"><MapPin size={11} /> {lang === "ar" ? e.placeAr : e.placeEn}</span>
-                  <MapLink name={nm(e, lang)} />
+                  <MapLink name={nm(e, lang)} item={e} />
                 </div>
               </div>
               <div className="rounded-xl px-2.5 py-1.5 text-center text-[11px] font-bold leading-tight text-white" style={{ background: e.color, fontFamily: "Tajawal" }}>
@@ -2123,7 +2093,7 @@ function Events() {
                 <div className="text-base font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(e, lang)}</div>
                 <div className="mt-1 flex items-center gap-2 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <span className="flex items-center gap-1"><MapPin size={12} /> {lang === "ar" ? e.placeAr : e.placeEn}</span>
-                  <MapLink name={nm(e, lang)} />
+                  <MapLink name={nm(e, lang)} item={e} />
                 </div>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {e.tags.map((tk) => <Pill key={tk} color={e.color}>{tx(TAG_LABELS[tk], lang)}</Pill>)}
@@ -2143,7 +2113,7 @@ function Events() {
         <SectionTitle title={t.companionTitle} icon={Sparkles} />
         <div className="space-y-2">
           {COMPANION_SITES.map((s) => (
-            <a key={s.nAr} href={mapsUrl(nm(s, lang), lang)} target="_blank" rel="noopener noreferrer"
+            <a key={s.nAr} href={bestUrl(s, lang)} target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
               style={{ borderColor: th.border, background: th.cardBg }}>
               <div className="pe-3">
@@ -2331,7 +2301,7 @@ function Evening() {
           </div>
           <div className="flex flex-wrap gap-2">
             {g.list.map((item) => (
-              <a key={item.nAr} href={mapsUrl(nm(item, lang), lang)} target="_blank" rel="noopener noreferrer"
+              <a key={item.nAr} href={bestUrl(item, lang)} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs"
                 style={{ borderColor: th.border, background: th.cardBg, color: th.titleColor, fontFamily: "Tajawal" }}>
                 {nm(item, lang)} <ExternalLink size={10} />
@@ -2358,7 +2328,7 @@ function Heritage() {
 
       <div className="space-y-2">
         {HERITAGE.map((h, i) => (
-          <a key={h.nAr} href={mapsUrl(nm(h, lang), lang)} target="_blank" rel="noopener noreferrer"
+          <a key={h.nAr} href={bestUrl(h, lang)} target="_blank" rel="noopener noreferrer"
             className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
             style={{ borderColor: th.border, background: th.cardBg }}>
             <div className="flex items-start gap-3">
@@ -2381,7 +2351,7 @@ function Heritage() {
         <SectionTitle title={t.museumsFarmsTitle} icon={Sprout} />
         <div className="space-y-2">
           {MUSEUMS_FARMS.map((m) => (
-            <a key={m.nAr} href={mapsUrl(nm(m, lang), lang)} target="_blank" rel="noopener noreferrer"
+            <a key={m.nAr} href={bestUrl(m, lang)} target="_blank" rel="noopener noreferrer"
               className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
               style={{ borderColor: th.border, background: th.cardBg }}>
               <div>
@@ -2457,7 +2427,7 @@ function Access() {
               <Plane size={15} color="#3C6E8F" />
             </div>
             <p className="mt-2 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.airportDesc}</p>
-            <a href={mapsUrl(lang === "ar" ? "مطار صلالة الدولي" : "Salalah International Airport", lang)} target="_blank" rel="noopener noreferrer"
+            <a href="https://www.google.com/maps/search/?api=1&query=17.0392,54.0914" target="_blank" rel="noopener noreferrer"
               className="mt-3 flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-bold text-white" style={{ background: "#3C6E8F", fontFamily: "Tajawal" }}>
               <Navigation size={13} /> {t.airportBtn}
             </a>
@@ -2480,7 +2450,7 @@ function Health() {
       </div>
       <div className="space-y-2">
         {HOSPITALS.map((h) => (
-          <a key={h.nAr} href={h.url ? h.url : mapsUrl(nm(h, lang), lang)} target="_blank" rel="noopener noreferrer"
+          <a key={h.nAr} href={h.url ? h.url : bestUrl(h, lang)} target="_blank" rel="noopener noreferrer"
             className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
             style={{ borderColor: th.border, background: th.cardBg }}>
             <div className="flex items-center gap-3">
@@ -2615,7 +2585,7 @@ function Crowd() {
             ? "لمعرفة الازدحام الحقيقي والفعلي، افتح أي موقع في جوجل ماب وانظر رسم أوقات الذروة (Popular Times) إن كان متوفراً."
             : "For real crowd data, open any location in Google Maps and check the Popular Times graph if available."}
         </p>
-        <a href={mapsUrl(lang === "ar" ? "صلالة ظفار عمان" : "Salalah Dhofar Oman", lang)} target="_blank" rel="noopener noreferrer"
+        <a href="https://www.google.com/maps/@17.0151,54.0924,13z" target="_blank" rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold text-white"
           style={{ background: "#3C6E8F", fontFamily: "Tajawal" }}>
           <Navigation size={16} /> {lang === "ar" ? "افتح جوجل ماب" : "Open Google Maps"}
@@ -2827,74 +2797,48 @@ function Stays() {
     return matchArea && matchType && matchQ;
   }), [areaFilter, typeFilter, query]);
 
-  function starStr(n) {
-    if (!n) return "";
-    return "⭐".repeat(n);
+  function hotelMapUrl(a) {
+    if (a.lat && a.lng) return mapsUrlCoord(a.lat, a.lng);
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.nEn + " " + (ACCOM_AREAS[a.area] ? ACCOM_AREAS[a.area].en : "") + " Salalah Oman")}`;
   }
+
+  function starStr(n) { return n ? "⭐".repeat(Math.min(n, 5)) : ""; }
 
   return (
     <div className="space-y-5 pb-6">
       <SectionTitle eyebrow={t.staysEyebrow} title={t.staysTitle} icon={Building2} />
+
+      {/* المسرة App Banner */}
+      {BOOKING_PLATFORMS.map((p) => (
+        <div key={p.key} className="overflow-hidden rounded-2xl" style={{ background: "linear-gradient(135deg,#1F3D2B,#2F5D45)" }}>
+          <div className="flex items-center gap-3 p-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-3xl" style={{ background: "rgba(255,255,255,0.15)" }}>
+              {p.emoji}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-white" style={{ fontFamily: lang === "ar" ? "Aref Ruqaa" : "inherit" }}>{p.nameAr}</span>
+                <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "rgba(255,255,255,0.25)", color: "#fff", fontFamily: "Tajawal" }}>⭐ {t.localBadge}</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-white opacity-85" style={{ fontFamily: "Tajawal" }}>
+                {lang === "ar" ? p.descAr : lang === "hi" ? p.descHi : lang === "fr" ? p.descFr : p.descEn}
+              </p>
+            </div>
+          </div>
+          <a href={p.playUrl} target="_blank" rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 py-3 text-sm font-bold text-white"
+            style={{ background: "rgba(0,0,0,0.25)", fontFamily: "Tajawal" }}>
+            📲 {t.downloadApp}
+          </a>
+        </div>
+      ))}
 
       <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
         <Info size={13} className="mt-0.5 shrink-0" color="#A36A2E" />
         <span style={{ fontFamily: "Tajawal" }}>{t.staysNote}</span>
       </div>
 
-      {/* Booking platforms */}
-      <div>
-        <div className="mb-2 text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.bookingTitle}</div>
-        <p className="mb-3 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.bookingNote}</p>
-        <div className="space-y-2">
-          {BOOKING_PLATFORMS.map((p) => (
-            <div key={p.key} className="overflow-hidden rounded-2xl border" style={{ borderColor: p.color }}>
-              <div className="flex items-center justify-between px-4 py-2.5" style={{ background: p.color }}>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">{p.emoji}</span>
-                  <div>
-                    <div className="text-sm font-bold text-white" style={{ fontFamily: "Tajawal" }}>{p.nameAr || p.nameEn}</div>
-                    {p.local && (
-                      <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "rgba(255,255,255,0.25)", color: "#fff", fontFamily: "Tajawal" }}>
-                        ⭐ {t.localBadge}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {p.playUrl && (
-                    <a href={p.playUrl} target="_blank" rel="noopener noreferrer"
-                      className="rounded-lg px-3 py-1.5 text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.2)", color: "#fff", fontFamily: "Tajawal" }}>
-                      📲 {t.downloadApp}
-                    </a>
-                  )}
-                  {!p.playUrl && (
-                    <a href={p.webUrl} target="_blank" rel="noopener noreferrer"
-                      className="rounded-lg px-3 py-1.5 text-[11px] font-bold" style={{ background: "rgba(255,255,255,0.2)", color: "#fff", fontFamily: "Tajawal" }}>
-                      🌐 {t.openWebsite}
-                    </a>
-                  )}
-                </div>
-              </div>
-              <div className="px-4 py-2.5" style={{ background: th.cardBg }}>
-                <p className="text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-                  {lang === "ar" ? p.descAr : lang === "hi" ? p.descHi : lang === "fr" ? p.descFr : p.descEn}
-                </p>
-                {p.webUrl && p.playUrl && (
-                  <a href={p.webUrl} target="_blank" rel="noopener noreferrer"
-                    className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold"
-                    style={{ color: p.color, fontFamily: "Tajawal" }}>
-                    🌐 {t.openWebsite} ↗
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="h-px" style={{ background: th.border }} />
-
-      {/* Individual property listings */}
+      {/* Search */}
       <div className="flex items-center gap-2 rounded-xl border px-3 py-2" style={{ borderColor: th.border, background: th.cardBg }}>
         <Search size={15} color={th.subColor} />
         <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t.searchPlaceholder}
@@ -2918,11 +2862,11 @@ function Stays() {
       {/* Type filter */}
       <div>
         <div className="mb-2 text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.filterType}</div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="grid grid-cols-3 gap-1.5">
           {typeKeys.map((k) => (
             <button key={k} type="button" onClick={() => setTypeFilter(k)}
-              className="flex items-center gap-1 shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-bold transition"
-              style={{ borderColor: typeFilter === k ? "#C98A2E" : th.border, background: typeFilter === k ? "#C98A2E1A" : th.cardBg, color: typeFilter === k ? "#C98A2E" : th.subColor, fontFamily: "Tajawal" }}>
+              className="flex items-center justify-center gap-1 rounded-xl border py-2 text-[11px] font-bold transition"
+              style={{ borderColor: typeFilter === k ? "#C98A2E" : th.border, background: typeFilter === k ? "#C98A2E" : th.cardBg, color: typeFilter === k ? "#fff" : th.subColor, fontFamily: "Tajawal" }}>
               {k !== "all" && <span>{ACCOM_TYPES[k].emoji}</span>}
               {k === "all" ? t.filterAll : tx(ACCOM_TYPES[k], lang)}
             </button>
@@ -2930,42 +2874,50 @@ function Stays() {
         </div>
       </div>
 
+      {/* Count */}
+      <div className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+        {filtered.length} {lang === "ar" ? "نتيجة" : lang === "fr" ? "résultats" : lang === "hi" ? "परिणाम" : "results"}
+      </div>
+
       {/* Results */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {filtered.length === 0 ? (
           <div className="py-10 text-center text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.noResults}</div>
         ) : filtered.map((a) => (
-          <div key={a.nAr} className="overflow-hidden rounded-2xl border" style={{ borderColor: th.border, background: th.cardBg }}>
-            {/* Header strip */}
-            <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "linear-gradient(135deg,#1F3D2B,#2F5D45)" }}>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{ACCOM_TYPES[a.type]?.emoji}</span>
-                <div>
-                  <div className="text-sm font-bold text-white" style={{ fontFamily: "Tajawal" }}>{lang === "ar" ? a.nAr : a.nEn}</div>
-                  <div className="flex items-center gap-1.5 text-[10px] text-white opacity-80" style={{ fontFamily: "Tajawal" }}>
-                    <span>{tx(ACCOM_TYPES[a.type], lang)}</span>
-                    {a.stars > 0 && <><span>·</span><span>{starStr(a.stars)}</span></>}
-                  </div>
+          <div key={a.nAr} className="overflow-hidden rounded-2xl border" style={{ borderColor: th.border }}>
+            <div className="flex items-center gap-3 px-4 py-3" style={{ background: theme === "light" ? "#F3EEDD" : "#1F2E24" }}>
+              <span className="text-2xl">{ACCOM_TYPES[a.type]?.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-bold truncate" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
+                  {lang === "ar" ? a.nAr : a.nEn}
+                </div>
+                <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "#2F5D451A", color: "#2F5D45", fontFamily: "Tajawal" }}>
+                    {tx(ACCOM_TYPES[a.type], lang)}
+                  </span>
+                  <span className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                    📍 {tx(ACCOM_AREAS[a.area], lang)}
+                  </span>
+                  {a.stars > 0 && <span className="text-[11px]">{starStr(a.stars)}</span>}
                 </div>
               </div>
-              <span className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold" style={{ background: "rgba(255,255,255,0.2)", color: "#fff", fontFamily: "Tajawal" }}>
-                {tx(ACCOM_AREAS[a.area], lang)}
-              </span>
             </div>
-            {/* Body */}
-            <div className="px-4 py-3 space-y-3">
+            <div className="px-4 py-3 space-y-2.5" style={{ background: th.cardBg }}>
               <p className="text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                 {lang === "ar" ? a.descAr : a.descEn}
               </p>
-              <a href={`tel:${a.phone}`}
-                className="flex items-center justify-between rounded-xl px-4 py-2.5 text-white transition active:scale-[0.98]"
-                style={{ background: "#2F5D45" }}>
-                <div className="flex items-center gap-2">
-                  <Phone size={15} color="#fff" />
-                  <span className="text-sm font-bold" style={{ fontFamily: "Tajawal" }}>{t.callReservation}</span>
-                </div>
-                <span dir="ltr" className="text-sm font-bold" style={{ fontFamily: "Tajawal" }}>{a.phone}</span>
-              </a>
+              <div className="flex gap-2">
+                <a href={`tel:${a.phone}`}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold text-white"
+                  style={{ background: "#2F5D45", fontFamily: "Tajawal" }}>
+                  <Phone size={13} /> {t.callReservation}
+                </a>
+                <a href={hotelMapUrl(a)} target="_blank" rel="noopener noreferrer"
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold"
+                  style={{ borderColor: "#2F5D45", color: "#2F5D45", fontFamily: "Tajawal" }}>
+                  <Navigation size={13} /> {t.location}
+                </a>
+              </div>
             </div>
           </div>
         ))}
