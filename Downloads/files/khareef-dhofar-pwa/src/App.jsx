@@ -3139,52 +3139,62 @@ function NotificationBell({ unread }) {
 function XFeed() {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    // Load Twitter widget script
-    if (!window.twttr) {
-      const s = document.createElement("script");
-      s.src = "https://platform.twitter.com/widgets.js";
-      s.async = true;
-      s.charset = "utf-8";
-      s.onload = () => window.twttr?.widgets?.load();
-      document.head.appendChild(s);
-    } else {
-      window.twttr.widgets.load();
-    }
-  }, [theme]);
+    fetch("/featured.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(data => setPosts(Array.isArray(data) ? data.slice(0, 2) : []))
+      .catch(() => {});
+  }, []);
 
-  const twitterUser = "khareef_dhofar";
+  if (posts.length === 0) return null;
+
+  const caption = (p) => {
+    if (lang === "ar") return p.captionAr || p.caption || "";
+    if (lang === "en") return p.captionEn || p.captionAr || "";
+    if (lang === "hi") return p.captionHi || p.captionEn || p.captionAr || "";
+    if (lang === "fr") return p.captionFr || p.captionEn || p.captionAr || "";
+    return p.captionAr || "";
+  };
 
   return (
-    <div className="overflow-hidden rounded-2xl" style={{ border: `1px solid ${th.border}` }}>
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5"
-        style={{ background: theme === "light" ? "#000" : "#15202b" }}>
-        <div className="flex items-center gap-2">
-          <Twitter size={16} color="#fff" />
-          <span className="text-sm font-bold text-white" style={{ fontFamily: "Tajawal" }}>
-            {lang === "ar" ? "أخبار ظفار" : "Dhofar News"}
-          </span>
-        </div>
-        <a href={`https://x.com/${twitterUser}`} target="_blank" rel="noopener noreferrer"
-          className="text-[11px] font-medium text-white opacity-70" style={{ fontFamily: "Tajawal" }}>
-          @{twitterUser} ↗
-        </a>
-      </div>
+    <div className="space-y-3">
+      {posts.map(post => (
+        <a key={post.id}
+          href={post.xUrl || post.instagramUrl || "https://x.com/khareef_dhofar"}
+          target="_blank" rel="noopener noreferrer"
+          className="block overflow-hidden rounded-2xl transition active:scale-[0.98]"
+          style={{ background: th.cardBg, border: `1px solid ${th.border}` }}>
 
-      {/* Twitter Timeline Widget */}
-      <div style={{ background: th.cardBg }}>
-        <a className="twitter-timeline"
-          href={`https://twitter.com/${twitterUser}`}
-          data-tweet-limit="2"
-          data-theme={theme === "dark" ? "dark" : "light"}
-          data-chrome="noheader nofooter noborders transparent"
-          data-dnt="true"
-          data-lang={lang === "ar" ? "ar" : "en"}
-          style={{ display: "block", minHeight: 200 }}>
+          {post.imageUrl && (
+            <img src={post.imageUrl} alt=""
+              className="w-full object-cover"
+              style={{ maxHeight: 220 }}
+              loading="lazy"
+              onError={e => e.target.parentElement.style.display = "none"} />
+          )}
+
+          <div className="px-4 py-3">
+            <div className="flex items-center gap-2 mb-2">
+              <Twitter size={13} color={th.subColor} />
+              <span className="text-[11px] font-bold" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                @khareef_dhofar
+              </span>
+              {post.date && (
+                <span className="ms-auto text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                  {post.date}
+                </span>
+              )}
+            </div>
+            {caption(post) && (
+              <p className="text-sm leading-relaxed" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
+                {caption(post)}
+              </p>
+            )}
+          </div>
         </a>
-      </div>
+      ))}
     </div>
   );
 }
