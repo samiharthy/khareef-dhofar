@@ -1,13 +1,13 @@
 {
-  "id": "notif-1782531829767",
+  "id": "notif-1782574574179",
   "active": true,
-  "type": "info",
+  "type": "weather",
   "priority": "normal",
   "message": {
-    "ar": "مرحباً بكم في خريف ظفار 2026 🌿",
-    "en": "Welcome to the fall of Dhofar 2026 🌿",
-    "hi": "धोफर 2026 के पतन में आपका स्वागत है 🌿",
-    "fr": "Bienvenue à la chute du Dhofar 2026 🌿"
+    "ar": "مرحباً بكم في خريف صلالة بدايه اخضرار المناطق الجبلية في ظفار  2026 🌿",
+    "en": "Welcome to the fall of Salalah, the beginning of the greening of the mountainous areas in Dhofar  2026 🌿",
+    "hi": "धोफर 2026 में पहाड़ी क्षेत्रों के हरियाली की शुरुआत, सलालाह के पतन में आपका स्वागत है 🌿",
+    "fr": "Bienvenue à la chute de Salalah, le début du verdissement des zones montagneuses du Dhofar  2026 🌿"
   },
-  "updatedAt": "2026-06-27T03:43:49.767Z"
+  "updatedAt": "2026-06-27T15:36:14.179Z"
 }
