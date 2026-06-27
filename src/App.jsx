@@ -3129,7 +3129,7 @@ function AlertBanner() {
 
   async function fetchAlert() {
     try {
-      const res = await fetch("/alert.json?t=" + Date.now());
+      const res = await fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/alert.json?t=" + Date.now());
       const data = await res.json();
       if (!data.active) return;
       const seenId = localStorage.getItem(ALERT_SEEN_KEY);
