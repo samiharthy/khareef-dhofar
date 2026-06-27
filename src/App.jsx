@@ -249,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.42";
+const APP_VERSION = "1.43";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -356,6 +356,33 @@ const TAG_LABELS = {
   sculptureCompetition: { ar: "مسابقة نحت دولية", en: "International Sculpture Competition", hi: "अंतर्राष्ट्रीय मूर्तिकला प्रतियोगिता", fr: "Concours international de sculpture" },
   theatrePerformances: { ar: "عروض مسرحية دولية", en: "International Theatre Performances", hi: "अंतर्राष्ट्रीय रंगमंच प्रदर्शन", fr: "Représentations théâtrales internationales" },
 };
+
+
+const DHOFAR_WEATHER_REGIONS = [
+  { id: "salalah",  nameAr: "صلالة",        nameEn: "Salalah",    lat: 17.0151, lng: 54.0924 },
+  { id: "mughsail", nameAr: "المغسيل",       nameEn: "Mughsail",   lat: 16.8794, lng: 53.7766 },
+  { id: "rakhyut",  nameAr: "رخيوت",         nameEn: "Rakhyut",    lat: 16.7491, lng: 53.4378 },
+  { id: "taqah",    nameAr: "طاقة",          nameEn: "Taqah",      lat: 17.0334, lng: 54.3942 },
+  { id: "mirbat",   nameAr: "مرباط",         nameEn: "Mirbat",     lat: 16.9925, lng: 54.6916 },
+  { id: "sadah",    nameAr: "سدح",           nameEn: "Sadah",      lat: 17.0299, lng: 54.7851 },
+  { id: "thumrait", nameAr: "ثمريت (شمال)", nameEn: "Thumrait",   lat: 17.6617, lng: 54.0319 },
+];
+
+function rainLabel(code, lang) {
+  const isRain = code >= 51 && code <= 99;
+  const isFog  = code === 45 || code === 48;
+  const isCloudy = code >= 2 && code <= 3;
+  if (isRain) return lang === "ar" ? "🌧️ أمطار" : "🌧️ Rain";
+  if (isFog)  return lang === "ar" ? "🌫️ ضباب"  : "🌫️ Fog";
+  if (isCloudy) return lang === "ar" ? "⛅ غيوم" : "⛅ Cloudy";
+  return lang === "ar" ? "☀️ صحو" : "☀️ Clear";
+}
+function rainColor(code) {
+  if (code >= 51 && code <= 99) return "#3C6E8F";
+  if (code === 45 || code === 48) return "#888";
+  if (code >= 2) return "#7AA87A";
+  return "#C98A2E";
+}
 
 const EVENTS = [
   {
@@ -2097,6 +2124,7 @@ function Home({ go }) {
 
       <HomeWeatherForecast />
 
+      <DhofarRainMap />
       <XFeed />
 
       <SponsoredSection limit={1} />
@@ -3137,6 +3165,113 @@ function NotificationBell({ unread }) {
   );
 }
 
+
+function DhofarRainMap() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [regionWeather, setRegionWeather] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(null);
+
+  useEffect(() => {
+    // Check cache first (update every 3 hours)
+    const cached = localStorage.getItem("dhofar_rain_cache");
+    if (cached) {
+      const { data, timestamp } = JSON.parse(cached);
+      const ageHours = (Date.now() - timestamp) / 3600000;
+      if (ageHours < 3) {
+        setRegionWeather(data);
+        setLastUpdate(new Date(timestamp));
+        setLoading(false);
+        return;
+      }
+    }
+    fetchAllRegions();
+  }, []);
+
+  async function fetchAllRegions() {
+    setLoading(true);
+    try {
+      const results = await Promise.all(
+        DHOFAR_WEATHER_REGIONS.map(async (region) => {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${region.lat}&longitude=${region.lng}&current=weather_code,precipitation,temperature_2m&timezone=Asia%2FMuscat`;
+          const r = await fetch(url);
+          const d = await r.json();
+          return {
+            ...region,
+            code: d.current?.weather_code ?? 0,
+            precip: d.current?.precipitation ?? 0,
+            temp: Math.round(d.current?.temperature_2m ?? 0),
+          };
+        })
+      );
+      setRegionWeather(results);
+      const now = Date.now();
+      setLastUpdate(new Date(now));
+      localStorage.setItem("dhofar_rain_cache", JSON.stringify({ data: results, timestamp: now }));
+    } catch(e) {}
+    setLoading(false);
+  }
+
+  const hasRain = regionWeather.some(r => r.code >= 51);
+
+  return (
+    <div className="overflow-hidden rounded-2xl" style={{ border: `1px solid ${th.border}` }}>
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3"
+        style={{ background: hasRain ? "#3C6E8F15" : th.cardBg, borderBottom: `1px solid ${th.border}` }}>
+        <div className="flex items-center gap-2">
+          <span style={{ fontSize: 18 }}>{hasRain ? "🌧️" : "🌤️"}</span>
+          <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
+            {lang === "ar" ? "حالة الأمطار في ظفار" : "Dhofar Rain Status"}
+          </span>
+        </div>
+        <button onClick={fetchAllRegions} disabled={loading}
+          className="flex items-center gap-1 rounded-full px-2 py-1 text-[11px]"
+          style={{ background: th.border, color: th.subColor, border: "none", cursor: "pointer" }}>
+          <RefreshCw size={11} className={loading ? "animate-spin" : ""} color={th.subColor} />
+        </button>
+      </div>
+
+      {/* Regions grid */}
+      {loading ? (
+        <div className="py-6 text-center" style={{ color: th.subColor, fontFamily: "Tajawal", fontSize: 13 }}>
+          <RefreshCw size={16} className="mx-auto mb-2 animate-spin" color={th.subColor} />
+          {lang === "ar" ? "جاري تحديث بيانات الطقس..." : "Updating weather..."}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-px" style={{ background: th.border }}>
+          {regionWeather.map(region => (
+            <div key={region.id} className="flex items-center justify-between px-3 py-2.5"
+              style={{ background: th.cardBg }}>
+              <div>
+                <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
+                  {lang === "ar" ? region.nameAr : region.nameEn}
+                </div>
+                <div className="text-[11px] mt-0.5" style={{ color: rainColor(region.code), fontFamily: "Tajawal" }}>
+                  {rainLabel(region.code, lang)}
+                  {region.precip > 0 ? ` · ${region.precip}mm` : ""}
+                </div>
+              </div>
+              <div className="text-sm font-bold" style={{ color: th.subColor }}>
+                {region.temp}°
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Last update */}
+      {lastUpdate && (
+        <div className="px-4 py-1.5 text-center text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal", borderTop: `1px solid ${th.border}` }}>
+          {lang === "ar" ? `آخر تحديث: ${lastUpdate.toLocaleTimeString("ar-OM", { hour: "2-digit", minute: "2-digit" })}` 
+                         : `Updated: ${lastUpdate.toLocaleTimeString("en-OM", { hour: "2-digit", minute: "2-digit" })}`}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function XFeed() {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
@@ -3310,6 +3445,17 @@ export default function App() {
 
   useEffect(() => {
     fetchLiveWeather();
+    // Auto-update: check for new version daily
+    const lastCheck = localStorage.getItem("last_version_check");
+    const now = Date.now();
+    if (!lastCheck || now - parseInt(lastCheck) > 86400000) {
+      localStorage.setItem("last_version_check", now.toString());
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(reg => reg.update());
+        });
+      }
+    }
   }, []);
 
   async function fetchLiveWeather() {
