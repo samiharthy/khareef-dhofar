@@ -1,3 +1,3 @@
 {
-  "ignoreCommand": "git diff HEAD^1 --name-only | grep -qE '^(src/|index\\.html|package\\.json|vite\\.config|tailwind|postcss)'"
+  "ignoreCommand": "! git diff HEAD~1 --name-only | grep -qvE '^public/(alert|featured|locations)\\.json$'"
 }
