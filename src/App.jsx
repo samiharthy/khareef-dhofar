@@ -1873,7 +1873,7 @@ function AboutCard() {
   async function handleShare() {
     if (navigator.share) {
       try {
-        await navigator.share({
+        await (() => { const s = parseInt(localStorage.getItem('kh_shares') || '0') + 1; localStorage.setItem('kh_shares', s.toString()); })(); navigator.share({
           title: lang === "ar" ? "خريف ظفار 2026" : "Khareef Dhofar 2026",
           text: lang === "ar"
             ? "تطبيق خريف ظفار 2026 — دليلك السياحي الشامل لموسم الخريف في صلالة عُمان 🌿"
@@ -3893,6 +3893,17 @@ export default function App() {
         });
       }
     }
+
+    // Track app opens
+    const opens = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
+    localStorage.setItem("kh_opens", opens.toString());
+
+    // Track PWA installs
+    window.addEventListener("appinstalled", () => {
+      const installs = parseInt(localStorage.getItem("kh_installs") || "0") + 1;
+      localStorage.setItem("kh_installs", installs.toString());
+      localStorage.setItem("kh_installed_at", new Date().toISOString());
+    });
   }, []);
 
   async function fetchLiveWeather() {
