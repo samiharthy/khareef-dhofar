@@ -3969,12 +3969,6 @@ export default function App() {
     </LangContext.Provider>
   );
 }
-  const th = THEMES[theme];
-  const EVENTS_PREVIEW = EVENTS.slice(0, 2);
-
-  return (
-    <div className="space-y-4 pb-6">
-      {/* Weather card */}
       <HomeWeatherForecast />
 
       {/* AI Where to go today */}
