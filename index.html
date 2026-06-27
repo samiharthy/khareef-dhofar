@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>خريف ظفار 2026 | Khareef Dhofar</title>
+    <meta name="description" content="مساعدك الشخصي لموسم الخريف في محافظة ظفار، صلالة - عُمان" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2F5D45" />
+    <link rel="icon" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="خريف ظفار" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #F4EFE2;
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+
+      /* ── Landscape / Car Screen / Autopilot ─────────────────────────── */
+      @media (orientation: landscape) and (min-width: 600px) {
+        /* Widen the container */
+        #root > div > div {
+          max-width: 100% !important;
+        }
+        /* Make bottom nav a side nav */
+        #root > div > div > div:last-child {
+          width: 120px !important;
+          min-width: 120px !important;
+          position: fixed !important;
+          top: 0 !important;
+          bottom: 0 !important;
+          right: 0 !important;
+          left: auto !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important;
+          grid-template-columns: none !important;
+          border-top: none !important;
+          border-left: 1px solid rgba(0,0,0,0.1) !important;
+          z-index: 40 !important;
+          gap: 4px !important;
+          padding: 12px 8px !important;
+        }
+        /* Main content: add padding for side nav */
+        #root > div > div > div.flex-1 {
+          padding-inline-end: 120px !important;
+        }
+        /* Bigger touch targets for car use */
+        button { min-height: 48px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
