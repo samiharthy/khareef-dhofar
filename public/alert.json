@@ -1,13 +1,13 @@
 {
-  "id": "notif-1782531800335",
+  "id": "notif-1782531829767",
   "active": true,
   "type": "info",
   "priority": "normal",
   "message": {
     "ar": "مرحباً بكم في خريف ظفار 2026 🌿",
-    "en": "Welcome to Khareef Dhofar 2026 🌿",
-    "hi": "ख़रीफ़ ज़ुफ़ार 2026 में आपका स्वागत है 🌿",
-    "fr": "Bienvenue au Khareef Dhofar 2026 🌿"
+    "en": "Welcome to the fall of Dhofar 2026 🌿",
+    "hi": "धोफर 2026 के पतन में आपका स्वागत है 🌿",
+    "fr": "Bienvenue à la chute du Dhofar 2026 🌿"
   },
-  "updatedAt": "2026-06-27T03:43:20.335Z"
+  "updatedAt": "2026-06-27T03:43:49.767Z"
 }
