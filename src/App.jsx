@@ -3742,8 +3742,8 @@ export default function App() {
             {tab === "health" && <Health />}
             {tab === "tips" && <Tips />}
             {tab === "stays" && <Stays />}
-            {tab === "about" && <About />
-          {tab === "food" && <FoodGuide />}}
+            {tab === "about" && <About />}
+          {tab === "food" && <FoodGuide />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
               <p className="mb-2 mt-6 text-center text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
