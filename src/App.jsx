@@ -249,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.47";
+const APP_VERSION = "1.48";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -2126,6 +2126,11 @@ function Home() {
           <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily:"Tajawal" }}>
             {lang === "ar" ? "الفعاليات الجارية" : "Current Events"}
           </span>
+          <button onClick={() => window.dispatchEvent(new CustomEvent("switchTab", { detail: "events" }))}
+            className="text-xs font-bold"
+            style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer", fontFamily:"Tajawal" }}>
+            {lang === "ar" ? "المزيد ←" : "More →"}
+          </button>
         </div>
         <div className="space-y-2">
           {EVENTS_PREVIEW.map(ev => (
@@ -3297,9 +3302,10 @@ const INTEREST_OPTIONS = [
 function WhereToGoToday() {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
-  const [selected, setSelected] = useState(null); // single select
-  const [result, setResult] = useState(null);
+  const [selected, setSelected] = useState(null);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [callCount, setCallCount] = useState(0);
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
@@ -3309,53 +3315,88 @@ function WhereToGoToday() {
     } catch {}
   }, []);
 
-  async function getRecommendation() {
+  async function getSuggestions(refresh = false) {
     if (!selected) return;
     setLoading(true);
-    setResult(null);
+    if (refresh) setResults([]);
+    const newCount = callCount + 1;
+    setCallCount(newCount);
+
     const opt = INTEREST_OPTIONS.find(o => o.id === selected);
     const now = new Date();
     const hour = now.getHours();
     const timeLabel = hour < 10 ? "صباح" : hour < 14 ? "ظهيرة" : hour < 18 ? "عصر" : "مساء";
     const weatherSummary = weather
-      ? weather.map(r => `${r.nameAr}: ${r.precip > 0 ? r.precip + "mm أمطار" : r.code >= 45 ? "ضباب" : "جاف"}, ${r.temp}°`).join("، ")
-      : "لا يوجد بيانات طقس";
-    const interest = opt ? (lang === "ar" ? opt.ar : opt.en) : "عامة";
+      ? weather.map(r => `${r.nameAr}: ${r.precip > 0 ? r.precip + "mm أمطار" : r.code >= 45 ? "ضباب" : "جاف"} ${r.temp}°`).join("، ")
+      : "لا يوجد";
+    const interest = opt ? (lang === "ar" ? opt.ar : opt.en) : "";
+    const excludeNote = newCount > 1 ? `\nمهم: هذا الطلب رقم ${newCount}، قدّم أماكن مختلفة تماماً عن الاقتراحات السابقة.` : "";
 
-    const prompt = `أنت مرشد سياحي خبير في محافظة ظفار بعُمان خلال موسم الخريف.
-الوقت: ${timeLabel} الساعة ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}
-الطقس في مناطق ظفار: ${weatherSummary}
-اهتمام الزائر: ${interest}
+    const prompt = `أنت مرشد سياحي خبير في محافظة ظفار، عُمان، موسم الخريف.
+الوقت: ${timeLabel} (${hour}:${String(now.getMinutes()).padStart(2,'0')})
+الطقس: ${weatherSummary}
+اهتمام الزائر: ${interest}${excludeNote}
 
-بناءً على الاهتمام والوقت والطقس، اقترح مكاناً واحداً مختلفاً ومناسباً للزيارة الآن. أجب بـ JSON فقط بدون أي نص إضافي:
-{"place":"اسم المكان","emoji":"إيموجي","reason":"سبب قصير 2-3 جمل","tip":"نصيحة سريعة"}`;
+اقترح 3 أماكن مختلفة ومناسبة للزيارة الآن. أجب بـ JSON فقط بدون أي نص إضافي أو markdown:
+[{"place":"اسم المكان","emoji":"إيموجي","reason":"سبب مختصر جملة واحدة","tip":"نصيحة سريعة"},{"place":"...","emoji":"...","reason":"...","tip":"..."},{"place":"...","emoji":"...","reason":"...","tip":"..."}]`;
+
+    const FALLBACKS = {
+      nature:    [
+        {place:"وادي دربات",emoji:"🏞️",reason:"أجمل وادٍ خريفي، مياه متدفقة وخضرة كثيفة.",tip:"زر الصباح لأجمل منظر"},
+        {place:"عين رزات",emoji:"💧",reason:"عين طبيعية هادئة محاطة بالأشجار.",tip:"مناسب للعائلات"},
+        {place:"نوافير المغسيل",emoji:"🌊",reason:"ظاهرة طبيعية فريدة، نوافير بحرية مذهلة.",tip:"الأمواج قوية، ابقَ بعيداً عن الحافة"},
+      ],
+      adventure: [
+        {place:"جبل سمحان",emoji:"⛰️",reason:"أعلى قمة في ظفار مع إطلالات خلابة.",tip:"انطلق مبكراً واحضر معدات مناسبة"},
+        {place:"مسار وادي دربات",emoji:"🥾",reason:"مسار 4كم بين الأشجار والشلالات.",tip:"المسار رطب، احذر الانزلاق"},
+        {place:"طريق انعدام الجاذبية",emoji:"🛣️",reason:"ظاهرة بصرية غريبة تبدو فيها السيارة تصعد وحدها.",tip:"مثير جداً للأطفال والكبار"},
+      ],
+      family:    [
+        {place:"عين رزات",emoji:"💧",reason:"بيئة هادئة وآمنة للعائلات مع مياه نقية.",tip:"احضر وجبة ومفرش للجلوس"},
+        {place:"حديقة ارض اللبان",emoji:"🌳",reason:"حديقة واسعة مع أشجار اللبان الأصيلة.",tip:"رائعة للتصوير العائلي"},
+        {place:"شاطئ الحافة",emoji:"🏖️",reason:"شاطئ هادئ مناسب للعائلات وقت المساء.",tip:"الغروب جميل جداً هنا"},
+      ],
+      heritage:  [
+        {place:"موقع السمهرم (خور روري)",emoji:"🏛️",reason:"موقع أثري مهم لتجارة اللبان القديمة.",tip:"أفضل في الصباح الباكر"},
+        {place:"متحف أرض اللبان",emoji:"🏺",reason:"يروي تاريخ ظفار وطريق اللبان العريق.",tip:"خصص ساعتين على الأقل"},
+        {place:"حصن مرباط",emoji:"🗼",reason:"قلعة تاريخية بإطلالة بحرية رائعة.",tip:"القلعة مفتوحة نهاراً فقط"},
+      ],
+      beach:     [
+        {place:"شاطئ مرباط",emoji:"🏖️",reason:"شاطئ طويل هادئ مع قلعة تاريخية بالقرب.",tip:"الأمواج هادئة نسبياً"},
+        {place:"شاطئ الحافة",emoji:"🌅",reason:"منظر الغروب من هنا استثنائي.",tip:"زر قبل الغروب بساعة"},
+        {place:"شاطئ المغسيل",emoji:"🌊",reason:"شاطئ صخري مع نوافير طبيعية مذهلة.",tip:"لا تقترب كثيراً من الصخور"},
+      ],
+      hiking:    [
+        {place:"مسار وادي دربات",emoji:"🥾",reason:"أشهر مسار في الخريف، 4كم مع شلالات.",tip:"ارتدِ حذاء مقاوم للماء"},
+        {place:"جبل القمر الغربي",emoji:"⛰️",reason:"مسار طويل 18كم لمحبي التحدي الحقيقي.",tip:"مع مرشد فقط، يوم كامل"},
+        {place:"مسار عين حمران",emoji:"🌿",reason:"مسار قصير 2كم بين الأشجار والينابيع.",tip:"مناسب للمبتدئين والعائلات"},
+      ],
+    };
 
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 400,
-          messages: [{ role: "user", content: prompt }] })
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6", max_tokens: 600,
+          messages: [{ role: "user", content: prompt }]
+        })
       });
       const d = await res.json();
       const text = d.content?.[0]?.text || "";
-      const clean = text.replace(/```json|```/g, "").trim();
-      setResult(JSON.parse(clean));
+      const clean = text.replace(/```json|```/g,"").trim();
+      const parsed = JSON.parse(clean);
+      setResults(Array.isArray(parsed) ? parsed.slice(0,3) : [parsed]);
     } catch {
-      const fallbacks = {
-        nature: { place:"وادي دربات", emoji:"🏞️", reason:"من أجمل الأودية في الخريف، تتدفق فيه المياه وتخضر جوانبه بشكل رائع.", tip:"الزيارة صباحاً للحصول على أفضل منظر" },
-        adventure: { place:"جبل سمحان", emoji:"⛰️", reason:"أعلى قمة في ظفار ويوفر إطلالات خلابة على السحاب والوادي.", tip:"احضر معدات مناسبة وانطلق مبكراً" },
-        family: { place:"عين رزات", emoji:"💧", reason:"عين مائية طبيعية محاطة بالخضرة، مثالية للعائلات.", tip:"المياه باردة ومنعشة، احضر وجبة خفيفة" },
-        heritage: { place:"خور روري - موقع السمهرم", emoji:"🏛️", reason:"موقع أثري مهم يعكس تاريخ تجارة اللبان في ظفار.", tip:"أفضل زيارة في الصباح قبل الحر" },
-        beach: { place:"شاطئ مرباط", emoji:"🏖️", reason:"شاطئ هادئ مع إطلالة على قلعة مرباط التاريخية.", tip:"احذر من الأمواج خلال موسم الخريف" },
-        hiking: { place:"مسار وادي دربات", emoji:"🥾", reason:"مسار سهل 4كم بين الأشجار والشلالات في موسم الخريف.", tip:"ارتدِ حذاء مناسباً، المسار قد يكون رطباً" },
-      };
-      setResult(fallbacks[selected] || fallbacks.nature);
+      // Shuffle fallbacks for variety
+      const fb = FALLBACKS[selected] || FALLBACKS.nature;
+      const shuffled = [...fb].sort(() => Math.random() - 0.5);
+      setResults(shuffled);
     }
     setLoading(false);
   }
 
-  function reset() { setResult(null); setLoading(false); }
+  function reset() { setResults([]); setLoading(false); }
 
   return (
     <div className="overflow-hidden rounded-2xl" style={{ border:`1px solid ${th.border}`, background:th.cardBg }}>
@@ -3374,61 +3415,67 @@ function WhereToGoToday() {
       </div>
 
       <div className="p-4">
-        {!result ? (
-          <>
-            {/* Single-select interests */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
-              {INTEREST_OPTIONS.map(opt => (
-                <button key={opt.id}
-                  onClick={() => setSelected(selected === opt.id ? null : opt.id)}
-                  className="flex flex-col items-center gap-1 rounded-2xl py-2.5 px-2 text-xs font-bold transition active:scale-95"
-                  style={{
-                    background: selected === opt.id ? "#2F5D45" : th.border,
-                    color: selected === opt.id ? "#fff" : th.subColor,
-                    border: `2px solid ${selected === opt.id ? "#2F5D45" : "transparent"}`,
-                    fontFamily:"Tajawal", cursor:"pointer"
-                  }}>
-                  <span style={{ fontSize:18 }}>{opt.ar.split(" ")[1] || "🌿"}</span>
-                  <span>{lang==="ar" ? opt.ar.split(" ")[0] : opt.en.split(" ")[0]}</span>
-                </button>
-              ))}
-            </div>
-
-            <button onClick={getRecommendation} disabled={!selected || loading}
+        {/* Interest selector — always visible */}
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          {INTEREST_OPTIONS.map(opt => (
+            <button key={opt.id}
+              onClick={() => { setSelected(selected === opt.id ? null : opt.id); setResults([]); }}
+              className="flex flex-col items-center gap-1 rounded-2xl py-2.5 px-2 text-xs font-bold transition active:scale-95"
               style={{
-                width:"100%", background: selected ? "#2F5D45" : "#ccc",
-                color:"#fff", border:"none", borderRadius:12, padding:"12px",
-                fontSize:14, fontWeight:700, cursor: selected ? "pointer" : "not-allowed",
-                fontFamily:"Tajawal", opacity: loading ? 0.7 : 1
+                background: selected === opt.id ? "#2F5D45" : th.border,
+                color: selected === opt.id ? "#fff" : th.subColor,
+                border: `2px solid ${selected === opt.id ? "#1F3D2B" : "transparent"}`,
+                fontFamily:"Tajawal", cursor:"pointer"
               }}>
-              {loading ? "⏳ " + (lang==="ar" ? "جاري التحليل..." : "Analyzing...") : "✨ " + (lang==="ar" ? "اقترح لي مكاناً الآن" : "Suggest a place")}
+              <span style={{ fontSize:18 }}>{opt.ar.slice(-2)}</span>
+              <span>{lang==="ar" ? opt.ar.replace(/\s*\S+$/, "") : opt.en.replace(/\s*\S+$/, "")}</span>
             </button>
-          </>
-        ) : (
-          <>
-            <div className="text-center mb-3">
-              <div style={{ fontSize:52 }}>{result.emoji}</div>
-              <div className="text-lg font-bold mt-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{result.place}</div>
-            </div>
-            <p className="text-sm leading-relaxed mb-3" style={{ color:th.subColor, fontFamily:"Tajawal" }}>{result.reason}</p>
-            {result.tip && (
-              <div className="rounded-xl px-3 py-2 mb-3 text-xs font-bold" style={{ background:"#C98A2E18", color:"#C98A2E", fontFamily:"Tajawal" }}>
-                💡 {result.tip}
+          ))}
+        </div>
+
+        {/* Suggest button */}
+        {!loading && results.length === 0 && (
+          <button onClick={() => getSuggestions(false)} disabled={!selected}
+            style={{
+              width:"100%", background: selected ? "#2F5D45" : "#ccc",
+              color:"#fff", border:"none", borderRadius:12, padding:"11px",
+              fontSize:14, fontWeight:700, cursor: selected ? "pointer" : "not-allowed",
+              fontFamily:"Tajawal"
+            }}>
+            ✨ {lang==="ar" ? "اقترح لي 3 أماكن الآن" : "Suggest 3 places"}
+          </button>
+        )}
+
+        {/* Loading */}
+        {loading && (
+          <div className="py-4 text-center text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            ⏳ {lang==="ar" ? "جاري التحليل..." : "Analyzing..."}
+          </div>
+        )}
+
+        {/* Results */}
+        {results.length > 0 && (
+          <div className="space-y-2">
+            {results.map((r, i) => (
+              <div key={i} className="flex items-start gap-3 rounded-xl p-3"
+                style={{ background: i===0 ? "#2F5D4510" : th.border }}>
+                <span style={{ fontSize:28, lineHeight:1, flexShrink:0 }}>{r.emoji}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {i===0 && <span className="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style={{ background:"#2F5D45", color:"#fff" }}>#{i+1} الأفضل</span>} {r.place}
+                  </div>
+                  <div className="text-[11px] mt-0.5 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>{r.reason}</div>
+                  {r.tip && <div className="text-[10px] mt-1 font-bold" style={{ color:"#C98A2E", fontFamily:"Tajawal" }}>💡 {r.tip}</div>}
+                </div>
               </div>
-            )}
-            <div className="flex gap-2">
-              <button onClick={reset}
-                style={{ flex:1, background:"none", border:`1px solid ${th.border}`, borderRadius:12,
-                  padding:"10px", fontSize:13, fontWeight:700, cursor:"pointer", color:th.subColor, fontFamily:"Tajawal" }}>
-                {lang==="ar" ? "← تغيير الاهتمام" : "← Change"}
-              </button>
-              <button onClick={getRecommendation}
-                style={{ flex:1, background:"#2F5D4518", border:"none", borderRadius:12,
-                  padding:"10px", fontSize:13, fontWeight:700, cursor:"pointer", color:"#2F5D45", fontFamily:"Tajawal" }}>
-                {lang==="ar" ? "🔄 اقتراح آخر" : "🔄 Another"}
-              </button>
-            </div>
-          </>
+            ))}
+            <button onClick={() => getSuggestions(true)} disabled={loading}
+              style={{ width:"100%", marginTop:4, background:"none", border:`1px solid ${th.border}`,
+                borderRadius:12, padding:"9px", fontSize:13, fontWeight:700,
+                cursor:"pointer", color:th.subColor, fontFamily:"Tajawal" }}>
+              🔄 {lang==="ar" ? "اقتراحات أخرى مختلفة" : "New suggestions"}
+            </button>
+          </div>
         )}
       </div>
     </div>
