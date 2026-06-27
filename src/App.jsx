@@ -15,6 +15,14 @@ import {
 =================================================================== */
 
 const LangContext = createContext({ lang: "ar", t: null, theme: "light", th: null, liveWeather: null });
+function XIcon({ size = 16, color = "currentColor" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.632 5.905-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+    </svg>
+  );
+}
+
 function useLang() {
   return useContext(LangContext);
 }
@@ -241,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.40";
+const APP_VERSION = "1.41";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1777,7 +1785,7 @@ function SocialBar() {
         <a key={s.handle} href={s.url} target="_blank" rel="noopener noreferrer"
           className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2 text-[11px] font-bold"
           style={{ borderColor: "#E3DCC8", background: "#FBF8F0", color: "#A3373B", fontFamily: "Tajawal" }}>
-          <Twitter size={13} /> {s.handle}
+          <XIcon size={13} /> {s.handle}
         </a>
       ))}
     </div>
@@ -2129,14 +2137,7 @@ function Home({ go }) {
         ))}
       </div>
 
-      <a href={SOCIAL[0].url} target="_blank" rel="noopener noreferrer"
-        className="flex items-center justify-between rounded-2xl border p-3" style={{ borderColor: th.border, background: th.cardBg }}>
-        <div className="flex items-center gap-2">
-          <Twitter size={16} color="#A3373B" />
-          <span className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.followTitle}</span>
-        </div>
-        <span className="text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{SOCIAL[0].handle}</span>
-      </a>
+
     </div>
   );
 }
@@ -3177,14 +3178,9 @@ function XFeed() {
 
           <div className="px-4 py-3">
             <div className="flex items-center gap-2 mb-2">
-              <Twitter size={13} color={th.subColor} />
-              <span className="text-[11px] font-bold" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-                @khareef_dhofar
-              </span>
+
               {post.date && (
-                <span className="ms-auto text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-                  {post.date}
-                </span>
+  
               )}
             </div>
             {caption(post) && (
