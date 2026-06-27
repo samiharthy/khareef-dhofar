@@ -1,0 +1,92 @@
+[
+  {
+    "nAr": "مطعم الحصن",
+    "nEn": "Al Husn Restaurant",
+    "type": "arabic",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "lat": 17.0151,
+    "lng": 54.0924,
+    "note": {
+      "ar": "أكلات عمانية أصيلة، مشهور بالمشاكيك",
+      "en": "Authentic Omani cuisine"
+    },
+    "open": "12:00-23:00",
+    "phone": "+96823210000"
+  },
+  {
+    "nAr": "مطعم البيك",
+    "nEn": "Al Baik",
+    "type": "fast",
+    "priceAr": "اقتصادي",
+    "priceEn": "Budget",
+    "lat": 17.0144,
+    "lng": 54.0867,
+    "note": {
+      "ar": "وجبات سريعة شعبي",
+      "en": "Popular fast food"
+    },
+    "open": "10:00-02:00",
+    "phone": ""
+  },
+  {
+    "nAr": "مطعم نزوى",
+    "nEn": "Nizwa Restaurant",
+    "type": "seafood",
+    "priceAr": "اقتصادي",
+    "priceEn": "Budget",
+    "lat": 17.02,
+    "lng": 54.095,
+    "note": {
+      "ar": "أسماك ومأكولات بحرية طازجة",
+      "en": "Fresh seafood"
+    },
+    "open": "11:00-23:00",
+    "phone": ""
+  },
+  {
+    "nAr": "كافيه ديلا",
+    "nEn": "Cafe Della",
+    "type": "cafe",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "lat": 17.0165,
+    "lng": 54.0905,
+    "note": {
+      "ar": "مشروبات وحلويات",
+      "en": "Drinks and desserts"
+    },
+    "open": "8:00-00:00",
+    "phone": ""
+  },
+  {
+    "nAr": "مطعم الساحل",
+    "nEn": "Al Sahel Restaurant",
+    "type": "seafood",
+    "priceAr": "مرتفع",
+    "priceEn": "High-end",
+    "lat": 17.008,
+    "lng": 54.082,
+    "note": {
+      "ar": "مأكولات بحرية فاخرة على الشاطئ",
+      "en": "Premium seafood on the beach"
+    },
+    "open": "12:00-23:00",
+    "phone": ""
+  },
+  {
+    "nAr": "مطعم السمحان",
+    "nEn": "Samhan Restaurant",
+    "type": "arabic",
+    "priceAr": "اقتصادي",
+    "priceEn": "Budget",
+    "lat": 17.019,
+    "lng": 54.097,
+    "note": {
+      "ar": "مطعم شعبي بأسعار مناسبة",
+      "en": "Popular local prices"
+    },
+    "open": "6:00-23:00",
+    "phone": ""
+  }
+]
