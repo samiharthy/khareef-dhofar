@@ -2,7 +2,7 @@ import React, { useState, useMemo, useContext, createContext, useEffect } from "
 import {
   MapPin, Calendar, Sparkles, Moon, Landmark, Compass,
   Search, Mountain, CloudFog, Sun, Clock, ExternalLink,
-  Tent, ShoppingBag, Coffee, Waves, Navigation, Twitter,
+  Tent, ShoppingBag, Coffee, Waves, Navigation,
   Gauge, Users, Info, Plane, Car, Stethoscope, Building2,
   Sprout, Route, Sunrise, Sunset, CloudDrizzle, CloudSun,
   Cloud, MoreHorizontal, X, Fuel, Footprints, Download, Share2, Star, Megaphone,
@@ -3284,6 +3284,15 @@ function FoodGuide() {
     </div>
   );
 }
+
+const INTEREST_OPTIONS = [
+  { id:"nature",    ar:"طبيعة 🌿",  en:"Nature 🌿" },
+  { id:"adventure", ar:"مغامرة 🧗", en:"Adventure 🧗" },
+  { id:"family",    ar:"عائلة 👨‍👩‍👧", en:"Family 👨‍👩‍👧" },
+  { id:"heritage",  ar:"تراث 🏛️",  en:"Heritage 🏛️" },
+  { id:"beach",     ar:"شاطئ 🏖️",  en:"Beach 🏖️" },
+  { id:"hiking",    ar:"هايكنج 🥾", en:"Hiking 🥾" },
+];
 
 function WhereToGoToday() {
   const { lang, theme } = useLang();
