@@ -3968,8 +3968,7 @@ export default function App() {
       </div>
     </LangContext.Provider>
   );
-}function Home() {
-  const { lang, t, theme, liveWeather, refetchWeather } = useLang();
+}
   const th = THEMES[theme];
   const EVENTS_PREVIEW = EVENTS.slice(0, 2);
 
