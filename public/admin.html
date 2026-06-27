@@ -294,66 +294,52 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     <!-- ══════════════ STATS ══════════════ -->
     <div id="tab-stats" style="display:none">
 
-      <!-- Vercel Live Stats -->
-      <div class="card" id="vercel-stats-card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-          <div style="font-weight:700;font-size:15px">📊 إحصائيات Vercel</div>
-          <button class="btn btn-green btn-sm" onclick="loadStats()">🔄 تحديث</button>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-          <div style="text-align:center;padding:16px;background:#EBF4EE;border-radius:12px">
-            <div style="font-size:36px;font-weight:800;color:#2F5D45" id="stat-visitors">—</div>
-            <div style="font-size:11px;color:#888;margin-top:3px">👥 الزوار</div>
+      <!-- Open Vercel Dashboard -->
+      <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="text-decoration:none;display:block;margin-bottom:14px">
+        <div style="background:linear-gradient(135deg,#1F3D2B,#2F5D45);border-radius:16px;padding:20px;text-align:center;color:#fff">
+          <div style="font-size:42px;margin-bottom:8px">📊</div>
+          <div style="font-size:16px;font-weight:800;margin-bottom:4px">لوحة إحصائيات Vercel</div>
+          <div style="font-size:11px;opacity:.75;margin-bottom:14px">الزوار · الدول · الأجهزة · الرسوم البيانية</div>
+          <div style="background:#fff;color:#1F3D2B;border-radius:10px;padding:9px 22px;font-size:13px;font-weight:800;display:inline-block">
+            🔗 فتح الإحصائيات الكاملة ↗
           </div>
-          <div style="text-align:center;padding:16px;background:#EBF4EE;border-radius:12px">
-            <div style="font-size:36px;font-weight:800;color:#3C6E8F" id="stat-pageviews">—</div>
-            <div style="font-size:11px;color:#888;margin-top:3px">📄 المشاهدات</div>
-          </div>
-        </div>
-        <!-- Countries & devices will show here -->
-        <div id="stats-geo" style="display:none;margin-top:10px"></div>
-        <div id="stats-note" style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">
-          يعمل فقط عند فتح الأدمن من الموقع (ليس من ملف محلي)
-        </div>
-      </div>
-
-      <!-- Vercel token input -->
-      <div class="card" id="vercel-token-card">
-        <div style="font-size:12px;font-weight:700;color:#3C6E8F;margin-bottom:8px">🔑 Vercel Token للإحصائيات</div>
-        <div style="font-size:11px;color:#555;margin-bottom:8px;line-height:1.6">
-          من <a href="https://vercel.com/account/tokens" target="_blank" style="color:#3C6E8F">vercel.com/account/tokens</a> → Create Token → samiharthy's projects
-        </div>
-        <div style="display:flex;gap:8px">
-          <input id="vercel-token-input" placeholder="أدخل Vercel Token..." style="flex:1;font-size:12px" />
-          <button onclick="saveAndLoadVercel()" class="btn btn-green btn-sm">حفظ</button>
-          <button onclick="clearVercelToken()" class="btn btn-sm" style="background:#eee;color:#888;border:none">مسح</button>
-        </div>
-      </div>
-
-      <!-- Link to full dashboard -->
-      <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="text-decoration:none">
-        <div class="card" style="background:linear-gradient(135deg,#1F3D2B,#2F5D45);color:#fff;text-align:center;padding:16px">
-          <div style="font-size:13px;font-weight:700;margin-bottom:4px">🔗 فتح Vercel Analytics الكامل ↗</div>
-          <div style="font-size:11px;opacity:.7">الدول · الأجهزة · المصادر · الرسوم البيانية</div>
         </div>
       </a>
 
-      <!-- App local stats -->
-      <div class="card" style="margin-top:14px">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px">📱 إحصائيات التطبيق على هذا الجهاز</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
-            <div style="font-size:24px;font-weight:800;color:#2F5D45" id="stat-installs">—</div>
-            <div style="font-size:10px;color:#888;margin-top:2px">📲 تثبيت</div>
+      <!-- Quick stats from app (localStorage) -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-weight:700;font-size:14px">📱 إحصائيات التطبيق</div>
+          <button class="btn btn-green btn-sm" onclick="loadStats()">🔄 تحديث</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div style="text-align:center;padding:14px 8px;background:#EBF4EE;border-radius:12px">
+            <div style="font-size:30px;font-weight:800;color:#2F5D45" id="stat-installs">—</div>
+            <div style="font-size:11px;color:#888;margin-top:3px">📲 تثبيت</div>
           </div>
-          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
-            <div style="font-size:24px;font-weight:800;color:#3C6E8F" id="stat-shares">—</div>
-            <div style="font-size:10px;color:#888;margin-top:2px">🔗 مشاركة</div>
+          <div style="text-align:center;padding:14px 8px;background:#EBF4EE;border-radius:12px">
+            <div style="font-size:30px;font-weight:800;color:#3C6E8F" id="stat-shares">—</div>
+            <div style="font-size:11px;color:#888;margin-top:3px">🔗 مشاركة</div>
           </div>
-          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
-            <div style="font-size:24px;font-weight:800;color:#C98A2E" id="stat-opens">—</div>
-            <div style="font-size:10px;color:#888;margin-top:2px">👁️ فتح</div>
+          <div style="text-align:center;padding:14px 8px;background:#EBF4EE;border-radius:12px">
+            <div style="font-size:30px;font-weight:800;color:#C98A2E" id="stat-opens">—</div>
+            <div style="font-size:11px;color:#888;margin-top:3px">👁️ فتح</div>
           </div>
+        </div>
+        <div style="font-size:11px;color:#aaa;text-align:center;margin-top:8px;line-height:1.6">
+          تُقرأ من التطبيق على الجهاز الذي فتح التطبيق آخر مرة<br>
+          <b>للإحصائيات الكاملة من جميع المستخدمين ← اضغط الزر الأخضر أعلاه</b>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="card" style="background:#F0F7FF;border:1px solid #3C6E8F30">
+        <div style="font-size:12px;font-weight:700;color:#3C6E8F;margin-bottom:6px">ℹ️ كيف تعمل الإحصائيات</div>
+        <div style="font-size:11px;color:#555;line-height:1.8">
+          • <b>Vercel Analytics</b>: تتتبع كل زائر تلقائياً بدون أي إعداد<br>
+          • <b>التثبيت</b>: يُسجَّل عند إضافة التطبيق للشاشة الرئيسية<br>
+          • <b>المشاركة</b>: يُسجَّل عند ضغط زر المشاركة في التطبيق<br>
+          • <b>الفتح</b>: يُسجَّل عند كل فتح للتطبيق
         </div>
       </div>
 
@@ -922,176 +908,18 @@ async function deleteRestaurant(i) {
 const STATS_PATH = "public/stats.json";
 let statsData = null, statsSha = null;
 
-async function loadStats() {
-  // Local stats
-  document.getElementById("stat-opens").textContent    = parseInt(localStorage.getItem("kh_opens")||"0");
-  document.getElementById("stat-installs").textContent = parseInt(localStorage.getItem("kh_installs")||"0");
-  document.getElementById("stat-shares").textContent   = parseInt(localStorage.getItem("kh_shares")||"0");
-
-  const token = localStorage.getItem("vercel_token");
-  if (!token) { document.getElementById("stats-note").textContent = "أدخل Vercel Token"; return; }
-
-  document.getElementById("stat-visitors").textContent  = "⏳";
-  document.getElementById("stat-pageviews").textContent = "⏳";
-  document.getElementById("stats-note").textContent     = "جاري الجلب...";
-
-  try {
-    const TEAM = "samiharthys-projects";
-    const SLUG = "khareef-dhofar";
-    const now  = new Date();
-    const to   = now.toISOString();
-    const from = new Date(now - 30*24*3600*1000).toISOString();
-
-    // Step 1: Get team
-    const teamRes = await fetch("https://api.vercel.com/v2/teams?slug=" + TEAM,
-      { headers: { Authorization: "Bearer " + token } });
-    const teamJson = await teamRes.json();
-    const teamId   = teamJson.teams?.[0]?.id;
-    document.getElementById("stats-note").textContent = teamId ? "Team: " + teamId.slice(0,8) + "..." : "No team found";
-
-    // Step 2: Get project
-    const pUrl = "https://api.vercel.com/v9/projects/" + SLUG + (teamId ? "?teamId=" + teamId : "");
-    const pRes = await fetch(pUrl, { headers: { Authorization: "Bearer " + token } });
-    const pJson = await pRes.json();
-    const pid   = pJson.id;
-    if (!pid) throw new Error("Project not found: " + JSON.stringify(pJson).slice(0,100));
-
-    document.getElementById("stats-note").textContent = "Project: " + pid.slice(0,8) + "...";
-
-    // Use hardcoded project ID as fallback (confirmed working)
-    const finalPid = pid || "prj_MV8eu8ihmza29NPaFvkW3CDflxen";
-    const teamParam = teamId ? "&teamId=" + teamId : "";
-
-    // Try multiple endpoint formats — Vercel has changed these over time
-    const endpoints = [
-      // Format 1: summary endpoint
-      `https://api.vercel.com/v1/web/insights/stats?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
-      // Format 2: no environment filter
-      `https://api.vercel.com/v1/web/insights?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
-      // Format 3: v0 endpoint
-      `https://api.vercel.com/v0/web/insights/stats?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
-      // Format 4: web analytics v1 (newer)
-      `https://api.vercel.com/v1/web/analytics?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
-    ];
-
-    let statsJson = null;
-    for (const url of endpoints) {
-      const r = await fetch(url, { headers: { Authorization: "Bearer " + token } });
-      const j = await r.json();
-      console.log("Trying:", url.split("?")[0], "→", r.status, JSON.stringify(j).slice(0,150));
-      if (r.ok && !j.error) { statsJson = j; break; }
-    }
-
-    if (!statsJson) throw new Error("كل الـ endpoints فشلت — انظر Console");
-
-    // Parse — try many possible structures
-    const getVal = (obj, ...keys) => {
-      for (const k of keys) {
-        const v = obj?.[k];
-        if (typeof v === "number") return v;
-        if (typeof v?.value === "number") return v.value;
-        if (typeof v?.total === "number") return v.total;
-      }
-      if (Array.isArray(obj?.data)) return obj.data.reduce((s,x) => s+(x.total||x.count||x.value||0),0);
-      return null;
-    };
-
-    const visitors  = getVal(statsJson, "visitors", "uniqueVisitors", "users") ??
-                      getVal(statsJson?.data, "visitors", "uniqueVisitors") ?? "؟";
-    const pageviews = getVal(statsJson, "pageViews", "pageviews", "views") ??
-                      getVal(statsJson?.data, "pageViews", "pageviews") ?? "؟";
-
-    document.getElementById("stat-visitors").textContent  = String(visitors);
-    document.getElementById("stat-pageviews").textContent = String(pageviews);
-    document.getElementById("stats-note").textContent     = "✅ آخر 30 يوم";
-    console.log("Final stats:", visitors, pageviews, "from:", JSON.stringify(statsJson).slice(0,200));
-    showMsg("stats-msg","✅ تم التحديث",true);
-
-  } catch(e) {
-    document.getElementById("stat-visitors").textContent  = "!";
-    document.getElementById("stat-pageviews").textContent = "!";
-    document.getElementById("stats-note").textContent     = "❌ " + e.message;
-    console.error("Stats error:", e);
-  }
-}
-
-function saveAndLoadVercel() {
-  const t = document.getElementById("vercel-token-input")?.value?.trim();
-  if (t) { localStorage.setItem("vercel_token", t); document.getElementById("vercel-token-input").value = ""; loadStats(); }
-}
-function clearVercelToken() {
-  localStorage.removeItem("vercel_token");
-  ["stat-visitors","stat-pageviews"].forEach(id => document.getElementById(id).textContent = "—");
-  showMsg("stats-msg","تم مسح التوكن",true);
+function loadStats() {
+  document.getElementById("stat-opens").textContent    = parseInt(localStorage.getItem("kh_opens")    || "0");
+  document.getElementById("stat-installs").textContent = parseInt(localStorage.getItem("kh_installs") || "0");
+  document.getElementById("stat-shares").textContent   = parseInt(localStorage.getItem("kh_shares")   || "0");
+  showMsg("stats-msg", "✅ تم التحديث", true);
 }
 
 
-async function fetchVercelStats(token) {
-  const errEl = document.getElementById("stats-error");
-  errEl.style.display = "none";
-  
-  try {
-    // Step 1: Get project ID
-    const pRes = await fetch("https://api.vercel.com/v9/projects/khareef-dhofar", {
-      headers: { Authorization: "Bearer " + token }
-    });
-    if (!pRes.ok) {
-      const err = await pRes.json();
-      throw new Error(err.error?.message || `Projects API ${pRes.status}`);
-    }
-    const project = await pRes.json();
-    const pid = project.id;
-    if (!pid) throw new Error("Project ID not found");
 
-    // Step 2: Get analytics using correct Vercel Web Analytics API
-    const to = new Date().toISOString().split("T")[0];
-    const from = new Date(Date.now() - 30*24*3600000).toISOString().split("T")[0];
-    
-    // Try new v2 endpoint first
-    const aRes = await fetch(
-      `https://api.vercel.com/v2/web/analytics?projectId=${pid}&from=${from}&to=${to}&filter=%7B%7D&limit=250`,
-      { headers: { Authorization: "Bearer " + token } }
-    );
-    
-    if (aRes.ok) {
-      const aData = await aRes.json();
-      // v2 response format
-      const visitors  = aData.data?.visitors?.value || aData.visitors || 0;
-      const pageviews = aData.data?.pageViews?.value || aData.pageViews || 0;
-      document.getElementById("stat-visitors").textContent  = visitors.toLocaleString("ar");
-      document.getElementById("stat-pageviews").textContent = pageviews.toLocaleString("ar");
-    } else {
-      // Try v1 endpoint
-      const a1Res = await fetch(
-        `https://api.vercel.com/v1/web/insights/stats?projectId=${pid}&from=${from}&to=${to}&environment=production`,
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      if (a1Res.ok) {
-        const a1 = await a1Res.json();
-        document.getElementById("stat-visitors").textContent  = (a1.visitors||a1.total||0).toLocaleString("ar");
-        document.getElementById("stat-pageviews").textContent = (a1.pageViews||a1.views||0).toLocaleString("ar");
-      } else {
-        // Show raw response for debugging
-        const errText = await a1Res.text();
-        throw new Error(`Analytics API ${a1Res.status}: ${errText.slice(0,100)}`);
-      }
-    }
 
-    document.getElementById("stats-error").style.display = "none";
-    showMsg("stats-msg", "✅ تم تحديث الإحصائيات", true);
 
-  } catch(e) {
-    console.error("Vercel stats error:", e);
-    document.getElementById("stat-visitors").textContent  = "—";
-    document.getElementById("stat-pageviews").textContent = "—";
-    errEl.innerHTML = `
-      <div style="background:#FFF0F0;border:1px solid #B5402C40;border-radius:10px;padding:12px;font-size:11px;color:#B5402C">
-        <b>خطأ:</b> ${e.message}<br><br>
-        <b>الحل:</b> افتح <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="color:#3C6E8F">Vercel Analytics Dashboard ↗</a> مباشرة
-      </div>`;
-    errEl.style.display = "block";
-  }
-}
+async 
 
 // Called from the app via URL trick — admin pulls stats from stats.json
 // The app itself writes events to stats.json every 10 opens or install/share
