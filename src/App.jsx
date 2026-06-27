@@ -249,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.45";
+const APP_VERSION = "1.46";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3194,21 +3194,27 @@ const FOOD_TYPES = {
 };
 
 function FoodGuide() {
-  const { lang, theme, t } = useLang();
+  const { lang, theme } = useLang();
   const th = THEMES[theme];
   const [filter, setFilter] = useState("all");
+  const [restaurants, setRestaurants] = useState(RESTAURANTS);
 
-  const filtered = filter === "all" ? RESTAURANTS : RESTAURANTS.filter(r => r.type === filter);
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(data => { if (Array.isArray(data) && data.length > 0) setRestaurants(data); })
+      .catch(() => {});
+  }, []);
+
+  const filtered = filter === "all" ? restaurants : restaurants.filter(r => r.type === filter);
 
   return (
     <div className="space-y-4 pb-6">
-      <SectionTitle eyebrow={lang==="ar"?"دليل":"Guide"} title={lang==="ar"?"دليل المطاعم":"Food Guide"} icon={Coffee} />
-
-      {/* Type filter */}
+      <SectionTitle eyebrow={lang==="ar"?"دليل":"Guide"} title={lang==="ar"?"دليل المطاعم":"Restaurant Guide"} icon={Coffee} />
       <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
         {Object.entries(FOOD_TYPES).map(([key, val]) => (
           <button key={key} onClick={() => setFilter(key)}
-            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition"
+            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
             style={{ background: filter===key ? "#2F5D45" : th.cardBg, color: filter===key ? "#fff" : th.subColor,
               border: `1px solid ${filter===key ? "#2F5D45" : th.border}`, fontFamily:"Tajawal" }}>
             <span>{val.icon}</span>
@@ -3216,36 +3222,41 @@ function FoodGuide() {
           </button>
         ))}
       </div>
-
-      {/* Restaurants */}
       <div className="space-y-3">
         {filtered.map((r, i) => (
           <div key={i} className="overflow-hidden rounded-2xl" style={{ background: th.cardBg, border: `1px solid ${th.border}` }}>
             <div className="px-4 py-3">
-              <div className="flex items-start justify-between gap-2">
-                <div>
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
+                  style={{ background: "#2F5D4512" }}>
+                  {FOOD_TYPES[r.type]?.icon || "🍽️"}
+                </div>
+                <div className="flex-1 min-w-0">
                   <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily:"Tajawal" }}>
                     {lang==="ar" ? r.nAr : r.nEn}
                   </div>
                   <div className="text-[11px] mt-0.5" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
-                    {FOOD_TYPES[r.type]?.icon} {lang==="ar" ? FOOD_TYPES[r.type]?.ar : FOOD_TYPES[r.type]?.en}
-                    {" · "}
-                    {lang==="ar" ? r.priceAr : r.priceEn}
-                    {" · 🕐 "}{r.open}
+                    {lang==="ar" ? FOOD_TYPES[r.type]?.ar : FOOD_TYPES[r.type]?.en}
+                    {" · "}{lang==="ar" ? r.priceAr : r.priceEn}
+                    {r.open ? " · 🕐 " + r.open : ""}
                   </div>
-                  <div className="text-xs mt-1 leading-relaxed" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
-                    {lang==="ar" ? r.note.ar : r.note.en}
-                  </div>
+                  {r.note && (
+                    <div className="text-xs mt-1 leading-relaxed" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? r.note.ar : r.note.en}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex gap-2 mt-3">
-                <a href={`https://www.google.com/maps/place/${r.lat},${r.lng}/@${r.lat},${r.lng},17z`}
-                  target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold"
-                  style={{ background: "#2F5D4515", color: "#2F5D45", fontFamily:"Tajawal" }}>
-                  <MapPin size={12} color="#2F5D45" />
-                  {lang==="ar" ? "الموقع" : "Location"}
-                </a>
+                {r.lat && (
+                  <a href={`https://www.google.com/maps/place/${r.lat},${r.lng}/@${r.lat},${r.lng},17z`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold"
+                    style={{ background: "#2F5D4515", color: "#2F5D45", fontFamily:"Tajawal" }}>
+                    <MapPin size={12} color="#2F5D45" />
+                    {lang==="ar" ? "الموقع" : "Map"}
+                  </a>
+                )}
                 {r.phone && (
                   <a href={`tel:${r.phone}`}
                     className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold"
@@ -3257,20 +3268,15 @@ function FoodGuide() {
             </div>
           </div>
         ))}
+        {filtered.length === 0 && (
+          <div className="text-center py-8" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "لا توجد نتائج" : "No results"}
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-
-const INTEREST_OPTIONS = [
-  { id:"nature",    ar:"طبيعة 🌿",  en:"Nature 🌿" },
-  { id:"adventure", ar:"مغامرة 🧗", en:"Adventure 🧗" },
-  { id:"family",    ar:"عائلة 👨‍👩‍👧", en:"Family 👨‍👩‍👧" },
-  { id:"heritage",  ar:"تراث 🏛️",  en:"Heritage 🏛️" },
-  { id:"beach",     ar:"شاطئ 🏖️",  en:"Beach 🏖️" },
-  { id:"hiking",    ar:"هايكنج 🥾", en:"Hiking 🥾" },
-];
 
 function WhereToGoToday() {
   const { lang, theme } = useLang();
