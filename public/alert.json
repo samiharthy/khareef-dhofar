@@ -1,13 +1,13 @@
 {
-  "id": "notif-1782576027795",
+  "id": "notif-1782576076961",
   "active": true,
-  "type": "urgent",
-  "priority": "urgent",
+  "type": "info",
+  "priority": "normal",
   "message": {
-    "ar": "مرحباً بكم في خريف صلالة بدايه اخضرار المناطق الجبلية في ظفار  2026 🌿",
-    "en": "Welcome to the fall of Salalah, the beginning of the greening of the mountainous areas in Dhofar  2026 🌿",
-    "hi": "धोफर 2026 में पहाड़ी क्षेत्रों के हरियाली की शुरुआत, सलालाह के पतन में आपका स्वागत है 🌿",
-    "fr": "Bienvenue à la chute de Salalah, le début du verdissement des zones montagneuses du Dhofar  2026 🌿"
+    "ar": "طوي أعتير شرق محافظة ظفار. بدأت الجبال تتلحف الضباب والأرض اعشوشبت بخجل!!",
+    "en": "Tawy Ateer, east of Dhofar Governorate. The mountains began to wrap themselves in fog and the earth grassed timidly!!",
+    "hi": "तावी अतीर, धोफर मुहाफ़ज़ाह के पूर्व में। पहाड़ों ने खुद को कोहरे में लपेटना शुरू कर दिया और पृथ्वी डर के मारे चूर - चूर हो गई!!",
+    "fr": "Tawy Ateer, à l'est du gouvernorat de Dhofar. Les montagnes ont commencé à s'envelopper de brouillard et la terre a gazonné timidement ! !"
   },
-  "updatedAt": "2026-06-27T15:47:02.082Z"
+  "updatedAt": "2026-06-27T16:01:16.961Z"
 }
