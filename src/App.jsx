@@ -3884,6 +3884,14 @@ export default function App() {
     // Handle tab switch from Home quick nav
     const handleSwitch = (e) => setTab(e.detail);
     window.addEventListener("switchTab", handleSwitch);
+    // Inject Vercel Analytics script dynamically (avoids Vite bundling issues)
+    if (!document.querySelector('script[src*="insights"]')) {
+      const vaScript = document.createElement("script");
+      vaScript.defer = true;
+      vaScript.src = "/_vercel/insights/script.js";
+      document.head.appendChild(vaScript);
+    }
+
     // Auto-update: check for new version daily
     const lastCheck = localStorage.getItem("last_version_check");
     const now = Date.now();
@@ -3897,8 +3905,9 @@ export default function App() {
     }
 
     // Track app opens
-    const opens = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
-    localStorage.setItem("kh_opens", opens.toString());
+    const openCount = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
+    localStorage.setItem("kh_opens", openCount.toString());
+    if(openCount%5===0&&openCount>0&&window.va) window.va("event",{name:"app_open"});
 
     // Track PWA installs
     window.addEventListener("appinstalled", () => {
@@ -3907,10 +3916,6 @@ export default function App() {
       localStorage.setItem("kh_installed_at", new Date().toISOString());
       if(window.va) window.va("event",{name:"app_install"});
     });
-
-    // Report open event (every 5 opens)
-    const opens = parseInt(localStorage.getItem("kh_opens") || "0");
-    if(opens%5===0&&opens>0&&window.va) window.va("event",{name:"app_open"});
   }, []);
 
   async function fetchLiveWeather() {
