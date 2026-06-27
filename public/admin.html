@@ -928,59 +928,74 @@ async function loadStats() {
   document.getElementById("stat-installs").textContent = parseInt(localStorage.getItem("kh_installs")||"0");
   document.getElementById("stat-shares").textContent   = parseInt(localStorage.getItem("kh_shares")||"0");
 
-  // Vercel API stats
   const token = localStorage.getItem("vercel_token");
-  if (!token) return;
-  
+  if (!token) { document.getElementById("stats-note").textContent = "أدخل Vercel Token"; return; }
+
   document.getElementById("stat-visitors").textContent  = "⏳";
   document.getElementById("stat-pageviews").textContent = "⏳";
+  document.getElementById("stats-note").textContent     = "جاري الجلب...";
 
   try {
-    const TEAM   = "samiharthys-projects";
-    const SLUG   = "khareef-dhofar";
-    const to   = new Date().toISOString().split("T")[0];
-    const from = new Date(Date.now() - 30*24*3600000).toISOString().split("T")[0];
-    
-    // Get team ID
-    const teamRes = await fetch(`https://api.vercel.com/v2/teams?slug=${TEAM}`, {
-      headers: { Authorization: "Bearer " + token }
-    });
-    const teamData = await teamRes.json();
-    const teamId = teamData.teams?.[0]?.id || teamData.id;
+    const TEAM = "samiharthys-projects";
+    const SLUG = "khareef-dhofar";
+    const now  = new Date();
+    const to   = now.toISOString();
+    const from = new Date(now - 30*24*3600*1000).toISOString();
 
-    // Get project
-    const projRes = await fetch(
-      `https://api.vercel.com/v9/projects/${SLUG}${teamId ? "?teamId="+teamId : ""}`,
-      { headers: { Authorization: "Bearer " + token } }
-    );
-    const proj = await projRes.json();
-    const pid = proj.id;
-    if (!pid) throw new Error("لم يتم العثور على المشروع");
+    // Step 1: Get team
+    const teamRes = await fetch("https://api.vercel.com/v2/teams?slug=" + TEAM,
+      { headers: { Authorization: "Bearer " + token } });
+    const teamJson = await teamRes.json();
+    const teamId   = teamJson.teams?.[0]?.id;
+    document.getElementById("stats-note").textContent = teamId ? "Team: " + teamId.slice(0,8) + "..." : "No team found";
 
-    // Get analytics stats (v1 endpoint)
-    const statsRes = await fetch(
-      `https://api.vercel.com/v1/web/insights/stats/visitors?projectId=${pid}&from=${from}&to=${to}&environment=production${teamId?"&teamId="+teamId:""}`,
-      { headers: { Authorization: "Bearer " + token } }
-    );
-    const statsData = await statsRes.json();
-    const visitors = statsData.total || statsData.value || statsData.data?.total || 0;
+    // Step 2: Get project
+    const pUrl = "https://api.vercel.com/v9/projects/" + SLUG + (teamId ? "?teamId=" + teamId : "");
+    const pRes = await fetch(pUrl, { headers: { Authorization: "Bearer " + token } });
+    const pJson = await pRes.json();
+    const pid   = pJson.id;
+    if (!pid) throw new Error("Project not found: " + JSON.stringify(pJson).slice(0,100));
 
-    const pvRes = await fetch(
-      `https://api.vercel.com/v1/web/insights/stats/pageviews?projectId=${pid}&from=${from}&to=${to}&environment=production${teamId?"&teamId="+teamId:""}`,
-      { headers: { Authorization: "Bearer " + token } }
-    );
-    const pvData = await pvRes.json();
-    const pageviews = pvData.total || pvData.value || pvData.data?.total || 0;
+    document.getElementById("stats-note").textContent = "Project: " + pid.slice(0,8) + "...";
 
-    document.getElementById("stat-visitors").textContent  = visitors.toLocaleString("ar");
-    document.getElementById("stat-pageviews").textContent = pageviews.toLocaleString("ar");
+    // Step 3: Try v1 web insights
+    const base = "https://api.vercel.com/v1/web/insights/stats";
+    const qp   = `?projectId=${pid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&environment=production` + (teamId ? "&teamId=" + teamId : "");
+
+    const [vRes, pvRes] = await Promise.all([
+      fetch(base + "/visitors" + qp, { headers: { Authorization: "Bearer " + token } }),
+      fetch(base + "/pageviews"  + qp, { headers: { Authorization: "Bearer " + token } })
+    ]);
+
+    const vJson  = await vRes.json();
+    const pvJson = await pvRes.json();
+
+    // Parse response — try multiple formats
+    const extractNum = (d) => {
+      if (typeof d === "number") return d;
+      if (d?.total !== undefined) return d.total;
+      if (d?.value !== undefined) return d.value;
+      if (Array.isArray(d?.data)) return d.data.reduce((s,x) => s + (x.total||x.count||x.value||0), 0);
+      if (d?.data?.total !== undefined) return d.data.total;
+      return "?";
+    };
+
+    const visitors  = extractNum(vJson);
+    const pageviews = extractNum(pvJson);
+
+    document.getElementById("stat-visitors").textContent  = String(visitors);
+    document.getElementById("stat-pageviews").textContent = String(pageviews);
     document.getElementById("stats-note").textContent     = "✅ آخر 30 يوم";
+
+    // Store raw for debug
+    console.log("visitors raw:", JSON.stringify(vJson));
+    console.log("pageviews raw:", JSON.stringify(pvJson));
     showMsg("stats-msg","✅ تم التحديث",true);
 
   } catch(e) {
-    document.getElementById("stat-visitors").textContent  = "—";
-    document.getElementById("stat-pageviews").textContent = "—";
-    document.getElementById("stats-note").textContent = "⚠️ " + e.message;
+    document.getElementById("stat-visitors").textContent  = "!";
+    document.getElementById("stat-pageviews").textContent = "!";
+    document.getElementById("stats-note").textContent     = "❌ " + e.message;
     console.error("Stats error:", e);
   }
 }
