@@ -958,38 +958,53 @@ async function loadStats() {
 
     document.getElementById("stats-note").textContent = "Project: " + pid.slice(0,8) + "...";
 
-    // Step 3: Try v1 web insights
-    const base = "https://api.vercel.com/v1/web/insights/stats";
-    const qp   = `?projectId=${pid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&environment=production` + (teamId ? "&teamId=" + teamId : "");
+    // Use hardcoded project ID as fallback (confirmed working)
+    const finalPid = pid || "prj_MV8eu8ihmza29NPaFvkW3CDflxen";
+    const teamParam = teamId ? "&teamId=" + teamId : "";
 
-    const [vRes, pvRes] = await Promise.all([
-      fetch(base + "/visitors" + qp, { headers: { Authorization: "Bearer " + token } }),
-      fetch(base + "/pageviews"  + qp, { headers: { Authorization: "Bearer " + token } })
-    ]);
+    // Try multiple endpoint formats — Vercel has changed these over time
+    const endpoints = [
+      // Format 1: summary endpoint
+      `https://api.vercel.com/v1/web/insights/stats?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
+      // Format 2: no environment filter
+      `https://api.vercel.com/v1/web/insights?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
+      // Format 3: v0 endpoint
+      `https://api.vercel.com/v0/web/insights/stats?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
+      // Format 4: web analytics v1 (newer)
+      `https://api.vercel.com/v1/web/analytics?projectId=${finalPid}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}${teamParam}`,
+    ];
 
-    const vJson  = await vRes.json();
-    const pvJson = await pvRes.json();
+    let statsJson = null;
+    for (const url of endpoints) {
+      const r = await fetch(url, { headers: { Authorization: "Bearer " + token } });
+      const j = await r.json();
+      console.log("Trying:", url.split("?")[0], "→", r.status, JSON.stringify(j).slice(0,150));
+      if (r.ok && !j.error) { statsJson = j; break; }
+    }
 
-    // Parse response — try multiple formats
-    const extractNum = (d) => {
-      if (typeof d === "number") return d;
-      if (d?.total !== undefined) return d.total;
-      if (d?.value !== undefined) return d.value;
-      if (Array.isArray(d?.data)) return d.data.reduce((s,x) => s + (x.total||x.count||x.value||0), 0);
-      if (d?.data?.total !== undefined) return d.data.total;
-      return "?";
+    if (!statsJson) throw new Error("كل الـ endpoints فشلت — انظر Console");
+
+    // Parse — try many possible structures
+    const getVal = (obj, ...keys) => {
+      for (const k of keys) {
+        const v = obj?.[k];
+        if (typeof v === "number") return v;
+        if (typeof v?.value === "number") return v.value;
+        if (typeof v?.total === "number") return v.total;
+      }
+      if (Array.isArray(obj?.data)) return obj.data.reduce((s,x) => s+(x.total||x.count||x.value||0),0);
+      return null;
     };
 
-    const visitors  = extractNum(vJson);
-    const pageviews = extractNum(pvJson);
+    const visitors  = getVal(statsJson, "visitors", "uniqueVisitors", "users") ??
+                      getVal(statsJson?.data, "visitors", "uniqueVisitors") ?? "؟";
+    const pageviews = getVal(statsJson, "pageViews", "pageviews", "views") ??
+                      getVal(statsJson?.data, "pageViews", "pageviews") ?? "؟";
 
     document.getElementById("stat-visitors").textContent  = String(visitors);
     document.getElementById("stat-pageviews").textContent = String(pageviews);
     document.getElementById("stats-note").textContent     = "✅ آخر 30 يوم";
-
-    // Store raw for debug
-    console.log("visitors raw:", JSON.stringify(vJson));
-    console.log("pageviews raw:", JSON.stringify(pvJson));
+    console.log("Final stats:", visitors, pageviews, "from:", JSON.stringify(statsJson).slice(0,200));
     showMsg("stats-msg","✅ تم التحديث",true);
 
   } catch(e) {
