@@ -249,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.41";
+const APP_VERSION = "1.42";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3143,10 +3143,16 @@ function XFeed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("/featured.json?t=" + Date.now())
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/featured.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => setPosts(Array.isArray(data) ? data.slice(0, 2) : []))
-      .catch(() => {});
+      .catch(() => {
+        // Fallback to local
+        fetch("/featured.json?t=" + Date.now())
+          .then(r => r.json())
+          .then(data => setPosts(Array.isArray(data) ? data.slice(0, 2) : []))
+          .catch(() => {});
+      });
   }, []);
 
   if (posts.length === 0) return null;
@@ -3173,7 +3179,18 @@ function XFeed() {
               className="w-full object-cover"
               style={{ maxHeight: 220 }}
               loading="lazy"
-              onError={e => e.target.parentElement.style.display = "none"} />
+              referrerPolicy="no-referrer"
+              onError={e => e.target.style.display = "none"} />
+          )}
+          {post.videoUrl && (
+            <a href={post.videoUrl} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-3"
+              style={{ background: "#00000010", borderBottom: `1px solid ${th.border}` }}>
+              <span style={{ fontSize: 20 }}>▶️</span>
+              <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
+                {lang === "ar" ? "شاهد الفيديو في X" : "Watch video on X"}
+              </span>
+            </a>
           )}
 
           <div className="px-4 py-3">
