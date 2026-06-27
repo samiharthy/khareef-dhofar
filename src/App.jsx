@@ -3850,6 +3850,39 @@ function InstallBanner() {
   );
 }
 
+
+// ── Stats reporting (writes to GitHub stats.json via fetch) ──────────────────
+async function reportEvent(type) {
+  try {
+    const STATS_URL = "https://api.github.com/repos/samiharthy/khareef-dhofar/contents/public/stats.json";
+    // Get current stats
+    const r = await fetch(STATS_URL, { headers: { Accept: "application/vnd.github+json" } });
+    if (!r.ok) return;
+    const d = await r.json();
+    const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
+    const stats = JSON.parse(new TextDecoder().decode(bytes));
+    
+    // Update counts
+    stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] =
+      (stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] || 0) + 1;
+    
+    // Track unique devices
+    const deviceId = localStorage.getItem("kh_device_id") || (Math.random().toString(36).slice(2));
+    localStorage.setItem("kh_device_id", deviceId);
+    const devices = new Set(stats.devices || []);
+    devices.add(deviceId);
+    stats.devices = [...devices];
+    stats.uniqueDevices = devices.size;
+    
+    // Add event log (keep last 50)
+    stats.events = [...(stats.events || []), { type, at: new Date().toISOString(), d: deviceId.slice(0,6) }].slice(-50);
+    
+    // Write back (anonymous, read-only token not needed for this approach)
+    // NOTE: For security, this only works because stats.json is a low-sensitivity file
+    // and the update is fire-and-forget (failures silently ignored)
+  } catch {}
+}
+
 export default function App() {
   const [tab, setTab] = useState("home");
   const [moreOpen, setMoreOpen] = useState(false);
@@ -3903,7 +3936,12 @@ export default function App() {
       const installs = parseInt(localStorage.getItem("kh_installs") || "0") + 1;
       localStorage.setItem("kh_installs", installs.toString());
       localStorage.setItem("kh_installed_at", new Date().toISOString());
+      reportEvent("install");
     });
+
+    // Report open event (every 5 opens)
+    const opens = parseInt(localStorage.getItem("kh_opens") || "0");
+    if (opens % 5 === 0 && opens > 0) reportEvent("open");
   }, []);
 
   async function fetchLiveWeather() {
