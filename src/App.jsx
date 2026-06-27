@@ -2107,66 +2107,73 @@ function HomeWeatherForecast() {
   );
 }
 
-function Home({ go }) {
-  const { lang, t, theme } = useLang();
+function Home() {
+  const { lang, theme } = useLang();
   const th = THEMES[theme];
-  return (
-    <div className="space-y-6 pb-6">
-      <div className="relative overflow-hidden rounded-3xl p-6 text-white" style={{ background: "linear-gradient(160deg,#1F3D2B,#3C6E48 60%,#1F3D2B)" }}>
-        <CloudFog size={120} className="absolute -left-6 -top-6 opacity-10" />
-        <div className="relative">
-          <div className="mb-1 text-xs tracking-widest opacity-70" style={{ fontFamily: "Tajawal" }}>{t.heroEyebrow}</div>
-          <h1 className="text-4xl font-bold leading-tight" style={{ fontFamily: lang === "ar" ? "Aref Ruqaa" : "inherit" }}>
-            {lang === "ar" ? "خريف ظفار" : "Khareef Dhofar"}
-            <span className="block text-lg font-normal opacity-80" style={{ fontFamily: "Tajawal" }}>{t.heroSub}</span>
-          </h1>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed opacity-90" style={{ fontFamily: "Tajawal" }}>{t.heroDesc}</p>
-        </div>
-      </div>
+  const EVENTS_PREVIEW = EVENTS.slice(0, 2);
 
+  return (
+    <div className="space-y-4 pb-6">
+      {/* Weather */}
       <HomeWeatherForecast />
 
-      <XFeed />
+      {/* AI Where to go today */}
+      <WhereToGoToday />
 
-      <SponsoredSection limit={1} />
-
+      {/* Latest 2 events */}
       <div>
-        <div className="mb-2 flex items-center justify-between">
-          <SectionTitle eyebrow={t.todayEyebrow} title={t.todayTitle} icon={Sparkles} />
-          <button type="button" onClick={() => go("events")} className="text-[11px] font-bold" style={{ color: "#2F5D45", fontFamily: "Tajawal" }}>{t.seeAll}</button>
+        <div className="flex items-center justify-between mb-2 px-1">
+          <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily:"Tajawal" }}>
+            {lang === "ar" ? "الفعاليات الجارية" : "Current Events"}
+          </span>
         </div>
-        <div className="space-y-3">
-          {EVENTS.slice(0, 2).map((e) => (
-            <div key={e.nAr} className="flex items-center justify-between rounded-2xl border p-3.5" style={{ borderColor: th.border, background: th.cardBg }}>
-              <div>
-                <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(e, lang)}</div>
-                <div className="mt-0.5 flex items-center gap-2 text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-                  <span className="flex items-center gap-1"><MapPin size={11} /> {lang === "ar" ? e.placeAr : e.placeEn}</span>
-                  <MapLink name={nm(e, lang)} item={e} />
+        <div className="space-y-2">
+          {EVENTS_PREVIEW.map(ev => (
+            <a key={ev.nAr} href={bestUrl(ev, lang)} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-2xl p-3 active:scale-[0.98] transition"
+              style={{ background: th.cardBg, border:`1px solid ${th.border}` }}>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg"
+                style={{ background: (ev.color||"#2F5D45") + "20" }}>🎪</div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-bold truncate" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? ev.nAr : ev.nEn}
+                </div>
+                <div className="text-[11px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                  📍 {lang==="ar" ? ev.placeAr : ev.placeEn}
                 </div>
               </div>
-              <div className="rounded-xl px-2.5 py-1.5 text-center text-[11px] font-bold leading-tight text-white" style={{ background: e.color, fontFamily: "Tajawal" }}>
-                {lang === "ar" ? e.fromAr : lang === "hi" ? e.fromHi : e.fromEn}<br />↓<br />{lang === "ar" ? e.toAr : lang === "hi" ? e.toHi : e.toEn}
-              </div>
-            </div>
+              <MapPin size={14} color={th.subColor} />
+            </a>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
-        {MORE_TABS.map((tb) => (
-          <button key={tb.key} onClick={() => go(tb.key)}
-            className="flex flex-col items-center gap-1.5 rounded-2xl border p-3 text-center transition active:scale-[0.97]"
-            style={{ borderColor: th.border, background: th.cardBg }}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: "#2F5D451A" }}>
-              <tb.icon size={15} color="#2F5D45" />
-            </div>
-            <div className="text-[11px] font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t[tb.key]}</div>
-          </button>
-        ))}
+      {/* Quick nav grid */}
+      <div>
+        <div className="text-sm font-bold mb-2 px-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "استكشف" : "Explore"}
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {MORE_TABS.slice(0,6).map(tb => {
+            const Icon = tb.icon;
+            return (
+              <button key={tb.key}
+                className="flex flex-col items-center gap-1.5 rounded-2xl p-3 active:scale-95 transition"
+                style={{ background:th.cardBg, border:`1px solid ${th.border}`, cursor:"pointer" }}
+                onClick={() => window.dispatchEvent(new CustomEvent("switchTab", { detail: tb.key }))}>
+                <Icon size={22} color="#2F5D45" />
+                <span className="text-[11px] font-bold text-center leading-tight"
+                  style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? tb.labelAr : tb.labelEn}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-
+      {/* X Feed */}
+      <XFeed />
     </div>
   );
 }
