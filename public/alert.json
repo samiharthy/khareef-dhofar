@@ -1,6 +1,6 @@
 {
-  "id": "2026-khareef-001",
-  "active": false,
+  "id": "notif-1782531800335",
+  "active": true,
   "type": "info",
   "priority": "normal",
   "message": {
@@ -9,5 +9,5 @@
     "hi": "ख़रीफ़ ज़ुफ़ार 2026 में आपका स्वागत है 🌿",
     "fr": "Bienvenue au Khareef Dhofar 2026 🌿"
   },
-  "updatedAt": "2026-06-23T00:00:00Z"
+  "updatedAt": "2026-06-27T03:43:20.335Z"
 }
