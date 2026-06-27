@@ -2164,7 +2164,7 @@ function Home() {
                 <Icon size={22} color="#2F5D45" />
                 <span className="text-[11px] font-bold text-center leading-tight"
                   style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-                  {lang==="ar" ? tb.labelAr : tb.labelEn}
+                  {tb.labelAr ? (lang==="ar" ? tb.labelAr : tb.labelEn) : t[tb.key]}
                 </span>
               </button>
             );
@@ -3955,7 +3955,13 @@ export default function App() {
             <div className="flex-1" style={{ background: "rgba(10,15,12,0.5)" }} onClick={toggleMore} />
             <div className="mx-auto w-full max-w-md rounded-t-3xl border-t p-5" style={{ borderColor: th.border, background: th.sheetBg }}>
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-bold" style={{ color: th.titleColor, fontFamily: isRTL ? "Aref Ruqaa" : "inherit" }}>{t.more}</h3>
+                <button type="button" onClick={() => { setMoreOpen(false); setTab("home"); }}
+                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+                  style={{ background:"#2F5D4515", color:"#2F5D45", border:"none", cursor:"pointer", fontFamily:"Tajawal" }}>
+                  <Sparkles size={13} color="#2F5D45" />
+                  {lang === "ar" ? "الرئيسية" : "Home"}
+                </button>
+                <h3 className="text-base font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.more}</h3>
                 <button type="button" onClick={toggleMore} className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: th.navBg }}>
                   <X size={16} color={th.subColor} />
                 </button>
@@ -3968,7 +3974,7 @@ export default function App() {
                     <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ background: "#2F5D451A" }}>
                       <tb.icon size={18} color="#2F5D45" />
                     </div>
-                    <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t[tb.key]}</div>
+                    <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{tb.labelAr ? (lang === "ar" ? tb.labelAr : tb.labelEn) : t[tb.key]}</div>
                   </button>
                 ))}
               </div>
