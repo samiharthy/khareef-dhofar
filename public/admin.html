@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة تحكم خريف ظفار 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',sans-serif;background:#F4EFE2;color:#1a1a1a;min-height:100vh}
+input,textarea,select,button{font-family:'Tajawal',sans-serif}
+.card{background:#fff;border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.btn{padding:10px 20px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.btn-green{background:#2F5D45;color:#fff}.btn-red{background:#B5402C;color:#fff}
+.btn-blue{background:#3C6E8F;color:#fff}.btn-outline{background:transparent;color:#2F5D45;border:2px solid #2F5D45}
+.btn-sm{padding:6px 14px;font-size:12px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input,textarea{width:100%;border:1.5px solid #E5E0D5;border-radius:10px;padding:10px 14px;font-size:13px;outline:none;background:#FAFAF8;resize:vertical}
+textarea{min-height:70px}
+select{width:100%;border:1.5px solid #E5E0D5;border-radius:10px;padding:10px 14px;font-size:13px;background:#FAFAF8;cursor:pointer}
+label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;margin-top:12px}
+.header{background:linear-gradient(135deg,#1F3D2B,#2F5D45);padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.tabs{display:flex;border-bottom:2px solid #E5E0D5;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10}
+.tab{padding:12px 16px;border:none;background:none;font-size:13px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;color:#888;white-space:nowrap}
+.tab.active{color:#2F5D45;border-bottom-color:#2F5D45;font-weight:800}
+.type-btn{padding:6px 14px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:.1s}
+.type-btn.t-info{border-color:#2F5D45;background:#2F5D45;color:#fff}
+.type-btn.t-weather{border-color:#3C6E8F;background:#3C6E8F;color:#fff}
+.type-btn.t-urgent{border-color:#B5402C;background:#B5402C;color:#fff}
+.sec-filter-btn{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid #ddd;background:#fff;color:#555}
+#login-page{display:none;min-height:100vh;align-items:center;justify-content:center;padding:20px}
+#main-page{display:none}
+.badge{border-radius:20px;padding:2px 10px;font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-page" style="display:flex">
+  <div style="width:100%;max-width:400px;margin:auto">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:48px">🌿</div>
+      <h1 style="font-size:22px;font-weight:800;color:#2F5D45;margin-top:8px">لوحة تحكم خريف ظفار</h1>
+    </div>
+    <div class="card">
+      <label>كلمة المرور</label>
+      <input type="password" id="login-pw" placeholder="••••••••" />
+      <label style="margin-top:14px">GitHub Token (ghp_...)</label>
+      <input id="login-token" placeholder="ghp_xxxxxxxxxxxxxxxx" />
+      <div style="font-size:11px;color:#888;margin-top:4px">github.com/settings/tokens → repo scope</div>
+      <div id="login-err" style="color:#B5402C;font-size:12px;margin-top:6px;display:none"></div>
+      <button class="btn btn-green" style="width:100%;margin-top:16px" onclick="doLogin()">دخول</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-page">
+  <div class="header">
+    <div>
+      <div style="color:#fff;font-weight:800;font-size:17px">🌿 لوحة التحكم</div>
+      <div style="color:rgba(255,255,255,.65);font-size:11px">خريف ظفار 2026</div>
+    </div>
+    <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:none" onclick="logout()">خروج</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('notif')">🔔 الإشعارات</button>
+    <button class="tab" onclick="showTab('posts')">𝕏 المنشورات</button>
+    <button class="tab" onclick="showTab('locs')">📍 المواقع</button>
+    <button class="tab" onclick="showTab('stats')">📊 الإحصائيات</button>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;padding:18px">
+
+    <!-- ══════════════ NOTIFICATIONS ══════════════ -->
+    <div id="tab-notif">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-weight:700;font-size:15px">حالة الإشعار الحالي</div>
+            <div id="notif-id" style="font-size:11px;color:#888;margin-top:2px"></div>
+          </div>
+          <span id="notif-badge" class="badge"></span>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button id="btn-toggle" class="btn btn-sm btn-green" onclick="toggleNotif()">تفعيل</button>
+          <button class="btn btn-sm btn-red" onclick="deactivateNotif()">إيقاف</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;font-size:15px;margin-bottom:14px">✏️ إشعار جديد / تعديل</div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:#666;margin-bottom:6px">النوع</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="type-btn t-info" id="type-info" onclick="setType('info')">📢 إعلان</button>
+            <button class="type-btn" id="type-weather" onclick="setType('weather')">🌧️ طقس</button>
+            <button class="type-btn" id="type-urgent" onclick="setType('urgent')">🚨 عاجل</button>
+          </div>
+        </div>
+        <label>الرسالة العربية 🇸🇦 *</label>
+        <textarea id="msg-ar" placeholder="اكتب الإشعار بالعربي..." oninput="updatePreview()"></textarea>
+        <button class="btn btn-blue" style="width:100%;margin-top:10px;margin-bottom:4px" id="btn-tr-notif" onclick="translateNotif()">🌐 ترجمة تلقائية (EN + HI + FR)</button>
+        <label>الإنجليزية 🇬🇧</label><input id="msg-en" />
+        <label>الهندية 🇮🇳</label><input id="msg-hi" />
+        <label>الفرنسية 🇫🇷</label><input id="msg-fr" />
+
+        <div id="notif-preview" style="display:none;margin-top:14px;padding:12px;border-radius:12px;background:#F0ECDD;border-right:4px solid #2F5D45">
+          <div style="font-size:11px;color:#888;margin-bottom:4px">معاينة في التطبيق</div>
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span id="prev-icon" style="font-size:20px">📢</span>
+            <p id="prev-text" style="font-size:13px;line-height:1.6"></p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-green" onclick="sendNotif()">🚀 إرسال وتفعيل</button>
+          <button class="btn btn-outline" onclick="saveNotif()">💾 حفظ فقط</button>
+        </div>
+        <div id="notif-msg" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ POSTS ══════════════ -->
+    <div id="tab-posts" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div id="posts-count" style="font-weight:700">...</div>
+        <button class="btn btn-green btn-sm" onclick="togglePostForm()">+ تغريدة جديدة</button>
+      </div>
+
+      <div id="post-form" style="display:none" class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px">𝕏 تغريدة جديدة</div>
+        <div style="background:#F0F7FF;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:11px;color:#3C6E8F;line-height:1.8">
+          ١. انسخ رابط التغريدة من X<br>
+          ٢. انسخ نص التغريدة يدوياً<br>
+          ٣. للصورة: افتح الصورة في X وانسخ رابطها<br>
+          ٤. اضغط <b>ترجمة تلقائية</b> ثم <b>نشر</b>
+        </div>
+        <label>رابط التغريدة *</label>
+        <input id="new-post-url" placeholder="https://x.com/username/status/..." />
+        <label>رابط الصورة (اختياري)</label>
+        <input id="new-post-img" placeholder="https://pbs.twimg.com/media/..." oninput="onPostImgChange()" />
+        <div id="post-img-preview" style="display:none;margin-top:6px">
+          <img id="post-img-el" style="width:100%;max-height:150px;object-fit:cover;border-radius:10px" onerror="this.parentElement.style.display='none'" />
+        </div>
+        <label>رابط فيديو (اختياري)</label>
+        <input id="new-post-video" placeholder="https://x.com/..." />
+        <label>النص العربي *</label>
+        <textarea id="new-post-ar" placeholder="انسخ نص التغريدة من X..."></textarea>
+        <button class="btn btn-blue" style="width:100%;margin-top:8px;margin-bottom:4px" id="btn-tr-post" onclick="translatePost()">🌐 ترجمة تلقائية (EN + HI + FR)</button>
+        <label>الإنجليزية</label><input id="new-post-en" />
+        <label>الهندية</label><input id="new-post-hi" />
+        <label>الفرنسية</label><input id="new-post-fr" />
+        <label>التاريخ</label><input type="date" id="new-post-date" />
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn btn-green" onclick="addPost()">🚀 نشر</button>
+          <button class="btn btn-outline" onclick="togglePostForm()">إلغاء</button>
+        </div>
+        <div id="post-add-msg" style="font-size:12px;margin-top:6px;display:none"></div>
+      </div>
+
+      <div id="posts-list"></div>
+    </div>
+
+    <!-- ══════════════ LOCATIONS & RESTAURANTS ══════════════ -->
+    <div id="tab-locs" style="display:none">
+
+      <!-- Sub-tabs -->
+      <div style="display:flex;gap:2px;background:#E5E0D5;border-radius:12px;padding:3px;margin-bottom:14px">
+        <button id="sub-spots" onclick="showSubTab('spots')"
+          style="flex:1;padding:8px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:#2F5D45;color:#fff;font-family:Tajawal">
+          📍 المواقع
+        </button>
+        <button id="sub-rest" onclick="showSubTab('rest')"
+          style="flex:1;padding:8px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:#666;font-family:Tajawal">
+          🍽️ المطاعم
+        </button>
+      </div>
+
+      <!-- SPOTS sub-tab -->
+      <div id="subtab-spots">
+        <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:12px 16px;margin-bottom:10px">
+          <div style="font-size:12px;color:#2F5D45;line-height:1.7">
+            📌 يعرض جميع المواقع المدمجة في التطبيق. يمكنك تعديل أو حذف أي موقع.<br>
+            المحذوفات والتعديلات تُحفظ في <code>locations.json</code> وتُطبَّق فوراً.
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div id="locs-count" style="font-weight:700;font-size:13px">...</div>
+          <button class="btn btn-green btn-sm" onclick="toggleLocForm()">+ موقع مخصص</button>
+        </div>
+
+        <!-- Section filter -->
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="sec-filter-btn" style="background:#2F5D45;color:#fff;border-color:#2F5D45" data-sec="all" onclick="filterSec('all')">الكل</button>
+          <button class="sec-filter-btn" data-sec="west" onclick="filterSec('west')">غرب</button>
+          <button class="sec-filter-btn" data-sec="mid" onclick="filterSec('mid')">وسط</button>
+          <button class="sec-filter-btn" data-sec="east" onclick="filterSec('east')">شرق</button>
+          <button class="sec-filter-btn" data-sec="events" onclick="filterSec('events')">فعاليات</button>
+          <button class="sec-filter-btn" data-sec="companion" onclick="filterSec('companion')">مصاحبة</button>
+          <button class="sec-filter-btn" data-sec="fuel" onclick="filterSec('fuel')">وقود</button>
+          <button class="sec-filter-btn" data-sec="stays" onclick="filterSec('stays')">إقامة</button>
+          <button class="sec-filter-btn" data-sec="hike" onclick="filterSec('hike')">هايكنج</button>
+        </div>
+
+        <!-- Add form -->
+        <div id="loc-form" style="display:none" class="card">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px">📍 موقع مخصص جديد</div>
+          <label>القسم</label>
+          <select id="loc-section">
+            <option value="west">غرب صلالة</option><option value="mid">وسط صلالة</option>
+            <option value="east">شرق صلالة</option><option value="events">الفعاليات</option>
+            <option value="companion">الفعاليات المصاحبة</option><option value="fuel">محطات الوقود</option>
+            <option value="stays">الإقامة والفنادق</option><option value="hike">مسارات هايكنج</option>
+            <option value="heritage">التراث</option><option value="health">الصحة</option>
+          </select>
+          <label>الاسم العربي *</label><input id="loc-nar" placeholder="اسم الموقع" />
+          <label>الاسم الإنجليزي *</label><input id="loc-nen" placeholder="Location name" />
+          <label>الإحداثيات (lat, lng) *</label>
+          <input id="loc-coords" placeholder="17.1299, 54.2381" oninput="parseLocCoords()" />
+          <div id="loc-coords-prev" style="display:none;font-size:11px;color:#2F5D45;font-weight:700;margin-top:3px"></div>
+          <input type="hidden" id="loc-lat" /><input type="hidden" id="loc-lng" />
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn btn-green" onclick="addLocation()">✅ إضافة</button>
+            <button class="btn btn-outline" onclick="toggleLocForm()">إلغاء</button>
+          </div>
+          <div id="loc-msg" style="font-size:12px;margin-top:6px;display:none"></div>
+        </div>
+
+        <!-- Edit form -->
+        <div id="edit-form" style="display:none" class="card" style="border:2px solid #3C6E8F">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#3C6E8F">✏️ تعديل موقع</div>
+          <input type="hidden" id="edit-orig-nar" />
+          <label>الاسم العربي</label><input id="edit-nar" />
+          <label>الاسم الإنجليزي</label><input id="edit-nen" />
+          <label>الإحداثيات (lat, lng)</label>
+          <input id="edit-coords" oninput="parseEditCoords()" />
+          <div id="edit-coords-prev" style="display:none;font-size:11px;color:#3C6E8F;font-weight:700;margin-top:3px"></div>
+          <input type="hidden" id="edit-lat" /><input type="hidden" id="edit-lng" />
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn btn-blue" onclick="saveEdit()">💾 حفظ التعديل</button>
+            <button class="btn btn-outline" onclick="document.getElementById('edit-form').style.display='none'">إلغاء</button>
+          </div>
+          <div id="edit-msg" style="font-size:12px;margin-top:6px;display:none"></div>
+        </div>
+
+        <div id="locs-list"></div>
+      </div>
+
+      <!-- RESTAURANTS sub-tab -->
+      <div id="subtab-rest" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div id="rest-count" style="font-weight:700;font-size:13px">...</div>
+          <button class="btn btn-green btn-sm" onclick="toggleRestForm()">+ مطعم جديد</button>
+        </div>
+        <div id="rest-form" style="display:none" class="card">
+          <div style="font-weight:700;font-size:14px;margin-bottom:12px">🍽️ مطعم جديد</div>
+          <label>الاسم العربي *</label><input id="rest-nar" placeholder="اسم المطعم" />
+          <label>الاسم الإنجليزي *</label><input id="rest-nen" placeholder="Restaurant name" />
+          <label>التصنيف</label>
+          <select id="rest-type">
+            <option value="arabic">🫕 عماني / عربي</option>
+            <option value="seafood">🦞 مأكولات بحرية</option>
+            <option value="cafe">☕ كافيه</option>
+            <option value="fast">🍔 وجبات سريعة</option>
+            <option value="international">🌍 دولي</option>
+          </select>
+          <label>الفئة السعرية</label>
+          <select id="rest-price">
+            <option value="اقتصادي|Budget">اقتصادي</option>
+            <option value="متوسط|Mid-range">متوسط</option>
+            <option value="مرتفع|High-end">مرتفع</option>
+          </select>
+          <label>الإحداثيات (lat, lng)</label>
+          <input id="rest-coords" placeholder="17.0151, 54.0924" oninput="parseRestCoords()" />
+          <div id="rest-coords-prev" style="display:none;font-size:11px;color:#2F5D45;font-weight:700;margin-top:3px"></div>
+          <input type="hidden" id="rest-lat" /><input type="hidden" id="rest-lng" />
+          <label>أوقات الدوام</label><input id="rest-open" placeholder="12:00-23:00" />
+          <label>رقم الهاتف</label><input id="rest-phone" placeholder="+968..." />
+          <label>وصف عربي</label><textarea id="rest-note-ar" rows="2" placeholder="وصف قصير..."></textarea>
+          <label>وصف إنجليزي</label><textarea id="rest-note-en" rows="2" placeholder="Short description..."></textarea>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn btn-green" onclick="addRestaurant()">✅ إضافة</button>
+            <button class="btn btn-outline" onclick="toggleRestForm()">إلغاء</button>
+          </div>
+          <div id="rest-msg" style="font-size:12px;margin-top:6px;display:none"></div>
+        </div>
+        <div id="rest-list"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ STATS ══════════════ -->
+    <div id="tab-stats" style="display:none">
+
+      <!-- Vercel Live Stats -->
+      <div class="card" id="vercel-stats-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div style="font-weight:700;font-size:15px">📊 إحصائيات Vercel</div>
+          <button class="btn btn-green btn-sm" onclick="loadStats()">🔄 تحديث</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+          <div style="text-align:center;padding:16px;background:#EBF4EE;border-radius:12px">
+            <div style="font-size:36px;font-weight:800;color:#2F5D45" id="stat-visitors">—</div>
+            <div style="font-size:11px;color:#888;margin-top:3px">👥 الزوار</div>
+          </div>
+          <div style="text-align:center;padding:16px;background:#EBF4EE;border-radius:12px">
+            <div style="font-size:36px;font-weight:800;color:#3C6E8F" id="stat-pageviews">—</div>
+            <div style="font-size:11px;color:#888;margin-top:3px">📄 المشاهدات</div>
+          </div>
+        </div>
+        <!-- Countries & devices will show here -->
+        <div id="stats-geo" style="display:none;margin-top:10px"></div>
+        <div id="stats-note" style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">
+          يعمل فقط عند فتح الأدمن من الموقع (ليس من ملف محلي)
+        </div>
+      </div>
+
+      <!-- Vercel token input -->
+      <div class="card" id="vercel-token-card">
+        <div style="font-size:12px;font-weight:700;color:#3C6E8F;margin-bottom:8px">🔑 Vercel Token للإحصائيات</div>
+        <div style="font-size:11px;color:#555;margin-bottom:8px;line-height:1.6">
+          من <a href="https://vercel.com/account/tokens" target="_blank" style="color:#3C6E8F">vercel.com/account/tokens</a> → Create Token → samiharthy's projects
+        </div>
+        <div style="display:flex;gap:8px">
+          <input id="vercel-token-input" placeholder="أدخل Vercel Token..." style="flex:1;font-size:12px" />
+          <button onclick="saveAndLoadVercel()" class="btn btn-green btn-sm">حفظ</button>
+          <button onclick="clearVercelToken()" class="btn btn-sm" style="background:#eee;color:#888;border:none">مسح</button>
+        </div>
+      </div>
+
+      <!-- Link to full dashboard -->
+      <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="text-decoration:none">
+        <div class="card" style="background:linear-gradient(135deg,#1F3D2B,#2F5D45);color:#fff;text-align:center;padding:16px">
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px">🔗 فتح Vercel Analytics الكامل ↗</div>
+          <div style="font-size:11px;opacity:.7">الدول · الأجهزة · المصادر · الرسوم البيانية</div>
+        </div>
+      </a>
+
+      <!-- App local stats -->
+      <div class="card" style="margin-top:14px">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px">📱 إحصائيات التطبيق على هذا الجهاز</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
+            <div style="font-size:24px;font-weight:800;color:#2F5D45" id="stat-installs">—</div>
+            <div style="font-size:10px;color:#888;margin-top:2px">📲 تثبيت</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
+            <div style="font-size:24px;font-weight:800;color:#3C6E8F" id="stat-shares">—</div>
+            <div style="font-size:10px;color:#888;margin-top:2px">🔗 مشاركة</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#F4EFE2;border-radius:10px">
+            <div style="font-size:24px;font-weight:800;color:#C98A2E" id="stat-opens">—</div>
+            <div style="font-size:10px;color:#888;margin-top:2px">👁️ فتح</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="stats-msg" style="font-size:12px;margin-top:8px;display:none"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const REPO = "samiharthy/khareef-dhofar";
+const ALERT_PATH = "public/alert.json";
+const FEATURED_PATH = "public/featured.json";
+const LOCS_PATH = "public/locations.json";
+const REST_PATH = "public/restaurants.json";
+const ADMIN_PW = "khareef2026";
+let GH_TOKEN = "";
+let alertData = null, alertSha = null;
+let postsData = [], postsSha = null;
+let locsData = [], locsSha = null;
+let restData = [], restSha = null;
+let currentType = "info";
+let currentLocSec = "all";
+
+// ── BUILT-IN SPOTS ──────────────────────────────────────────────────────────
+const BUILTIN_SPOTS = [{"nAr": "إطلالة رخيوت", "nEn": "Rakhyut", "lat": 16.7491631, "lng": 53.4377971, "section": "west"}, {"nAr": "إطلالة ضلكوت", "nEn": "Dalkut", "lat": 16.711611, "lng": 53.212773, "section": "west"}, {"nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)", "nEn": "Sarfait (Oman–Yemen border)", "lat": 16.6793665, "lng": 53.118577, "section": "west"}, {"nAr": "مرتفعات ألسان", "nEn": "Jabal Al San", "lat": 17.1750555, "lng": 54.2501138, "section": "mid"}, {"nAr": "عين صحلنوت", "nEn": "Ayn Sahalnoot", "lat": 17.1481424, "lng": 54.178309, "section": "mid"}, {"nAr": "إطلالة شير", "nEn": "Jabal Shir", "lat": 17.1945748, "lng": 54.1676345, "section": "mid"}, {"nAr": "شلالات جبوجب", "nEn": "Ayn Gogob", "lat": 17.2199709, "lng": 54.1112974, "section": "mid"}, {"nAr": "وادي نحيز", "nEn": "Wadi Nuheiz", "lat": 17.1895277, "lng": 54.0860812, "section": "mid"}, {"nAr": "عين جرزيز", "nEn": "Ayn Gharziz", "lat": 17.1059336, "lng": 54.0742133, "section": "mid"}, {"nAr": "سهل أتين", "nEn": "Jabal Ittin", "lat": 17.0713432, "lng": 54.0670953, "section": "mid"}, {"nAr": "إطلالة حمرير", "nEn": "Hamrir Viewpoint", "lat": 17.1233081, "lng": 54.1449883, "section": "mid"}, {"nAr": "حنجة القوارب - دربات", "nEn": "Wadi Darbat", "lat": 17.1053125, "lng": 54.4530625, "section": "mid"}, {"nAr": "متحف ارض اللبان", "nEn": "Land of Frankincense Museum", "lat": 17.0094009, "lng": 54.1360877, "section": "mid"}, {"nAr": "اكشاك جوز الهند", "nEn": "Coconut Stalls", "lat": 17.0035962, "lng": 54.1155011, "section": "mid"}, {"nAr": "عين حمران", "nEn": "Ayn Hamran", "lat": 17.0974375, "lng": 54.2809375, "section": "east"}, {"nAr": "عين وشلالات طبرق", "nEn": "Ayn Tabruk", "lat": 17.1005625, "lng": 54.3265625, "section": "east"}, {"nAr": "عين وشلالات أثوم", "nEn": "Ayn Athum", "lat": 17.1132375, "lng": 54.3649531, "section": "east"}, {"nAr": "جبل ناشب", "nEn": "Jabal Nashib", "lat": 17.1035625, "lng": 54.3104375, "section": "east"}, {"nAr": "مدينة الحق", "nEn": "City of Al Haq (Mountain)", "lat": 17.1771844, "lng": 54.387809, "section": "east"}, {"nAr": "كورنيش طاقة", "nEn": "Taqah Corniche", "lat": 17.0334727, "lng": 54.3942161, "section": "east"}, {"nAr": "طريق انعدام الجاذبية", "nEn": "Anti Gravity Point Salalah", "lat": 17.0394417, "lng": 54.6134819, "section": "east"}, {"nAr": "جبل طوي اعتير", "nEn": "Jabal Tawi Atair", "lat": 17.052985, "lng": 54.5547504, "section": "east"}, {"nAr": "جبل سمحان (فوق السحاب)", "nEn": "Jebel Samhan", "lat": 17.1026047, "lng": 54.6980883, "section": "east"}, {"nAr": "الواجهة العصرية (أب تاون)", "nEn": "Modern Frontage (Uptown)", "lat": 17.0567545, "lng": 54.0650162, "section": "events"}, {"nAr": "حديقة وقت الطفل", "nEn": "Kid's Time", "lat": 17.0174522, "lng": 54.0357409, "section": "events"}, {"nAr": "فعاليات عودة الماضي", "nEn": "Return of the Past", "lat": 17.0594084, "lng": 54.1417767, "section": "events"}, {"nAr": "ساحة أتين (أتين سكوير)", "nEn": "Atin Square", "lat": 17.0749228, "lng": 54.0688028, "section": "events"}, {"nAr": "الحديقة الصحية", "nEn": "Health Park", "lat": 17.0124515, "lng": 54.0704936, "section": "events"}, {"nAr": "محطة ظفار – عوقد", "nEn": "Dhofar Station – Auqad", "lat": 17.0084, "lng": 54.0208, "section": "fuel"}, {"nAr": "محطة ريسوت – شل", "nEn": "Raysut – Shell", "lat": 17.0037, "lng": 54.0387, "section": "fuel"}, {"nAr": "محطة الوادي – عُمان أويل", "nEn": "Al Wadi – Oman Oil", "lat": 17.0215, "lng": 54.069, "section": "fuel"}, {"nAr": "محطة اتين – عُمان أويل", "nEn": "Atin – Oman Oil", "lat": 17.0437, "lng": 54.0626, "section": "fuel"}, {"nAr": "محطة السلام – عُمان أويل", "nEn": "Al Salam – Oman Oil", "lat": 17.0112, "lng": 54.0856, "section": "fuel"}, {"nAr": "محطة الدهاريز – عُمان أويل", "nEn": "Al Dahariz – Oman Oil", "lat": 17.0254, "lng": 54.1715, "section": "fuel"}, {"nAr": "محطة السعادة – شل", "nEn": "Al Saada – Shell", "lat": 17.0825, "lng": 54.1588, "section": "fuel"}, {"nAr": "محطة صحلنوت – طاقة الغربية", "nEn": "Sahalnout – West Taqah", "lat": 17.0486, "lng": 54.2116, "section": "fuel"}, {"nAr": "محطة شل – طاقة", "nEn": "Shell – Taqah", "lat": 17.0408, "lng": 54.3686, "section": "fuel"}, {"nAr": "محطة عُمان أويل – طاقة", "nEn": "Oman Oil – Taqah", "lat": 17.0496, "lng": 54.3908, "section": "fuel"}, {"nAr": "محطة عُمان أويل – مرباط", "nEn": "Oman Oil – Mirbat", "lat": 16.9976, "lng": 54.7281, "section": "fuel"}, {"nAr": "محطة المها – ثمريت", "nEn": "Al Maha – Thumrait", "lat": 17.6048, "lng": 54.0326, "section": "fuel"}, {"nAr": "محطة شل – ثمريت", "nEn": "Shell – Thumrait", "lat": 17.6107, "lng": 54.0354, "section": "fuel"}, {"nAr": "محطة عُمان أويل – ثمريت", "nEn": "Oman Oil – Thumrait", "lat": 17.6554, "lng": 54.0597, "section": "fuel"}, {"nAr": "محطة حسن – المزيونة", "nEn": "Hassan Station – Al Mazyounah", "lat": 17.8437, "lng": 52.6636, "section": "fuel"}, {"nAr": "فندق كراون بلازا صلالة", "nEn": "Crowne Plaza Salalah", "lat": 17.0155, "lng": 54.092, "section": "stays"}, {"nAr": "فندق هيلتون صلالة", "nEn": "Hilton Salalah Resort", "lat": 17.0183, "lng": 54.0878, "section": "stays"}, {"nAr": "فندق جاز صلالة (سابقاً ماريوت)", "nEn": "Jaz Salalah Hotel (formerly Marriott)", "lat": 17.017, "lng": 54.09, "section": "stays"}, {"nAr": "فندق إيتاب صلالة", "nEn": "Itaab Salalah Hotel", "lat": 17.009, "lng": 54.1042, "section": "stays"}, {"nAr": "فندق هوليداي إن صلالة", "nEn": "Holiday Inn Salalah", "lat": 17.012, "lng": 54.098, "section": "stays"}, {"nAr": "فندق رمادا صلالة", "nEn": "Ramada Salalah Hotel", "lat": 17.01, "lng": 54.097, "section": "stays"}, {"nAr": "فندق صلالة روتانا", "nEn": "Salalah Rotana Hotel", "lat": 17.0095, "lng": 54.105, "section": "stays"}, {"nAr": "فندق الحارة التراثي", "nEn": "Al Hara Heritage Hotel", "lat": 17.0158, "lng": 54.0915, "section": "stays"}, {"nAr": "فندق سفاري صلالة", "nEn": "Safari Hotel Salalah", "lat": 17.011, "lng": 54.096, "section": "stays"}, {"nAr": "شقق سدر السعادة الفندقية", "nEn": "Sidr Al Saada Hotel Apartments", "lat": 17.0092, "lng": 54.1045, "section": "stays"}, {"nAr": "شقق الياسمين الفندقية", "nEn": "Al Yasmin Hotel Apartments", "lat": 17.0115, "lng": 54.0975, "section": "stays"}, {"nAr": "شقق العقيدة الفندقية", "nEn": "Al Aqeedah Hotel Apartments", "lat": 17.0108, "lng": 54.0968, "section": "stays"}, {"nAr": "شقق وادي دربات الفندقية", "nEn": "Wadi Darbat Hotel Apartments", "lat": 17.0088, "lng": 54.1038, "section": "stays"}, {"nAr": "شقق أريج السعادة", "nEn": "Areej Al Saada Apartments", "lat": 17.0085, "lng": 54.106, "section": "stays"}, {"nAr": "منتجع جويرة (مرسى هوانا)", "nEn": "Juweira Resort (Howana Marina)", "lat": 17.019, "lng": 54.086, "section": "stays"}, {"nAr": "منتجع البلازا صلالة", "nEn": "Plaza Salalah Resort", "lat": 17.0093, "lng": 54.1048, "section": "stays"}, {"nAr": "استراحات وفيلل النسيم صلالة", "nEn": "Al Naseem Villas & Rest Houses", "lat": 17.0091, "lng": 54.1044, "section": "stays"}, {"nAr": "استراحة ظفار الخضراء", "nEn": "Dhofar Al Khadra Rest House", "lat": 17.0102, "lng": 54.0955, "section": "stays"}, {"nAr": "فيلل الشرفة الخريف", "nEn": "Al Shurfa Khareef Villas", "lat": 17.0088, "lng": 54.104, "section": "stays"}, {"nAr": "شاليهات الواحة صلالة", "nEn": "Al Waha Chalets Salalah", "lat": 17.0135, "lng": 54.0928, "section": "stays"}, {"nAr": "استراحة طاقة الساحلية", "nEn": "Taqah Coastal Rest House", "lat": 17.0291, "lng": 54.3873, "section": "stays"}, {"nAr": "فندق ميناء مرباط", "nEn": "Mirbat Port Hotel", "lat": 16.9894, "lng": 54.6917, "section": "stays"}];
+
+const SECTION_LABELS = {
+  west:"غرب صلالة",mid:"وسط صلالة",east:"شرق صلالة",
+  events:"الفعاليات",companion:"الفعاليات المصاحبة",fuel:"محطات الوقود",
+  stays:"الإقامة والفنادق",hike:"مسارات هايكنج",heritage:"التراث",
+  health:"الصحة",evening:"المساء",access:"الوصول والنقل"
+};
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+window.onload = () => {
+  const vt = localStorage.getItem("vercel_token");
+  if (vt) document.getElementById("vercel-token-input").value = "محفوظ ✅";
+  const t = localStorage.getItem("gh_token");
+  if (t) document.getElementById("login-token").value = t;
+  document.getElementById("new-post-date").value = new Date().toISOString().split("T")[0];
+};
+
+function doLogin() {
+  const pw = document.getElementById("login-pw").value;
+  const token = document.getElementById("login-token").value.trim();
+  const err = document.getElementById("login-err");
+  if (pw !== ADMIN_PW) { err.textContent="كلمة المرور خاطئة"; err.style.display="block"; return; }
+  if (!token.startsWith("ghp_") && !token.startsWith("github_pat_")) { err.textContent="Token غير صحيح"; err.style.display="block"; return; }
+  GH_TOKEN = token;
+  localStorage.setItem("gh_token", token);
+  document.getElementById("login-page").style.display = "none";
+  document.getElementById("main-page").style.display = "block";
+  loadNotif();
+}
+function logout() { localStorage.removeItem("gh_token"); location.reload(); }
+
+// ── GITHUB API ───────────────────────────────────────────────────────────────
+async function ghGet(path) {
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    headers: { Authorization: `token ${GH_TOKEN}`, Accept: "application/vnd.github+json" }
+  });
+  if (r.status === 404) return { content: null, sha: null };
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  const d = await r.json();
+  const bytes = Uint8Array.from(atob(d.content.replace(/\n/g, "")), c => c.charCodeAt(0));
+  return { content: JSON.parse(new TextDecoder("utf-8").decode(bytes)), sha: d.sha };
+}
+async function ghPut(path, content, sha, msg) {
+  const body = { message: msg, content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2)))) };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
+    method: "PUT",
+    headers: { Authorization: `token ${GH_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(`GitHub ${r.status}: ${await r.text()}`);
+  return await r.json();
+}
+
+// ── TABS ─────────────────────────────────────────────────────────────────────
+function showTab(tab) {
+  ["notif","posts","locs","stats"].forEach(t => {
+    const el = document.getElementById("tab-"+t);
+    if (el) el.style.display = t === tab ? "block" : "none";
+  });
+  document.querySelectorAll(".tab").forEach(el =>
+    el.classList.toggle("active", el.getAttribute("onclick").includes("'"+tab+"'"))
+  );
+  if (tab === "posts" && postsSha === null) loadPosts();
+  if (tab === "locs" && locsSha === null) loadLocations();
+  if (tab === "restaurants") loadRestaurants();
+}
+
+// ── TRANSLATION ───────────────────────────────────────────────────────────────
+async function translateTo(text, lang) {
+  const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ar|${lang}`);
+  const d = await r.json();
+  return d.responseData?.translatedText || "";
+}
+async function doTranslate(arId, enId, hiId, frId, btnId) {
+  const ar = document.getElementById(arId).value.trim();
+  if (!ar) { alert("اكتب النص العربي أولاً"); return; }
+  const btn = document.getElementById(btnId);
+  btn.disabled = true; btn.textContent = "⏳ جاري الترجمة...";
+  try {
+    const [en, hi, fr] = await Promise.all([translateTo(ar,"en"), translateTo(ar,"hi"), translateTo(ar,"fr")]);
+    document.getElementById(enId).value = en;
+    document.getElementById(hiId).value = hi;
+    document.getElementById(frId).value = fr;
+  } catch(e) { alert("خطأ في الترجمة: " + e.message); }
+  btn.disabled = false; btn.textContent = "🌐 ترجمة تلقائية (EN + HI + FR)";
+}
+function translateNotif() { doTranslate("msg-ar","msg-en","msg-hi","msg-fr","btn-tr-notif"); }
+function translatePost()  { doTranslate("new-post-ar","new-post-en","new-post-hi","new-post-fr","btn-tr-post"); }
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+async function loadNotif() {
+  try {
+    const { content, sha } = await ghGet(ALERT_PATH);
+    alertSha = sha;
+    alertData = content || { id:"notif-001", active:false, type:"info", priority:"normal", message:{ar:"",en:"",hi:"",fr:""} };
+    renderNotif();
+  } catch(e) { showMsg("notif-msg","❌ خطأ في التحميل: "+e.message,false); }
+}
+
+function renderNotif() {
+  if (!alertData) return;
+  const badge = document.getElementById("notif-badge");
+  badge.textContent = alertData.active ? "🟢 نشط" : "⭕ موقف";
+  badge.style.background = alertData.active ? "#2F5D4520" : "#eee";
+  badge.style.color = alertData.active ? "#2F5D45" : "#888";
+  document.getElementById("notif-id").textContent = "ID: " + (alertData.id || "—");
+  document.getElementById("msg-ar").value = alertData.message?.ar || "";
+  document.getElementById("msg-en").value = alertData.message?.en || "";
+  document.getElementById("msg-hi").value = alertData.message?.hi || "";
+  document.getElementById("msg-fr").value = alertData.message?.fr || "";
+  setType(alertData.type || "info");
+  updatePreview();
+}
+
+function setType(t) {
+  currentType = t;
+  ["info","weather","urgent"].forEach(x => {
+    const el = document.getElementById("type-"+x);
+    el.className = "type-btn" + (x===t?" t-"+t:"");
+  });
+  updatePreview();
+}
+function updatePreview() {
+  const ar = document.getElementById("msg-ar").value.trim();
+  const el = document.getElementById("notif-preview");
+  if (!ar) { el.style.display="none"; return; }
+  el.style.display="block";
+  const icons={info:"📢",weather:"🌧️",urgent:"🚨"};
+  document.getElementById("prev-icon").textContent = icons[currentType];
+  document.getElementById("prev-text").textContent = ar;
+}
+
+async function sendNotif() {
+  const ar = document.getElementById("msg-ar").value.trim();
+  if (!ar) { alert("اكتب الرسالة أولاً"); return; }
+  const newData = {
+    id: "notif-" + Date.now(),
+    active: true,
+    type: currentType,
+    priority: currentType === "urgent" ? "urgent" : "normal",
+    message: {
+      ar, en: document.getElementById("msg-en").value,
+      hi: document.getElementById("msg-hi").value,
+      fr: document.getElementById("msg-fr").value
+    },
+    updatedAt: new Date().toISOString()
+  };
+  await saveAlertData(newData, "send notification");
+}
+
+async function saveNotif() {
+  if (!alertData) return;
+  alertData.type = currentType;
+  alertData.message = {
+    ar: document.getElementById("msg-ar").value,
+    en: document.getElementById("msg-en").value,
+    hi: document.getElementById("msg-hi").value,
+    fr: document.getElementById("msg-fr").value
+  };
+  await saveAlertData(alertData, "save notification");
+}
+
+async function toggleNotif() {
+  if (!alertData) return;
+  alertData.active = !alertData.active;
+  if (alertData.active) alertData.id = "notif-" + Date.now();
+  await saveAlertData(alertData, "toggle notification");
+}
+
+async function deactivateNotif() {
+  if (!alertData) return;
+  alertData.active = false;
+  await saveAlertData(alertData, "deactivate notification");
+}
+
+async function saveAlertData(data, msg) {
+  try {
+    const res = await ghPut(ALERT_PATH, data, alertSha, msg);
+    alertSha = res.content.sha;
+    alertData = data;
+    renderNotif();
+    showMsg("notif-msg","✅ تم الحفظ! سيظهر في التطبيق فوراً ✅",true);
+  } catch(e) { showMsg("notif-msg","❌ "+e.message,false); }
+}
+
+// ── POSTS ─────────────────────────────────────────────────────────────────────
+async function loadPosts() {
+  document.getElementById("posts-count").textContent = "⏳ تحميل...";
+  try {
+    const { content, sha } = await ghGet(FEATURED_PATH);
+    postsSha = sha;
+    postsData = Array.isArray(content) ? content : [];
+  } catch(e) { postsData = []; }
+  renderPosts();
+}
+function renderPosts() {
+  document.getElementById("posts-count").textContent = postsData.length + " تغريدة";
+  const list = document.getElementById("posts-list");
+  if (!postsData.length) { list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:24px">لا توجد تغريدات</div>'; return; }
+  list.innerHTML = postsData.map((p,i) => `
+    <div class="card" style="padding:14px;margin-bottom:10px">
+      ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;max-height:130px;object-fit:cover;border-radius:10px;margin-bottom:8px" onerror="this.style.display='none'" />` : ""}
+      <div style="font-size:11px;color:#888;margin-bottom:3px">${p.date||""}</div>
+      <div style="font-size:13px;line-height:1.6">${p.captionAr||""}</div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <a href="${p.xUrl||p.instagramUrl||"#"}" target="_blank" style="font-size:11px;color:#3C6E8F">فتح في X ↗</a>
+        <button onclick="deletePost(${i})" style="margin-right:auto;background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+      </div>
+    </div>`).join("");
+}
+function togglePostForm() {
+  const f = document.getElementById("post-form");
+  f.style.display = f.style.display==="none"?"block":"none";
+}
+function onPostImgChange() {
+  const url = document.getElementById("new-post-img").value.trim();
+  const wrap = document.getElementById("post-img-preview");
+  if (url) { document.getElementById("post-img-el").src=url; wrap.style.display="block"; }
+  else wrap.style.display="none";
+}
+async function addPost() {
+  const url = document.getElementById("new-post-url").value.trim();
+  const ar  = document.getElementById("new-post-ar").value.trim();
+  if (!url || !ar) { alert("أدخل الرابط والنص العربي"); return; }
+  const post = {
+    id:"post-"+Date.now(), xUrl:url, instagramUrl:url,
+    imageUrl:document.getElementById("new-post-img").value.trim(),
+    videoUrl:document.getElementById("new-post-video").value.trim(),
+    captionAr:ar, captionEn:document.getElementById("new-post-en").value.trim(),
+    captionHi:document.getElementById("new-post-hi").value.trim(),
+    captionFr:document.getElementById("new-post-fr").value.trim(),
+    date:document.getElementById("new-post-date").value
+  };
+  const updated = [post, ...postsData];
+  try {
+    const res = await ghPut(FEATURED_PATH, updated, postsSha, "add post");
+    postsSha=res.content.sha; postsData=updated; renderPosts(); togglePostForm();
+    ["new-post-url","new-post-img","new-post-video","new-post-ar","new-post-en","new-post-hi","new-post-fr"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("post-img-preview").style.display="none";
+    showMsg("post-add-msg","✅ نُشر! يظهر في التطبيق فوراً ✅",true);
+  } catch(e) { alert("خطأ: "+e.message); }
+}
+async function deletePost(i) {
+  if (!confirm("حذف هذه التغريدة؟")) return;
+  const updated = postsData.filter((_,idx)=>idx!==i);
+  try {
+    const res = await ghPut(FEATURED_PATH,updated,postsSha,"delete post");
+    postsSha=res.content.sha; postsData=updated; renderPosts();
+  } catch(e) { alert("خطأ: "+e.message); }
+}
+
+// ── SUB-TABS ─────────────────────────────────────────────────────────────────
+let currentSubTab = 'spots';
+function showSubTab(sub) {
+  currentSubTab = sub;
+  ['spots','rest'].forEach(s => {
+    document.getElementById('subtab-'+s).style.display = s===sub?'block':'none';
+    const btn = document.getElementById('sub-'+s);
+    btn.style.background = s===sub?'#2F5D45':'transparent';
+    btn.style.color = s===sub?'#fff':'#666';
+  });
+  if (sub==='rest') loadRestaurants();
+}
+
+// ── LOCATIONS ─────────────────────────────────────────────────────────────────
+async function loadLocations() {
+  document.getElementById("locs-count").textContent = "⏳ تحميل...";
+  try {
+    const { content, sha } = await ghGet(LOCS_PATH);
+    locsSha = sha;
+    locsData = Array.isArray(content) ? content : [];
+  } catch(e) { locsData = []; }
+  renderLocations();
+}
+function filterSec(sec) {
+  currentLocSec = sec;
+  document.querySelectorAll(".sec-filter-btn").forEach(b => {
+    b.style.background = b.dataset.sec===sec?"#2F5D45":"#fff";
+    b.style.color = b.dataset.sec===sec?"#fff":"#555";
+  });
+  renderLocations();
+}
+function renderLocations() {
+  // Merge builtin + custom, apply deletions + overrides from locsData
+  const deletions = new Set(locsData.filter(l=>l._deleted).map(l=>l.nAr));
+  const overrides = {};
+  locsData.filter(l=>l._override).forEach(l=>overrides[l.nAr]=l);
+  const customs = locsData.filter(l=>!l._deleted && !l._override);
+
+  let allSpots = [
+    ...BUILTIN_SPOTS.filter(s=>!deletions.has(s.nAr)).map(s=>overrides[s.nAr]?{...s,...overrides[s.nAr],_isOverride:true}:s),
+    ...customs.map(s=>({...s,_isCustom:true}))
+  ];
+
+  const filtered = currentLocSec==="all" ? allSpots : allSpots.filter(s=>s.section===currentLocSec);
+  document.getElementById("locs-count").textContent = allSpots.length+" موقع · يُعرض: "+filtered.length;
+  const list = document.getElementById("locs-list");
+  if (!filtered.length) { list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:16px">لا توجد مواقع في هذا القسم</div>'; return; }
+  list.innerHTML = filtered.map((loc) => `
+    <div class="card" style="display:flex;gap:10px;align-items:flex-start;padding:11px 14px;margin-bottom:8px">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:700">${loc.nAr}</span>
+          ${loc._isOverride?'<span style="font-size:10px;background:#C98A2E20;color:#C98A2E;border-radius:6px;padding:1px 6px">مُعدَّل</span>':""}
+          ${loc._isCustom?'<span style="font-size:10px;background:#2F5D4520;color:#2F5D45;border-radius:6px;padding:1px 6px">مُخصَّص</span>':""}
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:1px">${loc.nEn}</div>
+        <div style="font-size:11px;color:#3C6E8F;margin-top:2px">📍 ${loc.lat||"?"}, ${loc.lng||"?"}</div>
+        <div style="font-size:10px;color:#aaa">${SECTION_LABELS[loc.section]||loc.section||""}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+        <button onclick="openEdit('${loc.nAr}','${loc.nEn}',${loc.lat||0},${loc.lng||0})"
+          style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
+        <button onclick="deleteSpot('${loc.nAr}',${!!loc._isCustom})"
+          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+      </div>
+    </div>`).join("");
+}
+function toggleLocForm() {
+  const f=document.getElementById("loc-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+}
+function parseLocCoords() {
+  const m = document.getElementById("loc-coords").value.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);
+  if (m) {
+    document.getElementById("loc-lat").value=m[1];
+    document.getElementById("loc-lng").value=m[2];
+    const p=document.getElementById("loc-coords-prev");
+    p.textContent=`📍 ${m[1]}, ${m[2]} ✅`; p.style.display="block";
+  }
+}
+async function addLocation() {
+  const nAr=document.getElementById("loc-nar").value.trim();
+  const nEn=document.getElementById("loc-nen").value.trim();
+  const lat=parseFloat(document.getElementById("loc-lat").value);
+  const lng=parseFloat(document.getElementById("loc-lng").value);
+  if (!nAr||!nEn||isNaN(lat)||isNaN(lng)) { alert("أدخل جميع الحقول المطلوبة"); return; }
+  const updated=[...locsData,{id:"loc-"+Date.now(),nAr,nEn,lat,lng,section:document.getElementById("loc-section").value}];
+  try {
+    const res=await ghPut(LOCS_PATH,updated,locsSha,"add location: "+nAr);
+    locsSha=res.content.sha; locsData=updated; renderLocations(); toggleLocForm();
+    ["loc-nar","loc-nen","loc-coords"].forEach(id=>document.getElementById(id).value="");
+    document.getElementById("loc-coords-prev").style.display="none";
+    showMsg("loc-msg","✅ تمت الإضافة!",true);
+  } catch(e) { alert("خطأ: "+e.message); }
+}
+function openEdit(nAr, nEn, lat, lng) {
+  document.getElementById('edit-orig-nar').value = nAr;
+  document.getElementById('edit-nar').value = nAr;
+  document.getElementById('edit-nen').value = nEn;
+  document.getElementById('edit-coords').value = lat + ', ' + lng;
+  document.getElementById('edit-lat').value = lat;
+  document.getElementById('edit-lng').value = lng;
+  document.getElementById('edit-coords-prev').style.display='none';
+  document.getElementById('edit-form').style.display='block';
+  document.getElementById('edit-form').scrollIntoView({behavior:'smooth'});
+}
+function parseEditCoords() {
+  const m = document.getElementById('edit-coords').value.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);
+  if (m) {
+    document.getElementById('edit-lat').value=m[1];
+    document.getElementById('edit-lng').value=m[2];
+    const p=document.getElementById('edit-coords-prev');
+    p.textContent=`📍 ${m[1]}, ${m[2]} ✅`; p.style.display='block';
+  }
+}
+async function saveEdit() {
+  const origNar = document.getElementById('edit-orig-nar').value;
+  const newNAr = document.getElementById('edit-nar').value.trim();
+  const newNEn = document.getElementById('edit-nen').value.trim();
+  const lat = parseFloat(document.getElementById('edit-lat').value);
+  const lng = parseFloat(document.getElementById('edit-lng').value);
+  if (!newNAr || isNaN(lat)) { alert('أدخل البيانات المطلوبة'); return; }
+  const filtered = locsData.filter(l=>!(l._override && l.nAr===origNar));
+  const updated = [...filtered, {nAr:origNar, _override:true, newNAr, newNEn, lat, lng}];
+  try {
+    const res = await ghPut(LOCS_PATH, updated, locsSha, 'edit: '+origNar);
+    locsSha=res.content.sha; locsData=updated;
+    document.getElementById('edit-form').style.display='none';
+    renderLocations();
+    showMsg('edit-msg','✅ تم التعديل!',true);
+  } catch(e) { showMsg('edit-msg','❌ '+e.message,false); }
+}
+async function deleteSpot(nAr, isCustom) {
+  if (!confirm(`حذف "${nAr}" من التطبيق؟`)) return;
+  let updated;
+  if (isCustom) {
+    updated = locsData.filter(l=>l.nAr!==nAr);
+  } else {
+    const filtered = locsData.filter(l=>!(l._deleted && l.nAr===nAr));
+    updated = [...filtered, {nAr, _deleted:true}];
+  }
+  try {
+    const res = await ghPut(LOCS_PATH, updated, locsSha, 'delete: '+nAr);
+    locsSha=res.content.sha; locsData=updated; renderLocations();
+  } catch(e) { alert('خطأ: '+e.message); }
+}
+
+async function deleteLoc(i) {
+  if (!confirm("حذف هذا الموقع؟")) return;
+  const updated=locsData.filter((_,idx)=>idx!==i);
+  try {
+    const res=await ghPut(LOCS_PATH,updated,locsSha,"delete location");
+    locsSha=res.content.sha; locsData=updated; renderLocations();
+  } catch(e) { alert("خطأ: "+e.message); }
+}
+
+// ── RESTAURANTS ───────────────────────────────────────────────────────────────
+const BUILTIN_RESTAURANTS = [{"nAr": "مطعم الحصن", "nEn": "Al Husn Restaurant", "type": "arabic", "priceAr": "متوسط", "priceEn": "Mid-range", "lat": 17.0151, "lng": 54.0924, "note": {"ar": "أكلات عمانية أصيلة، مشهور بالمشاكيك", "en": "Authentic Omani cuisine"}, "open": "12:00-23:00", "phone": "+96823210000"}, {"nAr": "مطعم البيك", "nEn": "Al Baik", "type": "fast", "priceAr": "اقتصادي", "priceEn": "Budget", "lat": 17.0144, "lng": 54.0867, "note": {"ar": "وجبات سريعة شعبي", "en": "Popular fast food"}, "open": "10:00-02:00", "phone": ""}, {"nAr": "مطعم نزوى", "nEn": "Nizwa Restaurant", "type": "seafood", "priceAr": "اقتصادي", "priceEn": "Budget", "lat": 17.02, "lng": 54.095, "note": {"ar": "أسماك ومأكولات بحرية طازجة", "en": "Fresh seafood"}, "open": "11:00-23:00", "phone": ""}, {"nAr": "كافيه ديلا", "nEn": "Cafe Della", "type": "cafe", "priceAr": "متوسط", "priceEn": "Mid-range", "lat": 17.0165, "lng": 54.0905, "note": {"ar": "مشروبات وحلويات", "en": "Drinks and desserts"}, "open": "8:00-00:00", "phone": ""}, {"nAr": "مطعم الساحل", "nEn": "Al Sahel Restaurant", "type": "seafood", "priceAr": "مرتفع", "priceEn": "High-end", "lat": 17.008, "lng": 54.082, "note": {"ar": "مأكولات بحرية فاخرة على الشاطئ", "en": "Premium seafood on the beach"}, "open": "12:00-23:00", "phone": ""}, {"nAr": "مطعم السمحان", "nEn": "Samhan Restaurant", "type": "arabic", "priceAr": "اقتصادي", "priceEn": "Budget", "lat": 17.019, "lng": 54.097, "note": {"ar": "مطعم شعبي بأسعار مناسبة", "en": "Popular local prices"}, "open": "6:00-23:00", "phone": ""}];
+
+async function loadRestaurants() {
+  document.getElementById("rest-count").textContent = "⏳ تحميل...";
+  try {
+    const { content, sha } = await ghGet(REST_PATH);
+    restSha = sha;
+    // Merge: GitHub data overrides builtin if it has items, else use builtin
+    restData = (Array.isArray(content) && content.length > 0) ? content : [...BUILTIN_RESTAURANTS];
+  } catch(e) {
+    restSha = null;
+    restData = [...BUILTIN_RESTAURANTS];
+  }
+  renderRestaurants();
+}
+const RTYPES={arabic:"🫕 عماني",seafood:"🦞 بحري",cafe:"☕ كافيه",fast:"🍔 سريع",international:"🌍 دولي"};
+const RTYPE_ICONS={arabic:"🫕",seafood:"🦞",cafe:"☕",fast:"🍔",international:"🌍"};
+function renderRestaurants() {
+  document.getElementById("rest-count").textContent = restData.length + " مطعم";
+  const list = document.getElementById("rest-list");
+  if (!restData.length) {
+    list.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:20px">لا توجد مطاعم</div>';
+    return;
+  }
+  list.innerHTML = restData.map((r, i) => `
+    <div class="card" style="padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:26px;flex-shrink:0">${RTYPE_ICONS[r.type]||"🍽️"}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700">${r.nAr}</div>
+          <div style="font-size:11px;color:#888;margin-top:1px">${r.nEn}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+            <span style="font-size:10px;background:#2F5D4515;color:#2F5D45;border-radius:8px;padding:2px 8px;font-weight:700">${RTYPES[r.type]||"🍽️"}</span>
+            <span style="font-size:10px;background:#C98A2E15;color:#C98A2E;border-radius:8px;padding:2px 8px;font-weight:700">${r.priceAr||""}</span>
+            ${r.open?`<span style="font-size:10px;color:#888">🕐 ${r.open}</span>`:""}
+          </div>
+          ${r.lat&&r.lng?`<div style="font-size:10px;color:#3C6E8F;margin-top:3px">📍 ${r.lat}, ${r.lng}</div>`:""}
+          ${r.note?.ar?`<div style="font-size:11px;color:#888;margin-top:3px;line-height:1.5">${r.note.ar}</div>`:""}
+          ${r.phone?`<div style="font-size:11px;color:#3C6E8F;margin-top:2px">📞 ${r.phone}</div>`:""}
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="openEditRest(${i})"
+          style="flex:1;background:#3C6E8F15;border:none;border-radius:8px;padding:6px;color:#3C6E8F;cursor:pointer;font-size:12px;font-weight:700">✏️ تعديل</button>
+        <button onclick="deleteRestaurant(${i})"
+          style="flex:1;background:#B5402C15;border:none;border-radius:8px;padding:6px;color:#B5402C;cursor:pointer;font-size:12px;font-weight:700">🗑️ حذف</button>
+      </div>
+    </div>`).join("");
+}
+function openEditRest(i) {
+  const r = restData[i];
+  document.getElementById('rest-nar').value = r.nAr;
+  document.getElementById('rest-nen').value = r.nEn;
+  document.getElementById('rest-type').value = r.type || 'arabic';
+  document.getElementById('rest-open').value = r.open || '';
+  document.getElementById('rest-phone').value = r.phone || '';
+  document.getElementById('rest-note-ar').value = r.note?.ar || '';
+  document.getElementById('rest-note-en').value = r.note?.en || '';
+  if (r.lat) {
+    document.getElementById('rest-coords').value = r.lat + ', ' + r.lng;
+    document.getElementById('rest-lat').value = r.lat;
+    document.getElementById('rest-lng').value = r.lng;
+    const p = document.getElementById('rest-coords-prev');
+    p.textContent = `📍 ${r.lat}, ${r.lng} ✅`; p.style.display='block';
+  }
+  // Set price
+  const priceOpts = document.getElementById('rest-price').options;
+  for (let o of priceOpts) { if (o.value.startsWith(r.priceAr)) { document.getElementById('rest-price').value = o.value; break; } }
+  // Mark as editing this index
+  document.getElementById('rest-form').dataset.editIdx = i;
+  toggleRestForm();
+  document.getElementById('rest-form').scrollIntoView({behavior:'smooth'});
+}
+
+function toggleRestForm() {
+  const f=document.getElementById("rest-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+}
+function parseRestCoords() {
+  const m=document.getElementById("rest-coords").value.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);
+  if (m) {
+    document.getElementById("rest-lat").value=m[1];
+    document.getElementById("rest-lng").value=m[2];
+    const p=document.getElementById("rest-coords-prev");
+    p.textContent=`📍 ${m[1]}, ${m[2]} ✅`; p.style.display="block";
+  }
+}
+async function addRestaurant() {
+  const nAr = document.getElementById("rest-nar").value.trim();
+  const nEn = document.getElementById("rest-nen").value.trim();
+  if (!nAr || !nEn) { alert("أدخل الاسم العربي والإنجليزي"); return; }
+  const pp = document.getElementById("rest-price").value.split("|");
+  const r = {
+    nAr, nEn, type: document.getElementById("rest-type").value,
+    priceAr: pp[0], priceEn: pp[1] || pp[0],
+    lat: parseFloat(document.getElementById("rest-lat").value) || null,
+    lng: parseFloat(document.getElementById("rest-lng").value) || null,
+    open: document.getElementById("rest-open").value,
+    phone: document.getElementById("rest-phone").value,
+    note: { ar: document.getElementById("rest-note-ar").value, en: document.getElementById("rest-note-en").value }
+  };
+  
+  const editIdx = document.getElementById('rest-form').dataset.editIdx;
+  let updated;
+  if (editIdx !== undefined && editIdx !== '') {
+    updated = [...restData];
+    updated[parseInt(editIdx)] = r;
+    delete document.getElementById('rest-form').dataset.editIdx;
+  } else {
+    updated = [...restData, r];
+  }
+  
+  try {
+    const res = await ghPut(REST_PATH, updated, restSha, (editIdx ? "edit" : "add") + " restaurant: " + nAr);
+    restSha = res.content.sha; restData = updated; renderRestaurants(); toggleRestForm();
+    ["rest-nar","rest-nen","rest-open","rest-phone","rest-note-ar","rest-note-en","rest-coords"].forEach(id => document.getElementById(id).value = "");
+    document.getElementById("rest-coords-prev").style.display = "none";
+    showMsg("rest-msg", editIdx ? "✅ تم التعديل!" : "✅ تمت الإضافة!", true);
+  } catch(e) { alert("خطأ: " + e.message); }
+}
+async function deleteRestaurant(i) {
+  if (!confirm("حذف هذا المطعم؟")) return;
+  const updated=restData.filter((_,idx)=>idx!==i);
+  try {
+    const res=await ghPut(REST_PATH,updated,restSha,"delete restaurant");
+    restSha=res.content.sha; restData=updated; renderRestaurants();
+  } catch(e) { alert("خطأ: "+e.message); }
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────────
+const STATS_PATH = "public/stats.json";
+let statsData = null, statsSha = null;
+
+async function loadStats() {
+  // Local stats
+  document.getElementById("stat-opens").textContent    = parseInt(localStorage.getItem("kh_opens")||"0");
+  document.getElementById("stat-installs").textContent = parseInt(localStorage.getItem("kh_installs")||"0");
+  document.getElementById("stat-shares").textContent   = parseInt(localStorage.getItem("kh_shares")||"0");
+
+  // Vercel API stats
+  const token = localStorage.getItem("vercel_token");
+  if (!token) return;
+  
+  document.getElementById("stat-visitors").textContent  = "⏳";
+  document.getElementById("stat-pageviews").textContent = "⏳";
+
+  try {
+    const TEAM   = "samiharthys-projects";
+    const SLUG   = "khareef-dhofar";
+    const to   = new Date().toISOString().split("T")[0];
+    const from = new Date(Date.now() - 30*24*3600000).toISOString().split("T")[0];
+    
+    // Get team ID
+    const teamRes = await fetch(`https://api.vercel.com/v2/teams?slug=${TEAM}`, {
+      headers: { Authorization: "Bearer " + token }
+    });
+    const teamData = await teamRes.json();
+    const teamId = teamData.teams?.[0]?.id || teamData.id;
+
+    // Get project
+    const projRes = await fetch(
+      `https://api.vercel.com/v9/projects/${SLUG}${teamId ? "?teamId="+teamId : ""}`,
+      { headers: { Authorization: "Bearer " + token } }
+    );
+    const proj = await projRes.json();
+    const pid = proj.id;
+    if (!pid) throw new Error("لم يتم العثور على المشروع");
+
+    // Get analytics stats (v1 endpoint)
+    const statsRes = await fetch(
+      `https://api.vercel.com/v1/web/insights/stats/visitors?projectId=${pid}&from=${from}&to=${to}&environment=production${teamId?"&teamId="+teamId:""}`,
+      { headers: { Authorization: "Bearer " + token } }
+    );
+    const statsData = await statsRes.json();
+    const visitors = statsData.total || statsData.value || statsData.data?.total || 0;
+
+    const pvRes = await fetch(
+      `https://api.vercel.com/v1/web/insights/stats/pageviews?projectId=${pid}&from=${from}&to=${to}&environment=production${teamId?"&teamId="+teamId:""}`,
+      { headers: { Authorization: "Bearer " + token } }
+    );
+    const pvData = await pvRes.json();
+    const pageviews = pvData.total || pvData.value || pvData.data?.total || 0;
+
+    document.getElementById("stat-visitors").textContent  = visitors.toLocaleString("ar");
+    document.getElementById("stat-pageviews").textContent = pageviews.toLocaleString("ar");
+    document.getElementById("stats-note").textContent     = "✅ آخر 30 يوم";
+    showMsg("stats-msg","✅ تم التحديث",true);
+
+  } catch(e) {
+    document.getElementById("stat-visitors").textContent  = "—";
+    document.getElementById("stat-pageviews").textContent = "—";
+    document.getElementById("stats-note").textContent = "⚠️ " + e.message;
+    console.error("Stats error:", e);
+  }
+}
+
+function saveAndLoadVercel() {
+  const t = document.getElementById("vercel-token-input")?.value?.trim();
+  if (t) { localStorage.setItem("vercel_token", t); document.getElementById("vercel-token-input").value = ""; loadStats(); }
+}
+function clearVercelToken() {
+  localStorage.removeItem("vercel_token");
+  ["stat-visitors","stat-pageviews"].forEach(id => document.getElementById(id).textContent = "—");
+  showMsg("stats-msg","تم مسح التوكن",true);
+}
+
+
+async function fetchVercelStats(token) {
+  const errEl = document.getElementById("stats-error");
+  errEl.style.display = "none";
+  
+  try {
+    // Step 1: Get project ID
+    const pRes = await fetch("https://api.vercel.com/v9/projects/khareef-dhofar", {
+      headers: { Authorization: "Bearer " + token }
+    });
+    if (!pRes.ok) {
+      const err = await pRes.json();
+      throw new Error(err.error?.message || `Projects API ${pRes.status}`);
+    }
+    const project = await pRes.json();
+    const pid = project.id;
+    if (!pid) throw new Error("Project ID not found");
+
+    // Step 2: Get analytics using correct Vercel Web Analytics API
+    const to = new Date().toISOString().split("T")[0];
+    const from = new Date(Date.now() - 30*24*3600000).toISOString().split("T")[0];
+    
+    // Try new v2 endpoint first
+    const aRes = await fetch(
+      `https://api.vercel.com/v2/web/analytics?projectId=${pid}&from=${from}&to=${to}&filter=%7B%7D&limit=250`,
+      { headers: { Authorization: "Bearer " + token } }
+    );
+    
+    if (aRes.ok) {
+      const aData = await aRes.json();
+      // v2 response format
+      const visitors  = aData.data?.visitors?.value || aData.visitors || 0;
+      const pageviews = aData.data?.pageViews?.value || aData.pageViews || 0;
+      document.getElementById("stat-visitors").textContent  = visitors.toLocaleString("ar");
+      document.getElementById("stat-pageviews").textContent = pageviews.toLocaleString("ar");
+    } else {
+      // Try v1 endpoint
+      const a1Res = await fetch(
+        `https://api.vercel.com/v1/web/insights/stats?projectId=${pid}&from=${from}&to=${to}&environment=production`,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      if (a1Res.ok) {
+        const a1 = await a1Res.json();
+        document.getElementById("stat-visitors").textContent  = (a1.visitors||a1.total||0).toLocaleString("ar");
+        document.getElementById("stat-pageviews").textContent = (a1.pageViews||a1.views||0).toLocaleString("ar");
+      } else {
+        // Show raw response for debugging
+        const errText = await a1Res.text();
+        throw new Error(`Analytics API ${a1Res.status}: ${errText.slice(0,100)}`);
+      }
+    }
+
+    document.getElementById("stats-error").style.display = "none";
+    showMsg("stats-msg", "✅ تم تحديث الإحصائيات", true);
+
+  } catch(e) {
+    console.error("Vercel stats error:", e);
+    document.getElementById("stat-visitors").textContent  = "—";
+    document.getElementById("stat-pageviews").textContent = "—";
+    errEl.innerHTML = `
+      <div style="background:#FFF0F0;border:1px solid #B5402C40;border-radius:10px;padding:12px;font-size:11px;color:#B5402C">
+        <b>خطأ:</b> ${e.message}<br><br>
+        <b>الحل:</b> افتح <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="color:#3C6E8F">Vercel Analytics Dashboard ↗</a> مباشرة
+      </div>`;
+    errEl.style.display = "block";
+  }
+}
+
+// Called from the app via URL trick — admin pulls stats from stats.json
+// The app itself writes events to stats.json every 10 opens or install/share
+function resetStats() {} // Replaced by Vercel Analytics
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function showMsg(id, text, ok) {
+  const el=document.getElementById(id);
+  if (!el) return;
+  el.textContent=text; el.style.color=ok?"#2F5D45":"#B5402C"; el.style.display="block";
+  setTimeout(()=>el.style.display="none",5000);
+}
+</script>
+</body>
+</html>
