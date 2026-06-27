@@ -3179,9 +3179,7 @@ function XFeed() {
           <div className="px-4 py-3">
             <div className="flex items-center gap-2 mb-2">
 
-              {post.date && (
-  
-              )}
+              
             </div>
             {caption(post) && (
               <p className="text-sm leading-relaxed" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
