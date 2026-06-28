@@ -565,26 +565,39 @@ function filterSec(sec){
   renderLocations();
 }
 function renderLocations(){
-  const filtered=currentLocSec==="all"?locsData:locsData.filter(l=>l.section===currentLocSec);
-  document.getElementById("locs-count").textContent=locsData.length+" موقع · يُعرض: "+filtered.length;
+  const deletions=new Set(locsData.filter(l=>l._deleted).map(l=>l.nAr));
+  const overrideMap={};
+  locsData.filter(l=>l._override).forEach(l=>{overrideMap[l.nAr]=l;});
+  const customAdds=locsData.filter(l=>!l._deleted&&!l._override);
+
+  const allSpots=[
+    ...BUILTIN_SPOTS.filter(s=>!deletions.has(s.nAr)).map(s=>({
+      ...s,...(overrideMap[s.nAr]||{}),_isBuiltin:true,_isModified:!!overrideMap[s.nAr]
+    })),
+    ...customAdds.map(s=>({...s,_isCustom:true}))
+  ];
+
+  const filtered=currentLocSec==="all"?allSpots:allSpots.filter(s=>s.section===currentLocSec);
+  document.getElementById("locs-count").textContent=allSpots.length+" موقع · يُعرض: "+filtered.length;
   const list=document.getElementById("locs-list");
-  if(!locsData.length){list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:20px">لا توجد مواقع مخصصة. اضغط "+ موقع جديد"</div>';return;}
   if(!filtered.length){list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:16px">لا توجد مواقع في هذا القسم</div>';return;}
-  list.innerHTML=filtered.map((loc,i)=>`
-    <div class="card" style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;margin-bottom:8px">
+  list.innerHTML=filtered.map(loc=>`
+    <div class="card" style="display:flex;gap:10px;align-items:flex-start;padding:11px 14px;margin-bottom:8px">
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:700">${loc.nAr}</div>
-        <div style="font-size:11px;color:#888">${loc.nEn}</div>
-        <div style="font-size:11px;color:#3C6E8F">📍 ${loc.lat}, ${loc.lng}</div>
+        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:13px;font-weight:700">${loc.nAr||loc.nAr}</span>
+          ${loc._isModified?'<span style="font-size:9px;background:#C98A2E20;color:#C98A2E;border-radius:4px;padding:1px 6px">مُعدَّل</span>':""}
+          ${loc._isCustom?'<span style="font-size:9px;background:#2F5D4520;color:#2F5D45;border-radius:4px;padding:1px 6px">مُضاف</span>':""}
+        </div>
+        <div style="font-size:11px;color:#888">${loc.nEn||""}</div>
+        <div style="font-size:11px;color:#3C6E8F">📍 ${loc.lat||"?"}, ${loc.lng||"?"}</div>
         <div style="font-size:10px;color:#aaa">${SECTION_LABELS[loc.section]||loc.section||""}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
-        <button onclick="openEdit('${loc.nAr}','${loc.nEn}',${loc.lat},${loc.lng})"
+        <button onclick="openEdit('${(loc.nAr||"").replace(/'/g,"\\'")}','${(loc.nEn||"").replace(/'/g,"\\'")}',${loc.lat||0},${loc.lng||0})"
           style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
-        <button onclick="openEdit('${loc.nAr||""}','${loc.nEn||""}',${loc.lat||0},${loc.lng||0})"
-            style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
-          <button onclick="deleteSpotByName('${loc.nAr}',${loc._isBuiltin?true:false})"
-            style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+        <button onclick="deleteSpotByName('${(loc.nAr||"").replace(/'/g,"\\'")}',${!!loc._isBuiltin})"
+          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
       </div>
     </div>`).join("");
 }
