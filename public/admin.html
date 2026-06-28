@@ -337,6 +337,8 @@ let locsData=[], locsSha=null;
 let restData=[], restSha=null;
 let currentType="info", currentLocSec="all", currentSubTab="spots";
 
+const BUILTIN_SPOTS = [{"nAr": "إطلالة رخيوت", "nEn": "Rakhyut", "lat": 16.7491631, "lng": 53.4377971, "section": "regions"}, {"nAr": "إطلالة ضلكوت", "nEn": "Dalkut", "lat": 16.711611, "lng": 53.212773, "section": "regions"}, {"nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)", "nEn": "Sarfait (Oman–Yemen border)", "lat": 16.6793665, "lng": 53.118577, "section": "regions"}, {"nAr": "مرتفعات ألسان", "nEn": "Jabal Al San", "lat": 17.1750555, "lng": 54.2501138, "section": "regions"}, {"nAr": "عين صحلنوت", "nEn": "Ayn Sahalnoot", "lat": 17.1481424, "lng": 54.178309, "section": "regions"}, {"nAr": "إطلالة شير", "nEn": "Jabal Shir", "lat": 17.1945748, "lng": 54.1676345, "section": "regions"}, {"nAr": "شلالات جبوجب", "nEn": "Ayn Gogob", "lat": 17.2199709, "lng": 54.1112974, "section": "regions"}, {"nAr": "وادي نحيز", "nEn": "Wadi Nuheiz", "lat": 17.1895277, "lng": 54.0860812, "section": "regions"}, {"nAr": "عين جرزيز", "nEn": "Ayn Gharziz", "lat": 17.1059336, "lng": 54.0742133, "section": "regions"}, {"nAr": "سهل أتين", "nEn": "Jabal Ittin", "lat": 17.0713432, "lng": 54.0670953, "section": "regions"}, {"nAr": "إطلالة حمرير", "nEn": "Hamrir Viewpoint", "lat": 17.1233081, "lng": 54.1449883, "section": "regions"}, {"nAr": "حنجة القوارب - دربات", "nEn": "Wadi Darbat", "lat": 17.1053125, "lng": 54.4530625, "section": "regions"}, {"nAr": "متحف ارض اللبان", "nEn": "Land of Frankincense Museum", "lat": 17.0094009, "lng": 54.1360877, "section": "regions"}, {"nAr": "اكشاك جوز الهند", "nEn": "Coconut Stalls", "lat": 17.0035962, "lng": 54.1155011, "section": "regions"}, {"nAr": "عين حمران", "nEn": "Ayn Hamran", "lat": 17.0974375, "lng": 54.2809375, "section": "regions"}, {"nAr": "عين وشلالات طبرق", "nEn": "Ayn Tabruk", "lat": 17.1005625, "lng": 54.3265625, "section": "regions"}, {"nAr": "عين وشلالات أثوم", "nEn": "Ayn Athum", "lat": 17.1132375, "lng": 54.3649531, "section": "regions"}, {"nAr": "جبل ناشب", "nEn": "Jabal Nashib", "lat": 17.1035625, "lng": 54.3104375, "section": "regions"}, {"nAr": "مدينة الحق", "nEn": "City of Al Haq (Mountain)", "lat": 17.1771844, "lng": 54.387809, "section": "regions"}, {"nAr": "كورنيش طاقة", "nEn": "Taqah Corniche", "lat": 17.0334727, "lng": 54.3942161, "section": "regions"}, {"nAr": "طريق انعدام الجاذبية", "nEn": "Anti Gravity Point Salalah", "lat": 17.0394417, "lng": 54.6134819, "section": "regions"}, {"nAr": "جبل طوي اعتير", "nEn": "Jabal Tawi Atair", "lat": 17.052985, "lng": 54.5547504, "section": "regions"}, {"nAr": "جبل سمحان (فوق السحاب)", "nEn": "Jebel Samhan", "lat": 17.1026047, "lng": 54.6980883, "section": "regions"}, {"nAr": "الواجهة العصرية (أب تاون)", "nEn": "Modern Frontage (Uptown)", "lat": 17.0567545, "lng": 54.0650162, "section": "events"}, {"nAr": "حديقة وقت الطفل", "nEn": "Kid's Time", "lat": 17.0174522, "lng": 54.0357409, "section": "events"}, {"nAr": "فعاليات عودة الماضي", "nEn": "Return of the Past", "lat": 17.0594084, "lng": 54.1417767, "section": "events"}, {"nAr": "ساحة أتين (أتين سكوير)", "nEn": "Atin Square", "lat": 17.0749228, "lng": 54.0688028, "section": "events"}, {"nAr": "الحديقة الصحية", "nEn": "Health Park", "lat": 17.0124515, "lng": 54.0704936, "section": "events"}, {"nAr": "محطة ظفار – عوقد", "nEn": "Dhofar Station – Auqad", "lat": 17.0084, "lng": 54.0208, "section": "fuel"}, {"nAr": "محطة ريسوت – شل", "nEn": "Raysut – Shell", "lat": 17.0037, "lng": 54.0387, "section": "fuel"}, {"nAr": "محطة الوادي – عُمان أويل", "nEn": "Al Wadi – Oman Oil", "lat": 17.0215, "lng": 54.069, "section": "fuel"}, {"nAr": "محطة اتين – عُمان أويل", "nEn": "Atin – Oman Oil", "lat": 17.0437, "lng": 54.0626, "section": "fuel"}, {"nAr": "محطة السلام – عُمان أويل", "nEn": "Al Salam – Oman Oil", "lat": 17.0112, "lng": 54.0856, "section": "fuel"}, {"nAr": "محطة الدهاريز – عُمان أويل", "nEn": "Al Dahariz – Oman Oil", "lat": 17.0254, "lng": 54.1715, "section": "fuel"}, {"nAr": "محطة السعادة – شل", "nEn": "Al Saada – Shell", "lat": 17.0825, "lng": 54.1588, "section": "fuel"}, {"nAr": "محطة صحلنوت – طاقة الغربية", "nEn": "Sahalnout – West Taqah", "lat": 17.0486, "lng": 54.2116, "section": "fuel"}, {"nAr": "محطة شل – طاقة", "nEn": "Shell – Taqah", "lat": 17.0408, "lng": 54.3686, "section": "fuel"}, {"nAr": "محطة عُمان أويل – طاقة", "nEn": "Oman Oil – Taqah", "lat": 17.0496, "lng": 54.3908, "section": "fuel"}, {"nAr": "محطة عُمان أويل – مرباط", "nEn": "Oman Oil – Mirbat", "lat": 16.9976, "lng": 54.7281, "section": "fuel"}, {"nAr": "محطة المها – ثمريت", "nEn": "Al Maha – Thumrait", "lat": 17.6048, "lng": 54.0326, "section": "fuel"}, {"nAr": "محطة شل – ثمريت", "nEn": "Shell – Thumrait", "lat": 17.6107, "lng": 54.0354, "section": "fuel"}, {"nAr": "محطة عُمان أويل – ثمريت", "nEn": "Oman Oil – Thumrait", "lat": 17.6554, "lng": 54.0597, "section": "fuel"}, {"nAr": "محطة حسن – المزيونة", "nEn": "Hassan Station – Al Mazyounah", "lat": 17.8437, "lng": 52.6636, "section": "fuel"}, {"nAr": "فندق كراون بلازا صلالة", "nEn": "Crowne Plaza Salalah", "lat": 17.0155, "lng": 54.092, "section": "stays"}, {"nAr": "فندق هيلتون صلالة", "nEn": "Hilton Salalah Resort", "lat": 17.0183, "lng": 54.0878, "section": "stays"}, {"nAr": "فندق جاز صلالة (سابقاً ماريوت)", "nEn": "Jaz Salalah Hotel (formerly Marriott)", "lat": 17.017, "lng": 54.09, "section": "stays"}, {"nAr": "فندق إيتاب صلالة", "nEn": "Itaab Salalah Hotel", "lat": 17.009, "lng": 54.1042, "section": "stays"}, {"nAr": "فندق هوليداي إن صلالة", "nEn": "Holiday Inn Salalah", "lat": 17.012, "lng": 54.098, "section": "stays"}, {"nAr": "فندق رمادا صلالة", "nEn": "Ramada Salalah Hotel", "lat": 17.01, "lng": 54.097, "section": "stays"}, {"nAr": "فندق صلالة روتانا", "nEn": "Salalah Rotana Hotel", "lat": 17.0095, "lng": 54.105, "section": "stays"}, {"nAr": "فندق الحارة التراثي", "nEn": "Al Hara Heritage Hotel", "lat": 17.0158, "lng": 54.0915, "section": "stays"}, {"nAr": "فندق سفاري صلالة", "nEn": "Safari Hotel Salalah", "lat": 17.011, "lng": 54.096, "section": "stays"}, {"nAr": "شقق سدر السعادة الفندقية", "nEn": "Sidr Al Saada Hotel Apartments", "lat": 17.0092, "lng": 54.1045, "section": "stays"}, {"nAr": "شقق الياسمين الفندقية", "nEn": "Al Yasmin Hotel Apartments", "lat": 17.0115, "lng": 54.0975, "section": "stays"}, {"nAr": "شقق العقيدة الفندقية", "nEn": "Al Aqeedah Hotel Apartments", "lat": 17.0108, "lng": 54.0968, "section": "stays"}, {"nAr": "شقق وادي دربات الفندقية", "nEn": "Wadi Darbat Hotel Apartments", "lat": 17.0088, "lng": 54.1038, "section": "stays"}, {"nAr": "شقق أريج السعادة", "nEn": "Areej Al Saada Apartments", "lat": 17.0085, "lng": 54.106, "section": "stays"}, {"nAr": "منتجع جويرة (مرسى هوانا)", "nEn": "Juweira Resort (Howana Marina)", "lat": 17.019, "lng": 54.086, "section": "stays"}, {"nAr": "منتجع البلازا صلالة", "nEn": "Plaza Salalah Resort", "lat": 17.0093, "lng": 54.1048, "section": "stays"}, {"nAr": "استراحات وفيلل النسيم صلالة", "nEn": "Al Naseem Villas & Rest Houses", "lat": 17.0091, "lng": 54.1044, "section": "stays"}, {"nAr": "استراحة ظفار الخضراء", "nEn": "Dhofar Al Khadra Rest House", "lat": 17.0102, "lng": 54.0955, "section": "stays"}, {"nAr": "فيلل الشرفة الخريف", "nEn": "Al Shurfa Khareef Villas", "lat": 17.0088, "lng": 54.104, "section": "stays"}, {"nAr": "شاليهات الواحة صلالة", "nEn": "Al Waha Chalets Salalah", "lat": 17.0135, "lng": 54.0928, "section": "stays"}, {"nAr": "استراحة طاقة الساحلية", "nEn": "Taqah Coastal Rest House", "lat": 17.0291, "lng": 54.3873, "section": "stays"}, {"nAr": "فندق ميناء مرباط", "nEn": "Mirbat Port Hotel", "lat": 16.9894, "lng": 54.6917, "section": "stays"}];
+
 const SECTION_LABELS = {
   west:"غرب صلالة",mid:"وسط صلالة",east:"شرق صلالة",
   events:"الفعاليات",companion:"الفعاليات المصاحبة",fuel:"محطات الوقود",
@@ -579,8 +581,10 @@ function renderLocations(){
       <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
         <button onclick="openEdit('${loc.nAr}','${loc.nEn}',${loc.lat},${loc.lng})"
           style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
-        <button onclick="deleteLoc(${locsData.indexOf(loc)})"
-          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+        <button onclick="openEdit('${loc.nAr||""}','${loc.nEn||""}',${loc.lat||0},${loc.lng||0})"
+            style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
+          <button onclick="deleteSpotByName('${loc.nAr}',${loc._isBuiltin?true:false})"
+            style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
       </div>
     </div>`).join("");
 }
@@ -625,6 +629,18 @@ async function saveEdit(){
   const updated=[...locsData];updated[idx]={...updated[idx],nAr,nEn,lat,lng};
   try{const res=await ghPut(LOCS_PATH,updated,locsSha,"edit: "+nAr);locsSha=res.content.sha;locsData=updated;document.getElementById("edit-form").style.display="none";renderLocations();showMsg("edit-msg","✅ تم التعديل!",true);}
   catch(e){showMsg("edit-msg","❌ "+e.message,false);}
+}
+async function deleteSpotByName(nAr, isBuiltin) {
+  if(!confirm("حذف "+nAr+" من التطبيق؟")) return;
+  let updated;
+  if(isBuiltin) {
+    const filtered = locsData.filter(l=>!(l._deleted&&l.nAr===nAr));
+    updated = [...filtered, {nAr, _deleted:true}];
+  } else {
+    updated = locsData.filter(l=>l.nAr!==nAr&&!l._isCustom);
+  }
+  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"delete: "+nAr);locsSha=res.content.sha;locsData=updated;renderLocations();}
+  catch(e){alert("خطأ: "+e.message);}
 }
 async function deleteLoc(i){
   if(!confirm("حذف هذا الموقع؟")) return;
@@ -687,21 +703,31 @@ async function deleteRestaurant(i){
 
 // ── STATS (CounterAPI) ──
 async function loadStats(){
-  document.getElementById("stats-note").textContent="⏳ جاري التحميل...";
+  // Try to read stats.json from GitHub (updated by app via CI or manually)
   try{
-    const [installs,shares,opens] = await Promise.all([
-      fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/installs`).then(r=>r.json()),
-      fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/shares`).then(r=>r.json()),
-      fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/opens`).then(r=>r.json()),
-    ]);
-    document.getElementById("stat-installs").textContent = (installs.count||0).toLocaleString("ar");
-    document.getElementById("stat-shares").textContent   = (shares.count||0).toLocaleString("ar");
-    document.getElementById("stat-opens").textContent    = (opens.count||0).toLocaleString("ar");
-    document.getElementById("stats-note").textContent    = "✅ آخر تحديث: "+new Date().toLocaleTimeString("ar-OM");
-    showMsg("stats-msg","✅ تم التحديث",true);
-  } catch(e) {
-    document.getElementById("stats-note").textContent="⚠️ تحقق من الاتصال";
-    ["stat-installs","stat-shares","stat-opens"].forEach(id=>document.getElementById(id).textContent="—");
+    const {content} = await ghGet("public/stats.json");
+    if(content){
+      document.getElementById("stat-installs").textContent = (content.installs||0).toLocaleString("ar");
+      document.getElementById("stat-shares").textContent   = (content.shares||0).toLocaleString("ar");
+      document.getElementById("stat-opens").textContent    = (content.opens||0).toLocaleString("ar");
+      document.getElementById("stats-note").textContent    = "✅ آخر تحديث: "+new Date().toLocaleTimeString("ar-OM");
+      showMsg("stats-msg","✅ تم التحديث",true);
+      return;
+    }
+  }catch(e){}
+  // Fallback: localStorage (works only if same browser)
+  const o=localStorage.getItem("kh_opens"),
+        i=localStorage.getItem("kh_installs"),
+        s=localStorage.getItem("kh_shares");
+  if(o||i||s){
+    document.getElementById("stat-opens").textContent    = parseInt(o||"0").toLocaleString("ar");
+    document.getElementById("stat-installs").textContent = parseInt(i||"0").toLocaleString("ar");
+    document.getElementById("stat-shares").textContent   = parseInt(s||"0").toLocaleString("ar");
+    document.getElementById("stats-note").textContent    = "من هذا الجهاز · للإجمالي افتح Vercel Analytics";
+    showMsg("stats-msg","⚠️ إحصائيات هذا الجهاز فقط",false);
+  } else {
+    document.getElementById("stats-note").textContent    = "⚠️ لا توجد بيانات — افتح التطبيق أولاً";
+    ["stat-installs","stat-shares","stat-opens"].forEach(id=>document.getElementById(id).textContent="0");
   }
 }
 
