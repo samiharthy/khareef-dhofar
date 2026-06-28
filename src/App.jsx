@@ -2208,11 +2208,11 @@ function Home() {
       <XFeed />
 
       {/* Sponsored */}
-      {getAdsForSection("home").map((ad, i) => (
+      {homeAds.map((ad, i) => (
         <a key={"had"+i} href={ad.url||"#"} target="_blank" rel="noopener noreferrer"
           className="flex items-center gap-3 rounded-2xl p-3"
-          style={{ background:`${ad.color||"#2F5D45"}10`, border:`1px solid ${ad.color||"#2F5D45"}25`,
-            textDecoration:"none" }}>
+          style={{ background:`${ad.color||"#2F5D45"}10`,
+            border:`1px solid ${ad.color||"#2F5D45"}25`, textDecoration:"none" }}>
           <span style={{fontSize:22,flexShrink:0}}>{ad.emoji||"🌟"}</span>
           <div className="flex-1 min-w-0">
             <span style={{fontSize:9,fontWeight:700,padding:"1px 6px",borderRadius:4,
@@ -2228,6 +2228,8 @@ function Home() {
           </div>
         </a>
       ))}
+
+
     </div>
   );
 }
@@ -4518,7 +4520,7 @@ export default function App() {
           <InstallBanner />
 
           <div className="flex-1 overflow-y-auto px-5 pt-5 pb-4">
-            {tab === "home" && <Home go={openTab} />}
+            {tab === "home" && <Home go={openTab} homeAds={getAdsForSection("home")} />}
             {tab === "events" && <Events />}
             {tab === "best" && <BestTimes />}
             {tab === "sites" && <Sites />}
