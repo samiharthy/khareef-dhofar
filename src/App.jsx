@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.53";
+const APP_VERSION = "1.54";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3254,6 +3254,7 @@ function FoodGuide() {
   const [restaurants, setRestaurants] = useState(RESTAURANTS);
 
   useEffect(() => {
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t="+Date.now()).then(r=>r.json()).then(d=>{if(d?.enabled&&d.ads)setAds(d.ads);}).catch(()=>{});
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => { if (Array.isArray(data) && data.length > 0) setRestaurants(data); })
@@ -4056,6 +4057,7 @@ function ExploreTab() {
     catch { return new Set(); }
   });
   const [showFavOnly, setShowFavOnly] = useState(false);
+  const [ads, setAds] = useState([]);
   const [viewMode, setViewMode] = useState("list"); // list | map | favs
 
   useEffect(() => {
@@ -4068,6 +4070,7 @@ function ExploreTab() {
       }).catch(() => {});
 
     // Load restaurants
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t="+Date.now()).then(r=>r.json()).then(d=>{if(d?.enabled&&d.ads)setAds(d.ads);}).catch(()=>{});
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json()).then(d => { if(Array.isArray(d)) setRestaurants(d); })
       .catch(() => {});
@@ -4246,16 +4249,16 @@ function ExploreTab() {
                 </button>
               </div>
               <div className="space-y-2">
-                {cat.places.slice(0, 3).map((p, i) => (
+                {cat.places.slice(0, 4).map((p, i) => (
                   <PlaceCard key={i} place={p} catEmoji={cat.emoji} lang={lang} th={th}
                     isFav={favorites.has(p.id || p.ar)} onFavToggle={toggleFav} />
                 ))}
-                {cat.places.length > 3 && (
+                {cat.places.length > 4 && (
                   <button onClick={() => setActiveCat(cat.key)}
                     className="w-full rounded-2xl py-2.5 text-xs font-bold"
                     style={{ background:th.border, border:"none", color:th.subColor,
                       cursor:"pointer", fontFamily:"Tajawal" }}>
-                    + {cat.places.length - 3} {lang==="ar" ? "مزيد" : "more"}
+                    + {cat.places.length - 4} {lang==="ar" ? "مزيد" : "more"}
                   </button>
                 )}
               </div>
@@ -4309,38 +4312,44 @@ function ExploreTab() {
 function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
   const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
   const placeId = place.id || place.ar;
+  const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
+  const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
+  const descText = place.desc ? (lang==="ar" ? place.desc.ar : place.desc.en) : "";
   return (
-    <div className="flex rounded-2xl overflow-hidden"
-      style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E":th.border}` }}>
-      <a href={href} target="_blank" rel="noopener noreferrer"
-        className="flex gap-3 p-3 active:scale-[0.98] transition flex-1 min-w-0"
-        style={{ textDecoration:"none", display:"flex" }}>
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
-          style={{ background:"#2F5D4512" }}>{catEmoji}</div>
-        <div className="flex-1 min-w-0">
-        <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-          {lang==="ar" ? place.ar : place.en}
+    <div className="overflow-hidden rounded-2xl"
+      style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E50":th.border}` }}>
+      <div className="flex items-center gap-3 p-3">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
+          style={{ background: isFav?"#C98A2E12":"#2F5D4510" }}>
+          {catEmoji}
         </div>
-        {place.tag && (
-          <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
-            📍 {lang==="ar" ? place.tag.ar : place.tag.en}
-          </div>
-        )}
-        {place.desc && (
-          <div className="text-[11px] mt-0.5 leading-relaxed truncate" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-            {lang==="ar" ? place.desc.ar : place.desc.en}
-          </div>
-        )}
-      </div>
-          <MapPin size={14} color={th.subColor} style={{ flexShrink:0, marginTop:2 }} />
+        <a href={href} target="_blank" rel="noopener noreferrer"
+          className="min-w-0 flex-1" style={{ textDecoration:"none" }}>
+          <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
+          {tagText && (
+            <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+              {"📍 "}{tagText}
+            </div>
+          )}
+          {descText && (
+            <div className="text-[11px] mt-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {descText}
+            </div>
+          )}
         </a>
-      <button
-        onClick={e => { e.preventDefault(); if(onFavToggle) onFavToggle(placeId); }}
-        style={{ padding:"0 14px", background:"none", border:"none", cursor:"pointer",
-          fontSize:20, flexShrink:0, alignSelf:"center",
-          color: isFav ? "#C98A2E" : th.subColor, opacity: isFav ? 1 : 0.4 }}>
-        {isFav ? "⭐" : "☆"}
-      </button>
+        <div className="flex shrink-0 flex-col items-center gap-2">
+          <button onClick={() => onFavToggle && onFavToggle(placeId)}
+            style={{ background:"none", border:"none", cursor:"pointer", fontSize:18,
+              color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:0 }}>
+            {isFav?"⭐":"☆"}
+          </button>
+          <a href={href} target="_blank" rel="noopener noreferrer"
+            style={{ display:"flex", alignItems:"center", justifyContent:"center",
+              width:26, height:26, borderRadius:8, background:"#2F5D4515", textDecoration:"none" }}>
+            <MapPin size={13} color="#2F5D45" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
