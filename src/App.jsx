@@ -2035,7 +2035,15 @@ function HomeWeatherForecast() {
         style={{ textAlign: lang === "ar" ? "right" : "left" }}>
         <div className="flex items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl" style={{ background: `${currentColor}20` }}>
-            <CurrentIcon size={28} color={currentColor} />
+            <span style={{fontSize:32}}>
+              {currentCode===0?"☀️":currentCode===1?"🌤️":currentCode===2?"⛅":currentCode===3?"☁️":
+               (currentCode===45||currentCode===48)?"🌫️":
+               (currentCode>=51&&currentCode<=55)?"🌦️":(currentCode>=61&&currentCode<=67)?"🌧️":
+               (currentCode>=71&&currentCode<=77)?"🌨️":(currentCode>=80&&currentCode<=82)?"🌦️":
+               (currentCode>=95)?"⛈️":
+               pattern.key==="sunny"?"☀️":pattern.key==="fog"?"🌫️":pattern.key==="drizzle"?"🌦️":
+               pattern.key==="cloudy"?"☁️":pattern.key==="nightfog"?"🌫️":pattern.key==="cloudynight"?"☁️":"⛅"}
+            </span>
           </div>
           <div>
             {/* Location label */}
