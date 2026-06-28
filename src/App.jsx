@@ -2909,6 +2909,21 @@ function Planner() {
             <div className="py-8 text-center text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.plannerEmpty}</div>
           ) : (
             <>
+              {/* Map button for generated itinerary */}
+              {(() => {
+                const coords = generated.flatMap(day => (day.spots||[]).filter(s=>s.lat&&s.lng).map(s=>s.lat+","+s.lng));
+                const mapUrl = coords.length > 0
+                  ? "https://www.google.com/maps/dir/" + coords.slice(0,8).join("/")
+                  : "https://www.google.com/maps/search/salalah+oman";
+                return (
+                  <a href={mapUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 rounded-2xl py-3 font-bold text-sm"
+                    style={{ background:"#2F5D45", color:"#fff", textDecoration:"none", fontFamily:"Tajawal" }}>
+                    🗺️ {lang==="ar" ? "عرض الرحلة على الخريطة" : "View Trip on Map"}
+                  </a>
+                );
+              })()}
+
               <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
                 <Info size={13} className="mt-0.5 shrink-0" color="#A36A2E" />
                 <span style={{ fontFamily: "Tajawal" }}>{t.plannerNote}</span>
@@ -4010,6 +4025,7 @@ const NAV_LABELS = {
   home:    { ar:"الرئيسية", en:"Home"    },
   explore: { ar:"استكشف",  en:"Explore" },
   today:   { ar:"اليوم",   en:"Today"   },
+  more:    { ar:"المزيد",  en:"More"    },
 };
 
 function ExploreTab() {
@@ -4443,22 +4459,27 @@ export default function App() {
           </div>
 
           {/* Bottom Nav */}
-          <div className="sticky bottom-0 grid grid-cols-5 gap-1 border-t px-2 py-2.5"
+          <div className="sticky bottom-0 grid grid-cols-4 gap-1 border-t px-2 py-2.5"
             style={{ borderColor: th.border, background: th.navBg, zIndex: 40 }}>
-            {PRIMARY_TABS.map((tb) => (
-              <button key={tb.key} type="button" onClick={() => openTab(tb.key)}
-                className="flex flex-col items-center gap-1.5 rounded-xl py-2 transition"
-                style={{ background: tab === tb.key ? "#2F5D451A" : "transparent" }}>
-                <tb.icon size={24} color={tab === tb.key ? "#2F5D45" : th.subColor} strokeWidth={tab === tb.key ? 2.3 : 2} />
-                <span className="text-[10px] font-medium" style={{ color: tab === tb.key ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>{t[tb.key]}</span>
-              </button>
-            ))}
-            <button type="button" onClick={toggleMore}
-              className="flex flex-col items-center gap-1.5 rounded-xl py-2 transition"
-              style={{ background: isMoreActive || moreOpen ? "#2F5D451A" : "transparent" }}>
-              <MoreHorizontal size={24} color={isMoreActive || moreOpen ? "#2F5D45" : th.subColor} strokeWidth={isMoreActive || moreOpen ? 2.3 : 2} />
-              <span className="text-[10px] font-medium" style={{ color: isMoreActive || moreOpen ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>{t.more}</span>
-            </button>
+            {PRIMARY_TABS.map((tb) => {
+              const isMore = tb.key === "more";
+              const isActive = isMore ? (isMoreActive || moreOpen) : tab === tb.key;
+              const label = NAV_LABELS[tb.key]
+                ? (lang === "ar" ? NAV_LABELS[tb.key].ar : NAV_LABELS[tb.key].en)
+                : t[tb.key] || tb.key;
+              return (
+                <button key={tb.key} type="button"
+                  onClick={() => isMore ? toggleMore() : openTab(tb.key)}
+                  className="flex flex-col items-center gap-1.5 rounded-xl py-2 transition"
+                  style={{ background: isActive ? "#2F5D451A" : "transparent" }}>
+                  <tb.icon size={24} color={isActive ? "#2F5D45" : th.subColor} strokeWidth={isActive ? 2.3 : 2} />
+                  <span className="text-[10px] font-medium"
+                    style={{ color: isActive ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
