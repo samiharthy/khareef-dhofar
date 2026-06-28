@@ -346,6 +346,35 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
       <div id="stats-msg" style="font-size:12px;margin-top:8px;display:none"></div>
     </div>
 
+    <!-- ══ PLACES OVERRIDES ══ -->
+    <div id="tab-places" style="display:none">
+      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:12px 16px;margin-bottom:10px">
+        <div style="font-size:12px;color:#2F5D45;font-weight:700;margin-bottom:4px">🗺️ قاعدة بيانات المواقع المركزية</div>
+        <div style="font-size:11px;color:#555;line-height:1.7">
+          عدّل أي موقع هنا — الاسم والإحداثيات تنعكس في <b>كل أقسام التطبيق</b> فوراً بدون إعادة بناء.
+        </div>
+      </div>
+
+      <div id="place-edit-form" style="display:none" class="card" style="border:2px solid #3C6E8F">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px;color:#3C6E8F">✏️ تعديل موقع</div>
+        <input type="hidden" id="pov-id" />
+        <label>الاسم العربي</label><input id="pov-ar" />
+        <label>الاسم الإنجليزي</label><input id="pov-en" />
+        <label>خط العرض (lat)</label><input id="pov-lat" type="number" step="0.0001" />
+        <label>خط الطول (lng)</label><input id="pov-lng" type="number" step="0.0001" />
+        <label>التصنيف (عربي)</label><input id="pov-tag-ar" />
+        <label>التصنيف (إنجليزي)</label><input id="pov-tag-en" />
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn btn-green" onclick="savePlaceEdit()">💾 حفظ وتطبيق</button>
+          <button class="btn btn-outline" onclick="document.getElementById('place-edit-form').style.display='none'">إلغاء</button>
+        </div>
+        <div id="pov-msg" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+
+      <div id="places-count" style="font-weight:700;font-size:13px;margin-bottom:10px">...</div>
+      <div id="places-overrides-list"></div>
+    </div>
+
   </div>
 </div>
 
@@ -422,7 +451,7 @@ async function ghPut(path, content, sha, msg) {
 
 // ── TABS ─────────────────────────────────────────────────────────────────────
 function showTab(tab) {
-  ["notif","posts","locs","stats"].forEach(t => {
+  ["notif","posts","locs","stats","places"].forEach(t => {
     const el = document.getElementById("tab-"+t);
     if (el) el.style.display = t === tab ? "block" : "none";
   });
@@ -924,6 +953,103 @@ async
 // Called from the app via URL trick — admin pulls stats from stats.json
 // The app itself writes events to stats.json every 10 opens or install/share
 function resetStats() {} // Replaced by Vercel Analytics
+
+
+// ── PLACES OVERRIDES ─────────────────────────────────────────────────────────
+const PLACES_OVERRIDES_PATH = "public/places_overrides.json";
+const BUILTIN_PLACES = [{"id": "شاطئ المغسيل", "ar": "شاطئ المغسيل", "en": "Mughsail Beach", "lat": 16.8794, "lng": 53.7766, "tag_ar": "غرب", "tag_en": "West"}, {"id": "شاطئ الفزايح", "ar": "شاطئ الفزايح", "en": "Fazayah Beach", "lat": 16.8405, "lng": 53.7214, "tag_ar": "غرب بعيد", "tag_en": "Far West"}, {"id": "شاطئ مرباط", "ar": "شاطئ مرباط", "en": "Mirbat Beach", "lat": 16.9931, "lng": 54.691, "tag_ar": "شرق", "tag_en": "East"}, {"id": "شاطئ طاقة", "ar": "شاطئ طاقة", "en": "Taqah Beach", "lat": 17.0334, "lng": 54.3942, "tag_ar": "شرق", "tag_en": "East"}, {"id": "شاطئ الدهاريز", "ar": "شاطئ الدهاريز", "en": "Dahariz Beach", "lat": 17.0078, "lng": 54.1128, "tag_ar": "المدينة", "tag_en": "City"}, {"id": "عين رزات", "ar": "عين رزات", "en": "Ain Razat", "lat": 17.1299, "lng": 54.2381, "tag_ar": "الأشهر", "tag_en": "Most Famous"}, {"id": "عين حمران", "ar": "عين حمران", "en": "Ain Hamran", "lat": 17.0974, "lng": 54.2809, "tag_ar": "وسط", "tag_en": "Central"}, {"id": "عين صحلنوت", "ar": "عين صحلنوت", "en": "Ain Sahalnoot", "lat": 17.1481, "lng": 54.1783, "tag_ar": "وسط", "tag_en": "Central"}, {"id": "عين أثوم", "ar": "عين أثوم", "en": "Ain Athum", "lat": 17.1132, "lng": 54.365, "tag_ar": "شرق", "tag_en": "East"}, {"id": "عين طبرق", "ar": "عين طبرق", "en": "Ain Tabrok", "lat": 17.1006, "lng": 54.3266, "tag_ar": "شرق", "tag_en": "East"}, {"id": "عين جرزيز", "ar": "عين جرزيز", "en": "Ain Garziz", "lat": 17.1059, "lng": 54.0742, "tag_ar": "وسط", "tag_en": "Central"}, {"id": "عين كور", "ar": "عين كور", "en": "Ain Khor", "lat": 17.0499, "lng": 53.9641, "tag_ar": "غرب", "tag_en": "West"}, {"id": "وادي دربات", "ar": "وادي دربات", "en": "Wadi Darbat", "lat": 17.076, "lng": 54.4358, "tag_ar": "أيقونة الخريف", "tag_en": "Khareef Icon"}, {"id": "شلال وادي دربات", "ar": "شلال وادي دربات", "en": "Darbat Waterfall", "lat": 17.0721, "lng": 54.4528, "tag_ar": "موسمي", "tag_en": "Seasonal"}, {"id": "وادي نحيز", "ar": "وادي نحيز", "en": "Wadi Naheez", "lat": 17.09, "lng": 54.07, "tag_ar": "وسط", "tag_en": "Central"}, {"id": "وادي دوكة", "ar": "وادي دوكة", "en": "Wadi Dawkah", "lat": 17.3387, "lng": 54.0769, "tag_ar": "شمال · يونسكو", "tag_en": "North - UNESCO"}, {"id": "مطل جبل سمحان", "ar": "مطل جبل سمحان", "en": "Jabal Samhan View", "lat": 17.1026, "lng": 54.6981, "tag_ar": "أعلى مطل", "tag_en": "Highest"}, {"id": "مطل طاقة", "ar": "مطل طاقة", "en": "Taqah Viewpoint", "lat": 17.038, "lng": 54.4, "tag_ar": "شرق", "tag_en": "East"}, {"id": "مطل ثيتام", "ar": "مطل ثيتام", "en": "Theetham View", "lat": 17.06, "lng": 54.08, "tag_ar": "وسط", "tag_en": "Central"}, {"id": "نقطة الجاذبية العكسية", "ar": "نقطة الجاذبية العكسية", "en": "Anti-Gravity Point", "lat": 17.0394, "lng": 54.6135, "tag_ar": "غريب", "tag_en": "Unusual"}, {"id": "متحف أرض اللبان", "ar": "متحف أرض اللبان", "en": "Land of Frankincense Museum", "lat": 17.0178, "lng": 54.0934, "tag_ar": "يونسكو", "tag_en": "UNESCO"}, {"id": "خور روري / سمهرم", "ar": "خور روري / سمهرم", "en": "Khor Rori / Sumhuram", "lat": 17.0394, "lng": 54.4347, "tag_ar": "آثار", "tag_en": "Archaeology"}, {"id": "حصن مرباط", "ar": "حصن مرباط", "en": "Mirbat Castle", "lat": 16.9925, "lng": 54.6916, "tag_ar": "متحف", "tag_en": "Museum"}, {"id": "حفرة طوي أعتير", "ar": "حفرة طوي أعتير", "en": "Tawi Atair Sinkhole", "lat": 17.1132, "lng": 54.5603, "tag_ar": "جيولوجي", "tag_en": "Geological"}, {"id": "سوق الحافة", "ar": "سوق الحافة", "en": "Haffa Market", "lat": 17.0151, "lng": 54.0881, "tag_ar": "تراث", "tag_en": "Heritage"}, {"id": "ضريح النبي عمران", "ar": "ضريح النبي عمران", "en": "Tomb of Prophet Umran", "lat": 17.0094, "lng": 54.101, "tag_ar": "المدينة", "tag_en": "City"}, {"id": "ضريح النبي أيوب", "ar": "ضريح النبي أيوب", "en": "Tomb of Prophet Ayoub", "lat": 17.049, "lng": 54.147, "tag_ar": "جبال", "tag_en": "Mountains"}, {"id": "ضريح بن علي", "ar": "ضريح بن علي", "en": "Bin Ali Tomb", "lat": 16.9925, "lng": 54.695, "tag_ar": "مرباط", "tag_en": "Mirbat"}, {"id": "جامع السلطان قابوس", "ar": "جامع السلطان قابوس", "en": "Sultan Qaboos Mosque", "lat": 17.018, "lng": 54.094, "tag_ar": "المدينة", "tag_en": "City"}];
+let placesOverridesData = [], placesOverridesSha = null;
+
+async function loadPlacesOverrides() {
+  document.getElementById("places-count").textContent = "⏳ تحميل...";
+  try {
+    const r = await ghGet(PLACES_OVERRIDES_PATH);
+    placesOverridesSha = r.sha;
+    placesOverridesData = Array.isArray(r.content) ? r.content : [];
+  } catch(e) { placesOverridesData = []; }
+  renderPlacesOverrides();
+}
+
+function renderPlacesOverrides() {
+  const overrideMap = {};
+  placesOverridesData.forEach(o => overrideMap[o.id] = o);
+  
+  const count = Object.keys(overrideMap).length;
+  document.getElementById("places-count").textContent = BUILTIN_PLACES.length + " موقع · " + count + " معدَّل";
+  
+  const list = document.getElementById("places-overrides-list");
+  list.innerHTML = BUILTIN_PLACES.map(p => {
+    const ov = overrideMap[p.id] || {};
+    const hasOverride = !!overrideMap[p.id];
+    return `<div class="card" style="padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <span style="font-size:13px;font-weight:700">${ov.ar||p.ar}</span>
+            ${hasOverride ? '<span style="font-size:10px;background:#C98A2E20;color:#C98A2E;border-radius:6px;padding:1px 8px;font-weight:700">مُعدَّل</span>' : ''}
+          </div>
+          <div style="font-size:11px;color:#888;margin-top:1px">${ov.en||p.en}</div>
+          <div style="font-size:10px;color:#3C6E8F;margin-top:1px">📍 ${ov.lat||p.lat}, ${ov.lng||p.lng}</div>
+          <div style="font-size:10px;color:#888">🏷️ ${ov.tag_ar||p.tag_ar}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+          <button onclick="openPlaceEdit('${p.id}')"
+            style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">✏️ تعديل</button>
+          ${hasOverride ? `<button onclick="resetPlaceOverride('${p.id}')" style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">↩️ إعادة</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function openPlaceEdit(id) {
+  const p = BUILTIN_PLACES.find(x => x.id === id);
+  const ov = placesOverridesData.find(x => x.id === id) || {};
+  if (!p) return;
+  document.getElementById("pov-id").value = id;
+  document.getElementById("pov-ar").value = ov.ar || p.ar;
+  document.getElementById("pov-en").value = ov.en || p.en;
+  document.getElementById("pov-lat").value = ov.lat || p.lat;
+  document.getElementById("pov-lng").value = ov.lng || p.lng;
+  document.getElementById("pov-tag-ar").value = ov.tag_ar || p.tag_ar;
+  document.getElementById("pov-tag-en").value = ov.tag_en || p.tag_en;
+  document.getElementById("place-edit-form").style.display = "block";
+  document.getElementById("place-edit-form").scrollIntoView({behavior:"smooth"});
+}
+
+async function savePlaceEdit() {
+  const id = document.getElementById("pov-id").value;
+  const updated = {
+    id,
+    ar:     document.getElementById("pov-ar").value.trim(),
+    en:     document.getElementById("pov-en").value.trim(),
+    lat:    parseFloat(document.getElementById("pov-lat").value),
+    lng:    parseFloat(document.getElementById("pov-lng").value),
+    tag_ar: document.getElementById("pov-tag-ar").value.trim(),
+    tag_en: document.getElementById("pov-tag-en").value.trim(),
+  };
+  const filtered = placesOverridesData.filter(x => x.id !== id);
+  const newData = [...filtered, updated];
+  try {
+    const res = await ghPut(PLACES_OVERRIDES_PATH, newData, placesOverridesSha, "edit place: " + id);
+    placesOverridesSha = res.content.sha;
+    placesOverridesData = newData;
+    document.getElementById("place-edit-form").style.display = "none";
+    renderPlacesOverrides();
+    showMsg("pov-msg", "✅ تم التعديل — يظهر في التطبيق فوراً", true);
+  } catch(e) { showMsg("pov-msg", "❌ " + e.message, false); }
+}
+
+async function resetPlaceOverride(id) {
+  if (!confirm("إعادة البيانات الأصلية لهذا الموقع؟")) return;
+  const newData = placesOverridesData.filter(x => x.id !== id);
+  try {
+    const res = await ghPut(PLACES_OVERRIDES_PATH, newData, placesOverridesSha, "reset place: " + id);
+    placesOverridesSha = res.content.sha;
+    placesOverridesData = newData;
+    renderPlacesOverrides();
+  } catch(e) { alert("خطأ: " + e.message); }
+}
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function showMsg(id, text, ok) {
