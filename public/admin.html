@@ -587,26 +587,79 @@ function renderLocations(){
   const filtered=currentLocSec==="all"?allSpots:allSpots.filter(s=>s.section===currentLocSec);
   document.getElementById("locs-count").textContent=allSpots.length+" موقع · يُعرض: "+filtered.length;
   const list=document.getElementById("locs-list");
-  if(!filtered.length){list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:16px">لا توجد مواقع في هذا القسم</div>';return;}
-  list.innerHTML=filtered.map(loc=>`
-    <div class="card" style="display:flex;gap:10px;align-items:flex-start;padding:11px 14px;margin-bottom:8px">
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
-          <span style="font-size:13px;font-weight:700">${loc.nAr||loc.nAr}</span>
-          ${loc._isModified?'<span style="font-size:9px;background:#C98A2E20;color:#C98A2E;border-radius:4px;padding:1px 6px">مُعدَّل</span>':""}
-          ${loc._isCustom?'<span style="font-size:9px;background:#2F5D4520;color:#2F5D45;border-radius:4px;padding:1px 6px">مُضاف</span>':""}
-        </div>
-        <div style="font-size:11px;color:#888">${loc.nEn||""}</div>
-        <div style="font-size:11px;color:#3C6E8F">📍 ${loc.lat||"?"}, ${loc.lng||"?"}</div>
-        <div style="font-size:10px;color:#aaa">${SECTION_LABELS[loc.section]||loc.section||""}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
-        <button onclick="openEdit('${(loc.nAr||"").replace(/'/g,"\\'")}','${(loc.nEn||"").replace(/'/g,"\\'")}',${loc.lat||0},${loc.lng||0})"
-          style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
-        <button onclick="deleteSpotByName('${(loc.nAr||"").replace(/'/g,"\\'")}',${!!loc._isBuiltin})"
-          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
-      </div>
-    </div>`).join("");
+  if(!filtered.length){
+    list.innerHTML='<div class="card" style="text-align:center;color:#888;padding:16px">لا توجد مواقع في هذا القسم</div>';
+    return;
+  }
+
+  list.innerHTML="";
+  filtered.forEach(function(loc){
+    const card=document.createElement("div");
+    card.className="card";
+    card.style.cssText="display:flex;gap:10px;align-items:flex-start;padding:11px 14px;margin-bottom:8px";
+
+    const info=document.createElement("div");
+    info.style.cssText="flex:1;min-width:0";
+
+    const nameRow=document.createElement("div");
+    nameRow.style.cssText="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:2px";
+
+    const nameSpan=document.createElement("span");
+    nameSpan.style.cssText="font-size:13px;font-weight:700";
+    nameSpan.textContent=loc.nAr||"";
+    nameRow.appendChild(nameSpan);
+
+    if(loc._isModified){
+      const badge=document.createElement("span");
+      badge.style.cssText="font-size:9px;background:#C98A2E20;color:#C98A2E;border-radius:4px;padding:1px 6px;font-weight:700";
+      badge.textContent="مُعدَّل";
+      nameRow.appendChild(badge);
+    }
+    if(loc._isCustom){
+      const badge=document.createElement("span");
+      badge.style.cssText="font-size:9px;background:#2F5D4520;color:#2F5D45;border-radius:4px;padding:1px 6px;font-weight:700";
+      badge.textContent="مُضاف";
+      nameRow.appendChild(badge);
+    }
+    info.appendChild(nameRow);
+
+    if(loc.nEn){
+      const enDiv=document.createElement("div");
+      enDiv.style.cssText="font-size:11px;color:#888";
+      enDiv.textContent=loc.nEn;
+      info.appendChild(enDiv);
+    }
+    if(loc.lat&&loc.lng){
+      const coordDiv=document.createElement("div");
+      coordDiv.style.cssText="font-size:11px;color:#3C6E8F";
+      coordDiv.textContent="📍 "+loc.lat+", "+loc.lng;
+      info.appendChild(coordDiv);
+    }
+    const secDiv=document.createElement("div");
+    secDiv.style.cssText="font-size:10px;color:#aaa";
+    secDiv.textContent=SECTION_LABELS[loc.section]||loc.section||"";
+    info.appendChild(secDiv);
+
+    card.appendChild(info);
+
+    const btns=document.createElement("div");
+    btns.style.cssText="display:flex;flex-direction:column;gap:4px;flex-shrink:0";
+
+    const editBtn=document.createElement("button");
+    editBtn.style.cssText="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700";
+    editBtn.textContent="تعديل";
+    editBtn.onclick=function(){openEdit(loc.nAr||"",loc.nEn||"",loc.lat||0,loc.lng||0);};
+    btns.appendChild(editBtn);
+
+    const delBtn=document.createElement("button");
+    delBtn.style.cssText="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700";
+    delBtn.textContent="حذف";
+    delBtn.onclick=function(){deleteSpotByName(loc.nAr||"",!!loc._isBuiltin);};
+    btns.appendChild(delBtn);
+
+    card.appendChild(btns);
+    list.appendChild(card);
+  });
 }
 function toggleLocForm(){const f=document.getElementById("loc-form");f.style.display=f.style.display==="none"?"block":"none";}
 function parseLocCoords(){
