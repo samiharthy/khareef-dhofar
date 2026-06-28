@@ -400,7 +400,10 @@ const SECTION_LABELS = {
   west:"غرب صلالة",mid:"وسط صلالة",east:"شرق صلالة",
   events:"الفعاليات",companion:"الفعاليات المصاحبة",fuel:"محطات الوقود",
   stays:"الإقامة والفنادق",hike:"مسارات هايكنج",heritage:"التراث",
-  health:"الصحة",evening:"المساء",access:"الوصول والنقل"
+  health:"الصحة",evening:"المساء",access:"الوصول والنقل",
+  religious:"مواقع دينية",nature:"طبيعة وجيولوجيا",beaches:"شواطئ",
+  springs:"عيون مائية",valleys:"أودية وشلالات",viewpoints:"مطلات",
+  food:"مطاعم",custom:"مخصص"
 };
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
@@ -937,11 +940,34 @@ async function deleteRestaurant(i) {
 const STATS_PATH = "public/stats.json";
 let statsData = null, statsSha = null;
 
-function loadStats() {
-  document.getElementById("stat-opens").textContent    = parseInt(localStorage.getItem("kh_opens")    || "0");
-  document.getElementById("stat-installs").textContent = parseInt(localStorage.getItem("kh_installs") || "0");
-  document.getElementById("stat-shares").textContent   = parseInt(localStorage.getItem("kh_shares")   || "0");
-  showMsg("stats-msg", "✅ تم التحديث", true);
+async function loadStats() {
+  document.getElementById("stat-opens").textContent    = "⏳";
+  document.getElementById("stat-installs").textContent = "⏳";
+  document.getElementById("stat-shares").textContent   = "⏳";
+  try {
+    // Read from Vercel Analytics link (dashboard only)
+    // For device stats, read from localStorage (only works when opened as app)
+    const opens    = localStorage.getItem("kh_opens")    || "—";
+    const installs = localStorage.getItem("kh_installs") || "—";
+    const shares   = localStorage.getItem("kh_shares")   || "—";
+    document.getElementById("stat-opens").textContent    = opens === "—" ? "—" : parseInt(opens);
+    document.getElementById("stat-installs").textContent = installs === "—" ? "—" : parseInt(installs);
+    document.getElementById("stat-shares").textContent   = shares === "—" ? "—" : parseInt(shares);
+
+    // Also try to read stats.json from GitHub
+    try {
+      const { content } = await ghGet("public/stats.json");
+      if (content) {
+        if (content.opens)    document.getElementById("stat-opens").textContent    = content.opens.toLocaleString("ar");
+        if (content.installs) document.getElementById("stat-installs").textContent = content.installs.toLocaleString("ar");
+        if (content.shares)   document.getElementById("stat-shares").textContent   = content.shares.toLocaleString("ar");
+      }
+    } catch(e2) {}
+
+    showMsg("stats-msg", "✅ تم التحديث", true);
+  } catch(e) {
+    showMsg("stats-msg", "❌ " + e.message, false);
+  }
 }
 
 
