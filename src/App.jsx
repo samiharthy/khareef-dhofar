@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.50";
+const APP_VERSION = "1.51";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1747,14 +1747,17 @@ const THEMES = {
 };
 
 const PRIMARY_TABS = [
-  { key: "home", icon: Sparkles },
-  { key: "events", icon: Calendar },
-  { key: "sites", icon: Compass },
-  { key: "crowd", icon: Gauge },
+  { key: "home",    icon: Sparkles },
+  { key: "explore", icon: MapPin   },
+  { key: "today",   icon: Calendar },
+  { key: "more",    icon: MoreHorizontal },
 ];
 
 const MORE_TABS = [
-  { key: "guide",    labelAr:"دليل سياحي",      labelEn:"Tourist Guide", icon: Compass },
+  { key: "events",   labelAr:"الفعاليات",         labelEn:"Events",       icon: Calendar },
+  { key: "food",     labelAr:"دليل المطاعم",      labelEn:"Restaurants",  icon: Coffee },
+  { key: "sites",    labelAr:"خريطة المواقع",     labelEn:"Sites Map",    icon: Navigation },
+  { key: "crowd",    labelAr:"كثافة الأماكن",     labelEn:"Crowd",        icon: Gauge },
   { key: "planner",  labelAr:"مخطط سياحي",      labelEn:"Planner",   icon: MapPinned },
   { key: "stays",    labelAr:"الإقامة والفنادق", labelEn:"Hotels",    icon: Building2 },
   { key: "best",     labelAr:"أفضل وقت",         labelEn:"Best Time", icon: Sun },
@@ -4002,6 +4005,180 @@ function TouristGuide() {
     </div>
   );
 }
+
+const NAV_LABELS = {
+  home:    { ar:"الرئيسية", en:"Home"    },
+  explore: { ar:"استكشف",  en:"Explore" },
+  today:   { ar:"اليوم",   en:"Today"   },
+};
+
+function ExploreTab() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [search, setSearch] = useState("");
+  const [activeCat, setActiveCat] = useState("all");
+  const [overrides, setOverrides] = useState({});
+
+  // Load admin overrides from GitHub
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(d => {
+        const map = {};
+        (d || []).forEach(o => { map[o.id] = o; });
+        setOverrides(map);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Flatten all GUIDE_CATS places into a single list with category info
+  const allPlaces = GUIDE_CATS.flatMap(cat =>
+    cat.places.map(p => ({
+      ...p,
+      ...overrides[p.ar], // apply admin overrides
+      catKey: cat.key,
+      catEmoji: cat.emoji,
+      catAr: cat.ar,
+      catEn: cat.en,
+    }))
+  );
+
+  const categories = [
+    { key: "all", emoji: "🌍", ar: "الكل", en: "All" },
+    ...GUIDE_CATS.map(c => ({ key: c.key, emoji: c.emoji, ar: c.ar, en: c.en }))
+  ];
+
+  const filtered = allPlaces.filter(p => {
+    const matchCat = activeCat === "all" || p.catKey === activeCat;
+    const q = search.toLowerCase();
+    const matchSearch = !q || p.ar?.includes(search) || p.en?.toLowerCase().includes(q) ||
+      p.tag?.ar?.includes(search) || p.tag?.en?.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+
+  const grouped = activeCat === "all" && !search
+    ? GUIDE_CATS.map(cat => ({ ...cat, places: cat.places.map(p => ({ ...p, ...overrides[p.ar], catEmoji: cat.emoji })) }))
+    : null;
+
+  return (
+    <div className="space-y-4 pb-6">
+      <SectionTitle eyebrow={lang==="ar"?"ظفار":"Dhofar"} title={lang==="ar"?"استكشف":"Explore"} icon={MapPin} />
+
+      {/* Search */}
+      <div className="relative">
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder={lang==="ar" ? "🔍 ابحث عن شاطئ، عين، أثر..." : "🔍 Search beaches, springs, heritage..."}
+          className="w-full rounded-2xl px-4 py-3 text-sm outline-none"
+          style={{ background:th.cardBg, border:`1px solid ${search?'#2F5D45':th.border}`, color:th.titleColor, fontFamily:"Tajawal",
+            boxShadow: search ? "0 0 0 3px #2F5D4520" : "none", transition:"all .2s" }} />
+        {search && (
+          <button onClick={() => setSearch("")}
+            style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none",
+              cursor:"pointer", color:th.subColor, fontSize:18 }}>✕</button>
+        )}
+      </div>
+
+      {/* Categories */}
+      <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
+        {categories.map(c => (
+          <button key={c.key} onClick={() => { setActiveCat(c.key); setSearch(""); }}
+            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-95"
+            style={{ background:activeCat===c.key?"#2F5D45":th.cardBg, color:activeCat===c.key?"#fff":th.subColor,
+              border:`1px solid ${activeCat===c.key?"#2F5D45":th.border}`, fontFamily:"Tajawal", cursor:"pointer" }}>
+            <span>{c.emoji}</span><span>{lang==="ar"?c.ar:c.en}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Results count when searching */}
+      {(search || activeCat !== "all") && (
+        <div className="text-xs px-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {filtered.length} {lang==="ar" ? "نتيجة" : "results"}
+          {activeCat !== "all" && ` · ${lang==="ar" ? categories.find(c=>c.key===activeCat)?.ar : categories.find(c=>c.key===activeCat)?.en}`}
+        </div>
+      )}
+
+      {/* Grouped view (default) */}
+      {grouped && (
+        <div className="space-y-5">
+          {grouped.map(cat => (
+            <div key={cat.key}>
+              <div className="flex items-center justify-between mb-2 px-1">
+                <div className="flex items-center gap-2">
+                  <span style={{fontSize:16}}>{cat.emoji}</span>
+                  <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? cat.ar : cat.en}
+                  </span>
+                  <span className="text-xs rounded-full px-2 py-0.5" style={{ background:th.border, color:th.subColor, fontFamily:"Tajawal" }}>
+                    {cat.places.length}
+                  </span>
+                </div>
+                <button onClick={() => setActiveCat(cat.key)}
+                  className="text-xs font-bold" style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer", fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? "الكل ←" : "All →"}
+                </button>
+              </div>
+              <div className="space-y-2">
+                {cat.places.slice(0, 3).map((p, i) => (
+                  <PlaceCard key={i} place={p} catEmoji={cat.emoji} lang={lang} th={th} />
+                ))}
+                {cat.places.length > 3 && (
+                  <button onClick={() => setActiveCat(cat.key)}
+                    className="w-full rounded-2xl py-2.5 text-xs font-bold"
+                    style={{ background:th.border, border:"none", color:th.subColor, cursor:"pointer", fontFamily:"Tajawal" }}>
+                    + {cat.places.length - 3} {lang==="ar" ? "مزيد من الأماكن" : "more places"}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Filtered view */}
+      {!grouped && (
+        <div className="space-y-2">
+          {filtered.map((p, i) => (
+            <PlaceCard key={i} place={p} catEmoji={p.catEmoji} lang={lang} th={th} />
+          ))}
+          {filtered.length === 0 && (
+            <div className="py-10 text-center text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "لا توجد نتائج لـ "" + search + """ : `No results for "${search}"`}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PlaceCard({ place, catEmoji, lang, th }) {
+  const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer"
+      className="flex gap-3 rounded-2xl p-3 active:scale-[0.98] transition"
+      style={{ background:th.cardBg, border:`1px solid ${th.border}`, textDecoration:"none", display:"flex" }}>
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
+        style={{ background:"#2F5D4512" }}>{catEmoji}</div>
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? place.ar : place.en}
+        </div>
+        {place.tag && (
+          <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+            📍 {lang==="ar" ? place.tag.ar : place.tag.en}
+          </div>
+        )}
+        {place.desc && (
+          <div className="text-[11px] mt-0.5 leading-relaxed truncate" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? place.desc.ar : place.desc.en}
+          </div>
+        )}
+      </div>
+      <MapPin size={14} color={th.subColor} style={{ flexShrink:0, marginTop:2 }} />
+    </a>
+  );
+}
 export default function App() {
   const [tab, setTab] = useState("home");
   const [moreOpen, setMoreOpen] = useState(false);
@@ -4137,6 +4314,7 @@ export default function App() {
           {tab === "food" && <FoodGuide />}
           {tab === "today" && <TodayTab />}
           {tab === "guide" && <TouristGuide />}
+          {tab === "explore" && <ExploreTab />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
               <p className="mb-2 mt-6 text-center text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
