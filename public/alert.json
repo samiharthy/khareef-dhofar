@@ -1,13 +1,13 @@
 {
-  "id": "notif-1782624962257",
+  "id": "notif-1782625375013",
   "active": true,
-  "type": "info",
-  "priority": "normal",
+  "type": "urgent",
+  "priority": "urgent",
   "message": {
-    "ar": "المشكلة في خريف ظفار أنك تقول: “بروح مكان واحد\nوترجع آخر اليوم وقد زرت نصف المحافظة😂",
-    "en": "The problem in the fall of Dhofar is that you say: “In the spirit of one placeAnd you return at the end of the day and you have visited half the province😂",
-    "hi": "धोफर के पतन में समस्या यह है कि आप कहते हैं: \"एक जगह की भावना मेंऔर आप दिन के अंत में लौटते हैं और आप आधे प्रांत का दौरा कर चुके हैं😂",
-    "fr": "Le problème à la chute du Dhofar est que vous dites : « Dans l'esprit d'un endroitEt vous revenez en fin de journée et vous avez visité la moitié de la province😂"
+    "ar": "عبدالله احذر",
+    "en": "Abdullah, be careful.",
+    "hi": "अब्दुल्ला, सावधान रहना.",
+    "fr": "Abdullah, fais attention."
   },
-  "updatedAt": "2026-06-28T05:36:02.257Z"
+  "updatedAt": "2026-06-28T05:42:55.013Z"
 }
