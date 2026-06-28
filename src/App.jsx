@@ -207,17 +207,24 @@ function WeatherBadge() {
       type="button"
       onClick={refetchWeather}
       className="flex items-center gap-1.5 rounded-full px-3 py-1.5 transition active:scale-95"
-      style={{ background: pattern.sky }}
+      style={{ background: isLive ? `${color}18` : pattern.sky }}
       title={isLive ? (lang==="ar"?"بيانات حية":"Live data") : (lang==="ar"?"نمط تقديري":"Estimated")}
     >
-      <BIcon size={15} color={pattern.text} />
-      <span className="text-[11px] font-bold" style={{ color: pattern.text, fontFamily: "Tajawal" }}>
+      <span style={{ fontSize: 15 }}>{
+        code == null ? "🌤️" :
+        code === 0 ? "☀️" : code <= 2 ? "⛅" : code === 3 ? "☁️" :
+        (code===45||code===48) ? "🌫️" :
+        (code>=51&&code<=67) ? "🌧️" :
+        (code>=71&&code<=77) ? "🌨️" :
+        (code>=80&&code<=82) ? "🌦️" :
+        (code>=95) ? "⛈️" : "🌤️"
+      }</span>
+      <span className="text-[11px] font-bold" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
         {temp}°{lang === "ar" ? "م" : "C"}
       </span>
-      <span className="text-[10px] font-medium opacity-90" style={{ color: pattern.text, fontFamily: "Tajawal" }}>
+      <span className="text-[10px] font-medium opacity-80" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
         · {label}
       </span>
-      <span className="text-[9px]">{isLive ? "🟢" : "⭕"}</span>
     </button>
   );
 }
@@ -249,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.48";
+const APP_VERSION = "1.50";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1747,6 +1754,7 @@ const PRIMARY_TABS = [
 ];
 
 const MORE_TABS = [
+  { key: "guide",    labelAr:"دليل سياحي",      labelEn:"Tourist Guide", icon: Compass },
   { key: "planner",  labelAr:"مخطط سياحي",      labelEn:"Planner",   icon: MapPinned },
   { key: "stays",    labelAr:"الإقامة والفنادق", labelEn:"Hotels",    icon: Building2 },
   { key: "best",     labelAr:"أفضل وقت",         labelEn:"Best Time", icon: Sun },
@@ -3735,6 +3743,18 @@ function XFeed() {
 
   return (
     <div className="space-y-3">
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <XIcon size={14} color={th.subColor} />
+          <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "أخبار ظفار" : "Dhofar News"}
+          </span>
+        </div>
+        <a href="https://x.com/khareef_dhofar" target="_blank" rel="noopener noreferrer"
+          className="text-[11px] font-bold" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "المزيد ←" : "More →"}
+        </a>
+      </div>
       {posts.map(post => (
         <a key={post.id}
           href={post.xUrl || post.instagramUrl || "https://x.com/khareef_dhofar"}
@@ -3779,110 +3799,209 @@ function XFeed() {
 }
 
 function InstallBanner() {
-  const { lang, t, theme } = useLang();
+  const { lang, theme } = useLang();
   const th = THEMES[theme];
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => localStorage.getItem("install_dismissed")==="1");
+  const [prompt, setPrompt] = useState(null);
+  const [showGuide, setShowGuide] = useState(false);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone===true;
 
   useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-
-    const ua = window.navigator.userAgent || "";
-    setIsIOS(/iPad|iPhone|iPod/.test(ua) && !window.MSStream);
-
-    if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
-      setIsStandalone(true);
-    }
-    if (window.navigator.standalone) {
-      setIsStandalone(true);
-    }
-
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    const h = e => { e.preventDefault(); setPrompt(e); };
+    window.addEventListener("beforeinstallprompt", h);
+    return () => window.removeEventListener("beforeinstallprompt", h);
   }, []);
 
-  if (isStandalone || dismissed || (!deferredPrompt && !isIOS)) return null;
+  if (dismissed || isStandalone) return null;
+  if (!prompt && !isIOS) return null;
 
-  async function handleInstallClick() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      setDeferredPrompt(null);
+  const steps = [
+    { ar:"افتح الرابط في Safari (ليس Chrome)", en:"Open in Safari (not Chrome)" },
+    { ar:"اضغط زر المشاركة في الأسفل", en:"Tap the Share button at the bottom" },
+    { ar:'اختر "إضافة إلى الشاشة الرئيسية"', en:'Select "Add to Home Screen"' },
+    { ar:'اضغط "إضافة" في الأعلى', en:'Tap "Add" at the top' },
+  ];
+
+  const handleInstall = async () => {
+    if (isIOS) { setShowGuide(true); return; }
+    if (!prompt) return;
+    prompt.prompt();
+    const choice = await prompt.userChoice;
+    if (choice.outcome === "accepted") {
       setDismissed(true);
+      localStorage.setItem("install_dismissed","1");
+      const n = parseInt(localStorage.getItem("kh_installs")||"0")+1;
+      localStorage.setItem("kh_installs", n.toString());
     }
-  }
+    setPrompt(null);
+  };
 
   return (
-    <div className="mx-5 mt-3 flex items-start gap-3 rounded-2xl border p-3" style={{ borderColor: "#2F5D45", background: "#2F5D451A" }}>
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ background: "#2F5D45" }}>
-        <Download size={16} color="#F4EFE2" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.installTitle}</div>
-        <div className="mt-0.5 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-          {isIOS && !deferredPrompt ? t.installIOSDesc : t.installDesc}
-        </div>
-        {deferredPrompt && (
-          <button
-            type="button"
-            onClick={handleInstallClick}
-            className="mt-2 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-bold text-white"
-            style={{ background: "#2F5D45", fontFamily: "Tajawal" }}
-          >
-            <Download size={12} /> {t.installBtn}
-          </button>
-        )}
-        {isIOS && !deferredPrompt && (
-          <div className="mt-1.5 flex items-center gap-1 text-[10px]" style={{ color: "#2F5D45", fontFamily: "Tajawal" }}>
-            <Share2 size={12} />
+    <>
+      <div className="flex items-center justify-between rounded-2xl p-3 mb-1"
+        style={{ background:th.cardBg, border:`1px solid ${th.border}` }}>
+        <div className="flex items-center gap-2">
+          <span style={{fontSize:22}}>🌿</span>
+          <div>
+            <div className="text-xs font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "أضف للشاشة الرئيسية" : "Add to Home Screen"}
+            </div>
+            <div className="text-[10px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {isIOS ? "Safari فقط" : lang==="ar" ? "يعمل بدون إنترنت" : "Works offline"}
+            </div>
           </div>
-        )}
+        </div>
+        <div className="flex gap-2 items-center">
+          <button onClick={handleInstall}
+            style={{ background:"#2F5D45", color:"#fff", border:"none", borderRadius:10, padding:"6px 14px", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:"Tajawal" }}>
+            {isIOS ? "📲 كيف؟" : lang==="ar" ? "تثبيت" : "Install"}
+          </button>
+          <button onClick={() => { setDismissed(true); localStorage.setItem("install_dismissed","1"); }}
+            style={{ background:"none", border:"none", color:th.subColor, cursor:"pointer", fontSize:18 }}>✕</button>
+        </div>
       </div>
-      <button type="button" onClick={() => setDismissed(true)} className="shrink-0 rounded-full p-1" style={{ color: th.subColor }}>
-        <X size={14} />
-      </button>
-    </div>
+
+      {showGuide && (
+        <div style={{ position:"fixed", inset:0, zIndex:100, background:"rgba(0,0,0,.7)", display:"flex", alignItems:"flex-end", padding:16 }}
+          onClick={() => setShowGuide(false)}>
+          <div style={{ width:"100%", maxWidth:400, margin:"0 auto", background:th.cardBg, borderRadius:20, padding:20 }}
+            onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                {"📲 "}{lang==="ar" ? "تثبيت على iPhone/iPad" : "Install on iPhone/iPad"}
+              </div>
+              <button onClick={() => setShowGuide(false)}
+                style={{ background:"none", border:"none", fontSize:20, cursor:"pointer", color:th.subColor }}>✕</button>
+            </div>
+            {steps.map((s, i) => (
+              <div key={i} className="flex items-center gap-3 rounded-xl p-2.5 mb-2"
+                style={{ background:th.border }}>
+                <span style={{ background:"#2F5D45", color:"#fff", borderRadius:"50%", width:26, height:26, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, flexShrink:0 }}>{i+1}</span>
+                <span className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal", lineHeight:1.5 }}>
+                  {lang==="ar" ? s.ar : s.en}
+                </span>
+              </div>
+            ))}
+            <div className="mt-2 rounded-xl p-2 text-center text-[11px]" style={{ background:"#C98A2E18", color:"#C98A2E", fontFamily:"Tajawal" }}>
+              {"⚠️ "}{lang==="ar" ? "Safari مطلوب لتثبيت التطبيق على iPhone" : "Safari is required for iPhone/iPad installation"}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 
-// ── Stats reporting (writes to GitHub stats.json via fetch) ──────────────────
-async function reportEvent(type) {
-  try {
-    const STATS_URL = "https://api.github.com/repos/samiharthy/khareef-dhofar/contents/public/stats.json";
-    // Get current stats
-    const r = await fetch(STATS_URL, { headers: { Accept: "application/vnd.github+json" } });
-    if (!r.ok) return;
-    const d = await r.json();
-    const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
-    const stats = JSON.parse(new TextDecoder().decode(bytes));
-    
-    // Update counts
-    stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] =
-      (stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] || 0) + 1;
-    
-    // Track unique devices
-    const deviceId = localStorage.getItem("kh_device_id") || (Math.random().toString(36).slice(2));
-    localStorage.setItem("kh_device_id", deviceId);
-    const devices = new Set(stats.devices || []);
-    devices.add(deviceId);
-    stats.devices = [...devices];
-    stats.uniqueDevices = devices.size;
-    
-    // Add event log (keep last 50)
-    stats.events = [...(stats.events || []), { type, at: new Date().toISOString(), d: deviceId.slice(0,6) }].slice(-50);
-    
-    // Write back (anonymous, read-only token not needed for this approach)
-    // NOTE: For security, this only works because stats.json is a low-sensitivity file
-    // and the update is fire-and-forget (failures silently ignored)
-  } catch {}
-}
 
+const GUIDE_CATS = [
+  { key:"beaches", emoji:"🏖️", ar:"الشواطئ", en:"Beaches", places:[
+    {ar:"شاطئ المغسيل",en:"Mughsail Beach",lat:16.8794,lng:53.7766,tag:{ar:"غرب",en:"West"},desc:{ar:"أشهر شواطئ صلالة — نوافير طبيعية وكهف",en:"Salalah most famous beach — blowholes and cave"}},
+    {ar:"شاطئ الفزايح",en:"Fazayah Beach",lat:16.8405,lng:53.7214,tag:{ar:"غرب بعيد",en:"Far West"},desc:{ar:"من أجمل شواطئ ظفار — مياه صافية",en:"One of Dhofar most beautiful beaches"}},
+    {ar:"شاطئ مرباط",en:"Mirbat Beach",lat:16.9931,lng:54.6910,tag:{ar:"شرق",en:"East"},desc:{ar:"شاطئ هادئ بجوار قلعة مرباط",en:"Peaceful beach beside Mirbat Castle"}},
+    {ar:"شاطئ طاقة",en:"Taqah Beach",lat:17.0334,lng:54.3942,tag:{ar:"شرق",en:"East"},desc:{ar:"محطة ساحلية مع حصن طاقة",en:"Coastal stop with Taqah Castle"}},
+    {ar:"شاطئ الدهاريز",en:"Dahariz Beach",lat:17.0078,lng:54.1128,tag:{ar:"المدينة",en:"City"},desc:{ar:"أقرب الشواطئ لصلالة",en:"Closest beach to Salalah"}},
+  ]},
+  { key:"springs", emoji:"💧", ar:"العيون", en:"Springs", places:[
+    {ar:"عين رزات",en:"Ain Razat",lat:17.1299,lng:54.2381,tag:{ar:"الأشهر",en:"Most Famous"},desc:{ar:"أجمل عيون صلالة",en:"Salalah most beautiful spring"}},
+    {ar:"عين حمران",en:"Ain Hamran",lat:17.0974,lng:54.2809,tag:{ar:"وسط",en:"Central"},desc:{ar:"عين طبيعية في الجبال",en:"Natural mountain spring"}},
+    {ar:"عين صحلنوت",en:"Ain Sahalnoot",lat:17.1481,lng:54.1783,tag:{ar:"وسط",en:"Central"},desc:{ar:"عين قريبة للعائلات",en:"Close family spring"}},
+    {ar:"عين أثوم",en:"Ain Athum",lat:17.1132,lng:54.3650,tag:{ar:"شرق",en:"East"},desc:{ar:"عين جبلية جميلة في الخريف",en:"Beautiful mountain spring in Khareef"}},
+    {ar:"عين طبرق",en:"Ain Tabrok",lat:17.1006,lng:54.3266,tag:{ar:"شرق",en:"East"},desc:{ar:"للراغبين في الهدوء",en:"For those seeking peace"}},
+    {ar:"عين جرزيز",en:"Ain Garziz",lat:17.1059,lng:54.0742,tag:{ar:"وسط",en:"Central"},desc:{ar:"عين قريبة للزيارة اليومية",en:"Close spring for day trips"}},
+    {ar:"عين كور",en:"Ain Khor",lat:17.0499,lng:53.9641,tag:{ar:"غرب",en:"West"},desc:{ar:"من أجمل عيون الغرب",en:"Beautiful western spring"}},
+  ]},
+  { key:"valleys", emoji:"🏞️", ar:"الأودية والشلالات", en:"Valleys", places:[
+    {ar:"وادي دربات",en:"Wadi Darbat",lat:17.0760,lng:54.4358,tag:{ar:"أيقونة الخريف",en:"Khareef Icon"},desc:{ar:"أشهر معالم الخريف — بحيرة وشلال",en:"Khareef most famous — lake and waterfall"}},
+    {ar:"شلال وادي دربات",en:"Darbat Waterfall",lat:17.0721,lng:54.4528,tag:{ar:"موسمي",en:"Seasonal"},desc:{ar:"ينشط عند الأمطار الغزيرة",en:"Active during heavy rains"}},
+    {ar:"وادي نحيز",en:"Wadi Naheez",lat:17.0900,lng:54.0700,tag:{ar:"وسط",en:"Central"},desc:{ar:"وادٍ جبلي هادئ",en:"Quiet mountain valley"}},
+    {ar:"وادي دوكة",en:"Wadi Dawkah",lat:17.3387,lng:54.0769,tag:{ar:"شمال · يونسكو",en:"North - UNESCO"},desc:{ar:"أشجار اللبان الأصيلة — يونسكو",en:"Frankincense trees — UNESCO site"}},
+  ]},
+  { key:"viewpoints", emoji:"🔭", ar:"المطلات", en:"Viewpoints", places:[
+    {ar:"مطل جبل سمحان",en:"Jabal Samhan View",lat:17.1026,lng:54.6981,tag:{ar:"أعلى مطل",en:"Highest"},desc:{ar:"بحر السحاب — تجربة لا تُنسى",en:"Sea of clouds — unforgettable"}},
+    {ar:"مطل طاقة",en:"Taqah Viewpoint",lat:17.0380,lng:54.4000,tag:{ar:"شرق",en:"East"},desc:{ar:"إطلالة رائعة على الساحل",en:"Stunning coastal view"}},
+    {ar:"مطل ثيتام",en:"Theetham View",lat:17.0600,lng:54.0800,tag:{ar:"وسط",en:"Central"},desc:{ar:"إطلالة جبلية قريبة",en:"Close mountain viewpoint"}},
+    {ar:"نقطة الجاذبية العكسية",en:"Anti-Gravity Point",lat:17.0394,lng:54.6135,tag:{ar:"غريب",en:"Unusual"},desc:{ar:"تأثير بصري فريد",en:"Unique optical illusion"}},
+  ]},
+  { key:"heritage", emoji:"🏛️", ar:"التراث والآثار", en:"Heritage", places:[
+    {ar:"متحف أرض اللبان",en:"Land of Frankincense Museum",lat:17.0178,lng:54.0934,tag:{ar:"يونسكو",en:"UNESCO"},desc:{ar:"أهم محطة ثقافية — 8ص-6م",en:"Most important cultural stop — 8am-6pm"}},
+    {ar:"خور روري / سمهرم",en:"Khor Rori / Sumhuram",lat:17.0394,lng:54.4347,tag:{ar:"آثار",en:"Archaeology"},desc:{ar:"ميناء اللبان القديم",en:"Ancient frankincense port"}},
+    {ar:"حصن مرباط",en:"Mirbat Castle",lat:16.9925,lng:54.6916,tag:{ar:"متحف",en:"Museum"},desc:{ar:"قلعة تاريخية — 9ص-4م",en:"Historic castle — 9am-4pm"}},
+    {ar:"حفرة طوي أعتير",en:"Tawi Atair Sinkhole",lat:17.1132,lng:54.5603,tag:{ar:"جيولوجي",en:"Geological"},desc:{ar:"حفرة عملاقة — بئر الطيور",en:"Massive sinkhole — Bird Well"}},
+    {ar:"سوق الحافة",en:"Haffa Market",lat:17.0151,lng:54.0881,tag:{ar:"تراث",en:"Heritage"},desc:{ar:"قلب صلالة القديمة",en:"Heart of old Salalah"}},
+  ]},
+  { key:"religious", emoji:"🕌", ar:"المواقع الدينية", en:"Religious", places:[
+    {ar:"ضريح النبي عمران",en:"Tomb of Prophet Umran",lat:17.0094,lng:54.1010,tag:{ar:"المدينة",en:"City"},desc:{ar:"موقع ديني داخل صلالة",en:"Religious site in Salalah"}},
+    {ar:"ضريح النبي أيوب",en:"Tomb of Prophet Ayoub",lat:17.0490,lng:54.1470,tag:{ar:"جبال",en:"Mountains"},desc:{ar:"موقع ديني في الجبال",en:"Religious mountain site"}},
+    {ar:"ضريح بن علي",en:"Bin Ali Tomb",lat:16.9925,lng:54.6950,tag:{ar:"مرباط",en:"Mirbat"},desc:{ar:"معمارية فريدة في مرباط",en:"Unique architecture in Mirbat"}},
+    {ar:"جامع السلطان قابوس",en:"Sultan Qaboos Mosque",lat:17.0180,lng:54.0940,tag:{ar:"المدينة",en:"City"},desc:{ar:"أبرز المعالم المعمارية",en:"Prominent religious landmark"}},
+  ]},
+];
+
+function TouristGuide() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [active, setActive] = useState("beaches");
+  const [search, setSearch] = useState("");
+  const sec = GUIDE_CATS.find(s => s.key === active);
+  const places = (sec?.places||[]).filter(p =>
+    !search || p.ar.includes(search) || p.en.toLowerCase().includes(search.toLowerCase())
+  );
+  return (
+    <div className="space-y-4 pb-6">
+      <SectionTitle eyebrow={lang==="ar"?"ظفار":"Dhofar"} title={lang==="ar"?"الدليل السياحي":"Tourist Guide"} icon={Compass} />
+      <div className="rounded-xl px-3 py-2 text-[11px]" style={{ background:"#2F5D4510", color:"#2F5D45", fontFamily:"Tajawal" }}>
+        {"📚 "}{lang==="ar"?"مصادر: الدليل الرسمي + khareefsalalah.com":"Sources: Official Guide + khareefsalalah.com"}
+      </div>
+      <input value={search} onChange={e=>setSearch(e.target.value)}
+        placeholder={lang==="ar"?"🔍 ابحث...":"🔍 Search..."}
+        className="w-full rounded-2xl px-4 py-2.5 text-sm outline-none"
+        style={{ background:th.cardBg, border:`1px solid ${th.border}`, color:th.titleColor, fontFamily:"Tajawal" }} />
+      <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
+        {GUIDE_CATS.map(s=>(
+          <button key={s.key} onClick={()=>{setActive(s.key);setSearch("");}}
+            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+            style={{ background:active===s.key?"#2F5D45":th.cardBg, color:active===s.key?"#fff":th.subColor,
+              border:`1px solid ${active===s.key?"#2F5D45":th.border}`, fontFamily:"Tajawal", cursor:"pointer" }}>
+            <span>{s.emoji}</span><span>{lang==="ar"?s.ar:s.en}</span>
+          </button>
+        ))}
+      </div>
+      <div className="space-y-3">
+        {places.map((p,i)=>(
+          <a key={i}
+            href={"https://maps.google.com/?q="+p.lat+","+p.lng}
+            target="_blank" rel="noopener noreferrer"
+            className="flex gap-3 rounded-2xl p-3 active:scale-[0.98] transition"
+            style={{ background:th.cardBg, border:`1px solid ${th.border}`, textDecoration:"none", display:"flex" }}>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
+              style={{ background:"#2F5D4512" }}>{sec?.emoji}</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                {lang==="ar"?p.ar:p.en}
+              </div>
+              <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                {"📍 "}{lang==="ar"?p.tag.ar:p.tag.en}
+              </div>
+              {p.desc&&(
+                <div className="text-[11px] mt-1 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar"?p.desc.ar:p.desc.en}
+                </div>
+              )}
+            </div>
+            <MapPin size={14} color={th.subColor} style={{ flexShrink:0, marginTop:2 }} />
+          </a>
+        ))}
+        {places.length===0&&(
+          <div className="py-8 text-center text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar"?"لا توجد نتائج":"No results"}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 export default function App() {
   const [tab, setTab] = useState("home");
   const [moreOpen, setMoreOpen] = useState(false);
@@ -4020,6 +4139,7 @@ export default function App() {
             {tab === "about" && <About />}
           {tab === "food" && <FoodGuide />}
           {tab === "today" && <TodayTab />}
+          {tab === "guide" && <TouristGuide />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
               <p className="mb-2 mt-6 text-center text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
