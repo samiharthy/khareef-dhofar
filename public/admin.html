@@ -66,6 +66,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     <button class="tab" onclick="showTab('posts')">𝕏 المنشورات</button>
     <button class="tab" onclick="showTab('locs')">📍 المواقع</button>
     <button class="tab" onclick="showTab('stats')">📊 الإحصائيات</button>
+    <button class="tab" onclick="showTab('ads')">📢 الإعلانات</button>
   </div>
 
   <div style="max-width:600px;margin:0 auto;padding:18px">
@@ -339,6 +340,47 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
   </div>
 </div>
 
+    <!-- ADS TAB -->
+    <div id="tab-ads" style="display:none">
+      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:12px 16px;margin-bottom:10px">
+        <div style="font-size:12px;font-weight:700;color:#2F5D45;margin-bottom:4px">📢 إدارة الإعلانات المدفوعة</div>
+        <div style="font-size:11px;color:#555;line-height:1.7">
+          الإعلانات تظهر في قسم "استكشف" كبطاقات مُموَّلة.<br>
+          فعّل/أوقف الإعلانات بمفتاح واحد. كل إعلان له رابط، عنوان، وصف، وإيموجي.
+        </div>
+      </div>
+
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center;padding:14px">
+        <div>
+          <div style="font-weight:700;font-size:14px">الإعلانات</div>
+          <div id="ads-status" style="font-size:12px;color:#888;margin-top:2px">—</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="ads-toggle-btn" class="btn btn-sm btn-green" onclick="toggleAdsEnabled()">تفعيل</button>
+          <button class="btn btn-sm btn-outline" onclick="loadAds()">🔄 تحديث</button>
+        </div>
+      </div>
+
+      <!-- Add ad form -->
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">➕ إضافة إعلان جديد</div>
+        <label>عنوان عربي *</label><input id="ad-title-ar" placeholder="مثال: فندق الخريف الفاخر" />
+        <label>عنوان إنجليزي</label><input id="ad-title-en" placeholder="e.g. Khareef Luxury Hotel" />
+        <label>وصف عربي</label><input id="ad-desc-ar" placeholder="وصف قصير..." />
+        <label>وصف إنجليزي</label><input id="ad-desc-en" placeholder="Short description..." />
+        <label>الرابط (عند الضغط)</label><input id="ad-url" placeholder="https://..." />
+        <label>إيموجي</label><input id="ad-emoji" placeholder="🏨" style="width:80px" />
+        <label>اللون (hex)</label><input id="ad-color" placeholder="#2F5D45" style="width:120px" />
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn btn-green" onclick="addAd()">✅ إضافة إعلان</button>
+        </div>
+        <div id="ad-msg" style="font-size:12px;margin-top:6px;display:none"></div>
+      </div>
+
+      <div id="ads-list" style="margin-top:4px"></div>
+    </div>
+
+
 <script>
 const REPO = "samiharthy/khareef-dhofar";
 const ALERT_PATH = "public/alert.json";
@@ -361,6 +403,9 @@ const BUILTIN_RESTAURANTS = [{"nAr": "مطعم الحصن", "nEn": "Al Husn Rest
 window.onload=()=>{
   const t=localStorage.getItem("gh_token");
   if(t) document.getElementById("login-token").value=t;
+  const vt=localStorage.getItem("vercel_token");
+  const vInput=document.getElementById("vercel-token-input");
+  if(vt&&vInput) vInput.value="محفوظ ✅";
   document.getElementById("new-post-date").value=new Date().toISOString().split("T")[0];
 };
 
@@ -395,7 +440,7 @@ async function ghPut(path,content,sha,msg){
 }
 
 function showTab(tab){
-  ["notif","posts","locs","stats"].forEach(t=>{
+  ["notif","posts","locs","stats","ads"].forEach(t=>{
     const el=document.getElementById("tab-"+t);
     if(el) el.style.display=t===tab?"block":"none";
   });
@@ -405,6 +450,7 @@ function showTab(tab){
   if(tab==="posts"&&postsSha===null) loadPosts();
   if(tab==="locs"){ renderLocations(); loadLocations(); }
   if(tab==="stats") loadVercelStats();
+  if(tab==="ads") loadAds();
 }
 
 function showSubTab(sub){
@@ -775,7 +821,13 @@ async function deleteRestaurant(i){
 }
 
 // ── STATS (CounterAPI) ──
-async function loadStats(){ await loadVercelStats(); }
+async function loadStats(){ loadVercelStats(); }
+function saveVercelTokenAndLoad(){
+  const t=document.getElementById("vercel-token-input")?.value?.trim();
+  if(t){localStorage.setItem("vercel_token",t);document.getElementById("vercel-token-input").value="محفوظ ✅";}
+  loadVercelStats();
+}
+function clearVToken(){localStorage.removeItem("vercel_token");["stat-visitors","stat-pageviews"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent="—";});}
 
 async function loadVercelStats(){
   const PID="prj_MV8eu8ihmza29NPaFvkW3CDflxen";
@@ -784,7 +836,8 @@ async function loadVercelStats(){
   if(note) note.textContent="⏳ جاري جلب البيانات...";
   const to=new Date().toISOString().split("T")[0];
   const from=new Date(Date.now()-30*24*3600000).toISOString().split("T")[0];
-  const H={Authorization:"Bearer "+GH_TOKEN};
+  const VT=localStorage.getItem("vercel_token")||GH_TOKEN;
+  const H={Authorization:"Bearer "+VT};
 
   let tid="";
   try{const tr=await fetch(`https://api.vercel.com/v2/teams?slug=${TSLUG}`,{headers:H});const td=await tr.json();tid=td.teams?.[0]?.id||"";}catch(e){}
@@ -854,6 +907,97 @@ async function loadVercelStats(){
 
   if(note) note.textContent="✅ آخر تحديث: "+new Date().toLocaleTimeString("ar-OM");
   showMsg("stats-msg","✅ تم التحديث",true);
+}
+
+
+// ── ADS ───────────────────────────────────────────────────────────────────────
+const ADS_PATH = "public/ads.json";
+let adsData = {enabled:false, ads:[]}, adsSha = null;
+
+async function loadAds() {
+  try {
+    const {content, sha} = await ghGet(ADS_PATH);
+    adsSha = sha;
+    adsData = content || {enabled:false, ads:[]};
+  } catch(e) { adsData = {enabled:false, ads:[]}; }
+  renderAds();
+}
+
+function renderAds() {
+  const enabled = adsData.enabled;
+  document.getElementById("ads-status").textContent = enabled ? "🟢 الإعلانات مفعّلة في التطبيق" : "⭕ الإعلانات موقوفة";
+  document.getElementById("ads-toggle-btn").textContent = enabled ? "إيقاف" : "تفعيل";
+  document.getElementById("ads-toggle-btn").className = "btn btn-sm " + (enabled?"btn-red":"btn-green");
+
+  const list = document.getElementById("ads-list");
+  if(!adsData.ads?.length) {
+    list.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:20px">لا توجد إعلانات. اضغط "+ إضافة إعلان جديد"</div>';
+    return;
+  }
+  list.innerHTML = "";
+  adsData.ads.forEach((ad, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.cssText = "padding:12px 14px;margin-bottom:8px;border-right:4px solid "+(ad.color||"#2F5D45");
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:20px">${ad.emoji||"🌟"}</span>
+            <div>
+              <div style="font-size:13px;font-weight:700">${ad.titleAr||""}</div>
+              <div style="font-size:11px;color:#888">${ad.titleEn||""}</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:#555;margin-bottom:4px">${ad.descAr||""}</div>
+          ${ad.url?`<a href="${ad.url}" target="_blank" style="font-size:10px;color:#3C6E8F">${ad.url.slice(0,40)}...</a>`:""}
+        </div>
+        <button onclick="deleteAd(${i})"
+          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700;flex-shrink:0;margin-right:4px">حذف</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+async function toggleAdsEnabled() {
+  adsData.enabled = !adsData.enabled;
+  try {
+    const res = await ghPut(ADS_PATH, adsData, adsSha, adsData.enabled?"enable ads":"disable ads");
+    adsSha = res.content.sha;
+    renderAds();
+    showMsg("ad-msg", adsData.enabled?"✅ الإعلانات مفعّلة في التطبيق":"✅ الإعلانات موقوفة", true);
+  } catch(e) { showMsg("ad-msg","❌ "+e.message,false); }
+}
+
+async function addAd() {
+  const titleAr = document.getElementById("ad-title-ar").value.trim();
+  if(!titleAr) { alert("أدخل العنوان العربي"); return; }
+  const ad = {
+    titleAr, titleEn: document.getElementById("ad-title-en").value.trim(),
+    descAr:  document.getElementById("ad-desc-ar").value.trim(),
+    descEn:  document.getElementById("ad-desc-en").value.trim(),
+    url:     document.getElementById("ad-url").value.trim(),
+    emoji:   document.getElementById("ad-emoji").value.trim() || "🌟",
+    color:   document.getElementById("ad-color").value.trim() || "#2F5D45",
+  };
+  adsData.ads = [...(adsData.ads||[]), ad];
+  try {
+    const res = await ghPut(ADS_PATH, adsData, adsSha, "add ad: "+titleAr);
+    adsSha = res.content.sha;
+    renderAds();
+    ["ad-title-ar","ad-title-en","ad-desc-ar","ad-desc-en","ad-url","ad-emoji","ad-color"].forEach(id=>document.getElementById(id).value="");
+    showMsg("ad-msg","✅ تمت الإضافة! فعّل الإعلانات لتظهر في التطبيق",true);
+  } catch(e) { showMsg("ad-msg","❌ "+e.message,false); }
+}
+
+async function deleteAd(i) {
+  if(!confirm("حذف هذا الإعلان؟")) return;
+  adsData.ads = adsData.ads.filter((_,idx)=>idx!==i);
+  try {
+    const res = await ghPut(ADS_PATH, adsData, adsSha, "delete ad");
+    adsSha = res.content.sha;
+    renderAds();
+  } catch(e) { alert("خطأ: "+e.message); }
 }
 
 function showMsg(id,text,ok){
