@@ -4232,7 +4232,6 @@ export default function App() {
       const installs = parseInt(localStorage.getItem("kh_installs") || "0") + 1;
       localStorage.setItem("kh_installs", installs.toString());
       localStorage.setItem("kh_installed_at", new Date().toISOString());
-      reportEvent("install");
     });
 
   }, []);
