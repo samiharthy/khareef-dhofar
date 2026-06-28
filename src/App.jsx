@@ -4058,9 +4058,6 @@ export default function App() {
       reportEvent("install");
     });
 
-    // Report open event (every 5 opens)
-    const opens = parseInt(localStorage.getItem("kh_opens") || "0");
-    if (opens % 5 === 0 && opens > 0) reportEvent("open");
   }, []);
 
   async function fetchLiveWeather() {
