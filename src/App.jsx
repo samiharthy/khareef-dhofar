@@ -4383,6 +4383,10 @@ export default function App() {
     // Track app opens
     const opens = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
     localStorage.setItem("kh_opens", opens.toString());
+    // Report to CounterAPI every 5th open
+    if (opens % 5 === 1) {
+      fetch("https://api.counterapi.dev/v1/khareef-dhofar-2026/opens/up").catch(()=>{});
+    }
 
     // Track PWA installs
     window.addEventListener("appinstalled", () => {
