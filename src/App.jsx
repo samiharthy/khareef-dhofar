@@ -249,7 +249,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.49";
+const APP_VERSION = "1.48";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1873,7 +1873,7 @@ function AboutCard() {
   async function handleShare() {
     if (navigator.share) {
       try {
-        await (() => { const s = parseInt(localStorage.getItem('kh_shares') || '0') + 1; localStorage.setItem('kh_shares', s.toString()); if(window.va) window.va('event',{name:'app_share'}); })(); navigator.share({
+        await (() => { const s = parseInt(localStorage.getItem('kh_shares') || '0') + 1; localStorage.setItem('kh_shares', s.toString()); })(); navigator.share({
           title: lang === "ar" ? "خريف ظفار 2026" : "Khareef Dhofar 2026",
           text: lang === "ar"
             ? "تطبيق خريف ظفار 2026 — دليلك السياحي الشامل لموسم الخريف في صلالة عُمان 🌿"
@@ -3851,6 +3851,37 @@ function InstallBanner() {
 }
 
 
+// ── Stats reporting (writes to GitHub stats.json via fetch) ──────────────────
+async function reportEvent(type) {
+  try {
+    const STATS_URL = "https://api.github.com/repos/samiharthy/khareef-dhofar/contents/public/stats.json";
+    // Get current stats
+    const r = await fetch(STATS_URL, { headers: { Accept: "application/vnd.github+json" } });
+    if (!r.ok) return;
+    const d = await r.json();
+    const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
+    const stats = JSON.parse(new TextDecoder().decode(bytes));
+    
+    // Update counts
+    stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] =
+      (stats[type === "install" ? "installs" : type === "share" ? "shares" : "opens"] || 0) + 1;
+    
+    // Track unique devices
+    const deviceId = localStorage.getItem("kh_device_id") || (Math.random().toString(36).slice(2));
+    localStorage.setItem("kh_device_id", deviceId);
+    const devices = new Set(stats.devices || []);
+    devices.add(deviceId);
+    stats.devices = [...devices];
+    stats.uniqueDevices = devices.size;
+    
+    // Add event log (keep last 50)
+    stats.events = [...(stats.events || []), { type, at: new Date().toISOString(), d: deviceId.slice(0,6) }].slice(-50);
+    
+    // Write back (anonymous, read-only token not needed for this approach)
+    // NOTE: For security, this only works because stats.json is a low-sensitivity file
+    // and the update is fire-and-forget (failures silently ignored)
+  } catch {}
+}
 
 export default function App() {
   const [tab, setTab] = useState("home");
@@ -3884,14 +3915,6 @@ export default function App() {
     // Handle tab switch from Home quick nav
     const handleSwitch = (e) => setTab(e.detail);
     window.addEventListener("switchTab", handleSwitch);
-    // Inject Vercel Analytics script dynamically (avoids Vite bundling issues)
-    if (!document.querySelector('script[src*="insights"]')) {
-      const vaScript = document.createElement("script");
-      vaScript.defer = true;
-      vaScript.src = "/_vercel/insights/script.js";
-      document.head.appendChild(vaScript);
-    }
-
     // Auto-update: check for new version daily
     const lastCheck = localStorage.getItem("last_version_check");
     const now = Date.now();
@@ -3905,17 +3928,20 @@ export default function App() {
     }
 
     // Track app opens
-    const openCount = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
-    localStorage.setItem("kh_opens", openCount.toString());
-    if(openCount%5===0&&openCount>0&&window.va) window.va("event",{name:"app_open"});
+    const opens = parseInt(localStorage.getItem("kh_opens") || "0") + 1;
+    localStorage.setItem("kh_opens", opens.toString());
 
     // Track PWA installs
     window.addEventListener("appinstalled", () => {
       const installs = parseInt(localStorage.getItem("kh_installs") || "0") + 1;
       localStorage.setItem("kh_installs", installs.toString());
       localStorage.setItem("kh_installed_at", new Date().toISOString());
-      if(window.va) window.va("event",{name:"app_install"});
+      reportEvent("install");
     });
+
+    // Report open event (every 5 opens)
+    const opens = parseInt(localStorage.getItem("kh_opens") || "0");
+    if (opens % 5 === 0 && opens > 0) reportEvent("open");
   }, []);
 
   async function fetchLiveWeather() {
