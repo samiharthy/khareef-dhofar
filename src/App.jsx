@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.51";
+const APP_VERSION = "1.52";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -4018,88 +4018,181 @@ function ExploreTab() {
   const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState("all");
   const [overrides, setOverrides] = useState({});
+  const [restaurants, setRestaurants] = useState([]);
+  const [favorites, setFavorites] = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("kh_favorites") || "[]")); }
+    catch { return new Set(); }
+  });
+  const [showFavOnly, setShowFavOnly] = useState(false);
+  const [viewMode, setViewMode] = useState("list"); // list | map | favs
 
-  // Load admin overrides from GitHub
   useEffect(() => {
+    // Load overrides
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now())
-      .then(r => r.json())
-      .then(d => {
+      .then(r => r.json()).then(d => {
         const map = {};
-        (d || []).forEach(o => { map[o.id] = o; });
+        (d||[]).forEach(o => { map[o.id] = o; });
         setOverrides(map);
-      })
+      }).catch(() => {});
+
+    // Load restaurants
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
+      .then(r => r.json()).then(d => { if(Array.isArray(d)) setRestaurants(d); })
       .catch(() => {});
   }, []);
 
-  // Flatten all GUIDE_CATS places into a single list with category info
+  const toggleFav = (id) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      localStorage.setItem("kh_favorites", JSON.stringify([...next]));
+      return next;
+    });
+  };
+
+  // Flatten all places
   const allPlaces = GUIDE_CATS.flatMap(cat =>
     cat.places.map(p => ({
-      ...p,
-      ...overrides[p.ar], // apply admin overrides
-      catKey: cat.key,
-      catEmoji: cat.emoji,
-      catAr: cat.ar,
-      catEn: cat.en,
+      ...p, ...(overrides[p.ar]||{}),
+      catKey: cat.key, catEmoji: cat.emoji, catAr: cat.ar, catEn: cat.en,
+      type: "place", id: p.ar,
     }))
   );
 
+  // Restaurant places
+  const restPlaces = restaurants
+    .filter(r => r.lat && r.lng)
+    .map(r => ({
+      ar: r.nAr, en: r.nEn, lat: r.lat, lng: r.lng,
+      tag: { ar: "مطعم · " + (r.priceAr||""), en: "Restaurant · " + (r.priceEn||"") },
+      desc: r.note ? { ar: r.note.ar, en: r.note.en } : null,
+      catKey: "food", catEmoji: "🍽️", catAr: "المطاعم", catEn: "Restaurants",
+      type: "restaurant", id: "rest-" + r.nAr,
+    }));
+
+  // Events places
+  const eventPlaces = EVENTS
+    .filter(e => e.lat && e.lng)
+    .map(e => ({
+      ar: e.nAr, en: e.nEn, lat: e.lat, lng: e.lng,
+      tag: { ar: "فعالية · " + (e.placeAr||""), en: "Event · " + (e.placeEn||"") },
+      catKey: "events", catEmoji: "🎪", catAr: "الفعاليات", catEn: "Events",
+      type: "event", id: "evt-" + e.nAr,
+    }));
+
+  const allItems = [...allPlaces, ...restPlaces, ...eventPlaces];
+
   const categories = [
-    { key: "all", emoji: "🌍", ar: "الكل", en: "All" },
-    ...GUIDE_CATS.map(c => ({ key: c.key, emoji: c.emoji, ar: c.ar, en: c.en }))
+    { key: "all",    emoji: "🌍", ar: "الكل",         en: "All"         },
+    ...GUIDE_CATS.map(c => ({ key: c.key, emoji: c.emoji, ar: c.ar, en: c.en })),
+    { key: "food",   emoji: "🍽️", ar: "المطاعم",      en: "Restaurants" },
+    { key: "events", emoji: "🎪", ar: "الفعاليات",    en: "Events"      },
   ];
 
-  const filtered = allPlaces.filter(p => {
+  const filtered = allItems.filter(p => {
+    if (showFavOnly || viewMode === "favs") return favorites.has(p.id);
     const matchCat = activeCat === "all" || p.catKey === activeCat;
     const q = search.toLowerCase();
-    const matchSearch = !q || p.ar?.includes(search) || p.en?.toLowerCase().includes(q) ||
-      p.tag?.ar?.includes(search) || p.tag?.en?.toLowerCase().includes(q);
+    const matchSearch = !q ||
+      (p.ar && p.ar.includes(search)) ||
+      (p.en && p.en.toLowerCase().includes(q)) ||
+      (p.tag?.ar && p.tag.ar.includes(search));
     return matchCat && matchSearch;
   });
 
-  const grouped = activeCat === "all" && !search
-    ? GUIDE_CATS.map(cat => ({ ...cat, places: cat.places.map(p => ({ ...p, ...overrides[p.ar], catEmoji: cat.emoji })) }))
+  const grouped = activeCat === "all" && !search && viewMode === "list" && !showFavOnly
+    ? GUIDE_CATS.map(cat => ({
+        ...cat,
+        places: cat.places.map(p => ({ ...p, ...(overrides[p.ar]||{}), catEmoji: cat.emoji, type:"place", id:p.ar }))
+      }))
     : null;
 
+  // Map URL for all filtered places
+  const mapUrl = filtered.length > 0
+    ? "https://www.google.com/maps/dir/" + filtered.slice(0,10).map(p => p.lat+","+p.lng).join("/")
+    : "https://www.google.com/maps/search/salalah+oman";
+
   return (
-    <div className="space-y-4 pb-6">
+    <div className="space-y-3 pb-6">
       <SectionTitle eyebrow={lang==="ar"?"ظفار":"Dhofar"} title={lang==="ar"?"استكشف":"Explore"} icon={MapPin} />
 
-      {/* Search */}
+      {/* Search bar */}
       <div className="relative">
-        <input value={search} onChange={e => setSearch(e.target.value)}
-          placeholder={lang==="ar" ? "🔍 ابحث عن شاطئ، عين، أثر..." : "🔍 Search beaches, springs, heritage..."}
+        <input value={search} onChange={e => { setSearch(e.target.value); setViewMode("list"); }}
+          placeholder={lang==="ar" ? "🔍 ابحث عن شاطئ، مطعم، فعالية..." : "🔍 Beaches, restaurants, events..."}
           className="w-full rounded-2xl px-4 py-3 text-sm outline-none"
-          style={{ background:th.cardBg, border:`1px solid ${search?'#2F5D45':th.border}`, color:th.titleColor, fontFamily:"Tajawal",
-            boxShadow: search ? "0 0 0 3px #2F5D4520" : "none", transition:"all .2s" }} />
+          style={{ background:th.cardBg, border:`1.5px solid ${search?"#2F5D45":th.border}`,
+            color:th.titleColor, fontFamily:"Tajawal", transition:"border .2s" }} />
         {search && (
           <button onClick={() => setSearch("")}
-            style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none",
-              cursor:"pointer", color:th.subColor, fontSize:18 }}>✕</button>
+            style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)",
+              background:"none", border:"none", cursor:"pointer", color:th.subColor, fontSize:18 }}>✕</button>
         )}
       </div>
 
-      {/* Categories */}
-      <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
-        {categories.map(c => (
-          <button key={c.key} onClick={() => { setActiveCat(c.key); setSearch(""); }}
-            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition active:scale-95"
-            style={{ background:activeCat===c.key?"#2F5D45":th.cardBg, color:activeCat===c.key?"#fff":th.subColor,
-              border:`1px solid ${activeCat===c.key?"#2F5D45":th.border}`, fontFamily:"Tajawal", cursor:"pointer" }}>
-            <span>{c.emoji}</span><span>{lang==="ar"?c.ar:c.en}</span>
-          </button>
-        ))}
+      {/* View mode + favs toggle */}
+      <div className="flex items-center gap-2">
+        <button onClick={() => setViewMode("list")}
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+          style={{ background:viewMode==="list"?"#2F5D45":th.cardBg, color:viewMode==="list"?"#fff":th.subColor,
+            border:`1px solid ${viewMode==="list"?"#2F5D45":th.border}`, fontFamily:"Tajawal", cursor:"pointer" }}>
+          ☰ {lang==="ar"?"قائمة":"List"}
+        </button>
+        <a href={mapUrl} target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+          style={{ background:th.cardBg, color:th.subColor, border:`1px solid ${th.border}`,
+            fontFamily:"Tajawal", textDecoration:"none" }}>
+          🗺️ {lang==="ar"?"عرض خريطة":"Map View"}
+        </a>
+        <button onClick={() => setViewMode(viewMode==="favs"?"list":"favs")}
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+          style={{ background:viewMode==="favs"?"#C98A2E":th.cardBg,
+            color:viewMode==="favs"?"#fff":th.subColor,
+            border:`1px solid ${viewMode==="favs"?"#C98A2E":th.border}`,
+            fontFamily:"Tajawal", cursor:"pointer" }}>
+          ⭐ {lang==="ar"?"المفضلة":"Favorites"}
+          {favorites.size > 0 && (
+            <span className="ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+              style={{ background:"#fff3", color: viewMode==="favs"?"#fff":"#C98A2E" }}>
+              {favorites.size}
+            </span>
+          )}
+        </button>
       </div>
 
-      {/* Results count when searching */}
-      {(search || activeCat !== "all") && (
-        <div className="text-xs px-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-          {filtered.length} {lang==="ar" ? "نتيجة" : "results"}
-          {activeCat !== "all" && ` · ${lang==="ar" ? categories.find(c=>c.key===activeCat)?.ar : categories.find(c=>c.key===activeCat)?.en}`}
+      {/* Category filter */}
+      {viewMode === "list" && (
+        <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
+          {categories.map(c => (
+            <button key={c.key} onClick={() => setActiveCat(c.key)}
+              className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold"
+              style={{ background:activeCat===c.key?"#2F5D45":th.cardBg, color:activeCat===c.key?"#fff":th.subColor,
+                border:`1px solid ${activeCat===c.key?"#2F5D45":th.border}`, fontFamily:"Tajawal", cursor:"pointer" }}>
+              <span>{c.emoji}</span><span>{lang==="ar"?c.ar:c.en}</span>
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Grouped view (default) */}
-      {grouped && (
+      {/* Count */}
+      {(search || activeCat !== "all" || viewMode === "favs") && (
+        <div className="text-xs px-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {filtered.length} {lang==="ar" ? "نتيجة" : "results"}
+        </div>
+      )}
+
+      {/* Favorites empty */}
+      {viewMode === "favs" && favorites.size === 0 && (
+        <div className="py-10 text-center rounded-2xl" style={{ background:th.cardBg, border:`1px dashed ${th.border}` }}>
+          <div style={{ fontSize:36, marginBottom:8 }}>⭐</div>
+          <div className="text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "لا توجد مفضلات · اضغط ☆ على أي موقع" : "No favorites · Tap ☆ on any place"}
+          </div>
+        </div>
+      )}
+
+      {/* Grouped view */}
+      {grouped && viewMode === "list" && (
         <div className="space-y-5">
           {grouped.map(cat => (
             <div key={cat.key}>
@@ -4109,41 +4202,69 @@ function ExploreTab() {
                   <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
                     {lang==="ar" ? cat.ar : cat.en}
                   </span>
-                  <span className="text-xs rounded-full px-2 py-0.5" style={{ background:th.border, color:th.subColor, fontFamily:"Tajawal" }}>
+                  <span className="text-xs rounded-full px-2 py-0.5 font-bold"
+                    style={{ background:th.border, color:th.subColor, fontFamily:"Tajawal" }}>
                     {cat.places.length}
                   </span>
                 </div>
                 <button onClick={() => setActiveCat(cat.key)}
-                  className="text-xs font-bold" style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer", fontFamily:"Tajawal" }}>
+                  style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer",
+                    fontSize:12, fontWeight:700, fontFamily:"Tajawal" }}>
                   {lang==="ar" ? "الكل ←" : "All →"}
                 </button>
               </div>
               <div className="space-y-2">
                 {cat.places.slice(0, 3).map((p, i) => (
-                  <PlaceCard key={i} place={p} catEmoji={cat.emoji} lang={lang} th={th} />
+                  <PlaceCard key={i} place={p} catEmoji={cat.emoji} lang={lang} th={th}
+                    isFav={favorites.has(p.id || p.ar)} onFavToggle={toggleFav} />
                 ))}
                 {cat.places.length > 3 && (
                   <button onClick={() => setActiveCat(cat.key)}
                     className="w-full rounded-2xl py-2.5 text-xs font-bold"
-                    style={{ background:th.border, border:"none", color:th.subColor, cursor:"pointer", fontFamily:"Tajawal" }}>
-                    + {cat.places.length - 3} {lang==="ar" ? "مزيد من الأماكن" : "more places"}
+                    style={{ background:th.border, border:"none", color:th.subColor,
+                      cursor:"pointer", fontFamily:"Tajawal" }}>
+                    + {cat.places.length - 3} {lang==="ar" ? "مزيد" : "more"}
                   </button>
                 )}
               </div>
             </div>
           ))}
+          {/* Restaurants preview */}
+          {restPlaces.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-2 px-1">
+                <div className="flex items-center gap-2">
+                  <span style={{fontSize:16}}>🍽️</span>
+                  <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? "المطاعم" : "Restaurants"}
+                  </span>
+                </div>
+                <button onClick={() => setActiveCat("food")}
+                  style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer",
+                    fontSize:12, fontWeight:700, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? "الكل ←" : "All →"}
+                </button>
+              </div>
+              {restPlaces.slice(0,2).map((p,i) => (
+                <PlaceCard key={i} place={p} catEmoji="🍽️" lang={lang} th={th}
+                  isFav={favorites.has(p.id)} onFavToggle={toggleFav} />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      {/* Filtered view */}
+      {/* Filtered / favs list */}
       {!grouped && (
         <div className="space-y-2">
           {filtered.map((p, i) => (
-            <PlaceCard key={i} place={p} catEmoji={p.catEmoji} lang={lang} th={th} />
+            <PlaceCard key={i} place={p} catEmoji={p.catEmoji} lang={lang} th={th}
+              isFav={favorites.has(p.id)} onFavToggle={toggleFav} />
           ))}
-          {filtered.length === 0 && (
-            <div className="py-10 text-center text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-              {lang==="ar" ? "لا توجد نتائج لـ "" + search + """ : `No results for "${search}"`}
+          {filtered.length === 0 && viewMode !== "favs" && (
+            <div className="py-8 text-center text-sm rounded-2xl"
+              style={{ color:th.subColor, fontFamily:"Tajawal", background:th.cardBg }}>
+              {lang==="ar" ? ("لا نتائج لـ " + (search||"")) : ("No results for " + (search||""))}
             </div>
           )}
         </div>
@@ -4151,6 +4272,7 @@ function ExploreTab() {
     </div>
   );
 }
+
 
 function PlaceCard({ place, catEmoji, lang, th }) {
   const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
