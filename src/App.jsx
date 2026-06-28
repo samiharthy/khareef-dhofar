@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.52";
+const APP_VERSION = "1.53";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -2092,7 +2092,15 @@ function HomeWeatherForecast() {
                   <span className="text-[10px] font-bold" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                     {i === 0 ? t.today : tx(DAYS[dayIdx], lang)}
                   </span>
-                  <DayIcon size={20} color={dayColor} />
+                  <span style={{fontSize:20}}>
+                    {code2===0?"☀️":code2===1?"🌤️":code2===2?"⛅":code2===3?"☁️":
+                     (code2===45||code2===48)?"🌫️":
+                     (code2>=51&&code2<=55)?"🌦️":(code2>=61&&code2<=67)?"🌧️":
+                     (code2>=71&&code2<=77)?"🌨️":(code2>=80&&code2<=82)?"🌦️":
+                     (code2>=95)?"⛈️":
+                     condKey==="sunny"?"☀️":condKey==="cloudy"?"☁️":condKey==="fog"?"🌫️":
+                     condKey==="drizzle"?"🌦️":"⛅"}
+                  </span>
                   <span className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{temp2}°</span>
                   {precipP != null && precipP > 0 && (
                     <span className="text-[9px]" style={{ color: "#3C6E8F", fontFamily: "Tajawal" }}>💧{precipP}%</span>
@@ -4290,15 +4298,18 @@ function ExploreTab() {
 }
 
 
-function PlaceCard({ place, catEmoji, lang, th }) {
+function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
   const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const placeId = place.id || place.ar;
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer"
-      className="flex gap-3 rounded-2xl p-3 active:scale-[0.98] transition"
-      style={{ background:th.cardBg, border:`1px solid ${th.border}`, textDecoration:"none", display:"flex" }}>
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
-        style={{ background:"#2F5D4512" }}>{catEmoji}</div>
-      <div className="flex-1 min-w-0">
+    <div className="flex rounded-2xl overflow-hidden"
+      style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E":th.border}` }}>
+      <a href={href} target="_blank" rel="noopener noreferrer"
+        className="flex gap-3 p-3 active:scale-[0.98] transition flex-1 min-w-0"
+        style={{ textDecoration:"none", display:"flex" }}>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
+          style={{ background:"#2F5D4512" }}>{catEmoji}</div>
+        <div className="flex-1 min-w-0">
         <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
           {lang==="ar" ? place.ar : place.en}
         </div>
@@ -4313,8 +4324,16 @@ function PlaceCard({ place, catEmoji, lang, th }) {
           </div>
         )}
       </div>
-      <MapPin size={14} color={th.subColor} style={{ flexShrink:0, marginTop:2 }} />
-    </a>
+          <MapPin size={14} color={th.subColor} style={{ flexShrink:0, marginTop:2 }} />
+        </a>
+      <button
+        onClick={e => { e.preventDefault(); if(onFavToggle) onFavToggle(placeId); }}
+        style={{ padding:"0 14px", background:"none", border:"none", cursor:"pointer",
+          fontSize:20, flexShrink:0, alignSelf:"center",
+          color: isFav ? "#C98A2E" : th.subColor, opacity: isFav ? 1 : 0.4 }}>
+        {isFav ? "⭐" : "☆"}
+      </button>
+    </div>
   );
 }
 export default function App() {
