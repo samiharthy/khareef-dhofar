@@ -2206,6 +2206,28 @@ function Home() {
 
       {/* X Feed */}
       <XFeed />
+
+      {/* Sponsored */}
+      {getAdsForSection("home").map((ad, i) => (
+        <a key={"had"+i} href={ad.url||"#"} target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-3 rounded-2xl p-3"
+          style={{ background:`${ad.color||"#2F5D45"}10`, border:`1px solid ${ad.color||"#2F5D45"}25`,
+            textDecoration:"none" }}>
+          <span style={{fontSize:22,flexShrink:0}}>{ad.emoji||"🌟"}</span>
+          <div className="flex-1 min-w-0">
+            <span style={{fontSize:9,fontWeight:700,padding:"1px 6px",borderRadius:4,
+              background:ad.color||"#2F5D45",color:"#fff",fontFamily:"Tajawal"}}>
+              {lang==="ar"?"مُموَّل":"Sponsored"}
+            </span>
+            <div style={{fontSize:13,fontWeight:700,color:th.titleColor,fontFamily:"Tajawal",marginTop:2}}>
+              {lang==="ar"?ad.titleAr:ad.titleEn}
+            </div>
+            <div style={{fontSize:11,color:th.subColor,fontFamily:"Tajawal"}}>
+              {lang==="ar"?ad.descAr:ad.descEn}
+            </div>
+          </div>
+        </a>
+      ))}
     </div>
   );
 }
@@ -3247,14 +3269,13 @@ const FOOD_TYPES = {
   fast:    { ar:"وجبات سريعة", en:"Fast Food", icon:"🍔" },
 };
 
-function FoodGuide() {
+function FoodGuide({ adsForSection = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   const [filter, setFilter] = useState("all");
   const [restaurants, setRestaurants] = useState(RESTAURANTS);
 
   useEffect(() => {
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t="+Date.now()).then(r=>r.json()).then(d=>{if(d?.enabled&&d.ads)setAds(d.ads);}).catch(()=>{});
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => { if (Array.isArray(data) && data.length > 0) setRestaurants(data); })
@@ -3266,6 +3287,18 @@ function FoodGuide() {
   return (
     <div className="space-y-4 pb-6">
       <SectionTitle eyebrow={lang==="ar"?"دليل":"Guide"} title={lang==="ar"?"دليل المطاعم":"Restaurant Guide"} icon={Coffee} />
+      {adsForSection.map((ad,i)=>(
+        <a key={"fad"+i} href={ad.url||"#"} target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-3 rounded-2xl p-3"
+          style={{background:`${ad.color||"#C98A2E"}10`,border:`1px solid ${ad.color||"#C98A2E"}30`,textDecoration:"none"}}>
+          <span style={{fontSize:22}}>{ad.emoji||"🍽️"}</span>
+          <div className="flex-1">
+            <span style={{fontSize:9,background:ad.color||"#C98A2E",color:"#fff",borderRadius:4,padding:"1px 6px",fontWeight:700,fontFamily:"Tajawal"}}>{lang==="ar"?"مُموَّل":"Sponsored"}</span>
+            <div style={{fontSize:13,fontWeight:700,color:th.titleColor,fontFamily:"Tajawal",marginTop:2}}>{lang==="ar"?ad.titleAr:ad.titleEn}</div>
+            <div style={{fontSize:11,color:th.subColor,fontFamily:"Tajawal"}}>{lang==="ar"?ad.descAr:ad.descEn}</div>
+          </div>
+        </a>
+      ))}
       <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
         {Object.entries(FOOD_TYPES).map(([key, val]) => (
           <button key={key} onClick={() => setFilter(key)}
@@ -4045,7 +4078,7 @@ const NAV_LABELS = {
   more:    { ar:"المزيد",  en:"More"    },
 };
 
-function ExploreTab() {
+function ExploreTab({ globalAds = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   const [search, setSearch] = useState("");
@@ -4057,7 +4090,6 @@ function ExploreTab() {
     catch { return new Set(); }
   });
   const [showFavOnly, setShowFavOnly] = useState(false);
-  const [ads, setAds] = useState([]);
   const [viewMode, setViewMode] = useState("list"); // list | map | favs
 
   useEffect(() => {
@@ -4070,7 +4102,6 @@ function ExploreTab() {
       }).catch(() => {});
 
     // Load restaurants
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t="+Date.now()).then(r=>r.json()).then(d=>{if(d?.enabled&&d.ads)setAds(d.ads);}).catch(()=>{});
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json()).then(d => { if(Array.isArray(d)) setRestaurants(d); })
       .catch(() => {});
@@ -4355,6 +4386,17 @@ function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
 }
 export default function App() {
   const [tab, setTab] = useState("home");
+  const [globalAds, setGlobalAds] = useState([]);
+
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t=" + Date.now())
+      .then(r => r.json())
+      .then(d => { if(d?.enabled && Array.isArray(d.ads)) setGlobalAds(d.ads); })
+      .catch(() => {});
+  }, []);
+
+  const getAdsForSection = (section) =>
+    globalAds.filter(ad => !ad.section || ad.section === "all" || ad.section === section);
   const [moreOpen, setMoreOpen] = useState(false);
   const [lang, setLang] = useState("ar");
   const [theme, setTheme] = useState("light");
@@ -4488,10 +4530,10 @@ export default function App() {
             {tab === "tips" && <Tips />}
             {tab === "stays" && <Stays />}
             {tab === "about" && <About />}
-          {tab === "food" && <FoodGuide />}
+          {tab === "food" && <FoodGuide adsForSection={getAdsForSection("food")} />}
           {tab === "today" && <TodayTab />}
           {tab === "guide" && <TouristGuide />}
-          {tab === "explore" && <ExploreTab />}
+          {tab === "explore" && <ExploreTab globalAds={getAdsForSection("explore")} />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
               <p className="mb-2 mt-6 text-center text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
