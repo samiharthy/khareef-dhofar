@@ -103,20 +103,5 @@
       "ar": "ما يطلبه أهلُ الدار لأنفسهم، ويقدّمونه لضيوفهم أوّلًا — أربعةُ أطباقٍ عليها قامت الدار.",
       "en": "First time here? Start with these four — the dishes we sign our name to."
     }
-  },
-  {
-    "nAr": "تجربة",
-    "nEn": "Test",
-    "type": "arabic",
-    "priceAr": "اقتصادي",
-    "priceEn": "Budget",
-    "lat": 17.0330278,
-    "lng": 54.1093611,
-    "open": "",
-    "phone": "993338273",
-    "note": {
-      "ar": "تجربة مطعم",
-      "en": "Test"
-    }
   }
 ]
