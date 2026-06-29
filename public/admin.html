@@ -56,7 +56,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
   <div class="header">
     <div>
       <div style="color:#fff;font-weight:800;font-size:17px">🌿 لوحة التحكم</div>
-      <div style="color:rgba(255,255,255,.65);font-size:11px">خريف ظفار 2026</div>
+      <div style="color:rgba(255,255,255,.65);font-size:11px">خريف ظفار 2026 · v1.59</div>
     </div>
     <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:none" onclick="logout()">خروج</button>
   </div>
@@ -169,7 +169,11 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
           </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div id="locs-count" style="font-weight:700;font-size:13px">...</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="loc-search" placeholder="🔍 بحث في المواقع..." oninput="filterLocSearch()"
+          style="flex:1;border:1.5px solid #E5E0D5;border-radius:10px;padding:8px 12px;font-size:13px;font-family:Tajawal;background:#FAFAF8" />
+      </div>
+      <div id="locs-count" style="font-weight:700;font-size:13px">...</div>
           <button class="btn btn-green btn-sm" onclick="toggleLocForm()">+ موقع مخصص</button>
         </div>
         <!-- Section filters -->
@@ -383,11 +387,13 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
           <option value="all">كل الأقسام</option>
           <option value="home">الرئيسية</option>
           <option value="explore">استكشف</option>
-          <option value="today">اليوم</option>
+          <option value="today">الخريف (تبويب اليوم)</option>
           <option value="food">المطاعم</option>
-          <option value="events">الفعاليات</option>
-          <option value="heritage">التراث</option>
           <option value="stays">الإقامة</option>
+          <option value="nearby">أقرب الأماكن</option>
+          <option value="calendar">تقويم الخريف</option>
+          <option value="access">الوصول إلى ظفار</option>
+          <option value="health">الصحة والطوارئ</option>
         </select>
         <label>اللون (hex)</label><input id="ad-color" placeholder="#2F5D45" style="width:120px" />
         <div style="display:flex;gap:10px;margin-top:12px">
@@ -657,6 +663,13 @@ async function loadLocations(){
   catch(e){locsData=[];}
   renderLocations();
 }
+function filterLocSearch(){
+  const q = document.getElementById("loc-search")?.value?.trim().toLowerCase() || "";
+  locSearchQuery = q;
+  renderLocations();
+}
+let locSearchQuery = "";
+
 function filterSec(sec){
   currentLocSec=sec;
   document.querySelectorAll(".sec-filter-btn").forEach(b=>{
