@@ -7,7 +7,7 @@ import {
   Sprout, Route, Sunrise, Sunset, CloudDrizzle, CloudSun,
   Cloud, MoreHorizontal, X, Fuel, Footprints, Download, Share2, Star, Megaphone,
   Siren, ShieldAlert, Wallet, Phone, ClipboardList, MapPinned, ListOrdered,
-  Bell, BellRing, AlertTriangle, RefreshCw, Thermometer, Wind, Droplets
+  Bell, BellRing, AlertTriangle, RefreshCw, Thermometer, Wind, Droplets, HeartPulse
 } from "lucide-react";
 
 /* ===================================================================
