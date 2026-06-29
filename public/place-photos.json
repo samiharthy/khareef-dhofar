@@ -1,0 +1,20 @@
+{
+  "_categories": {
+    "beaches": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75&auto=format&fit=crop",
+    "springs": "https://images.unsplash.com/photo-1541974590-e9dc18449327?w=600&q=75&auto=format&fit=crop",
+    "valleys": "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=75&auto=format&fit=crop",
+    "viewpoints": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75&auto=format&fit=crop",
+    "heritage": "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600&q=75&auto=format&fit=crop",
+    "religious": "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&q=75&auto=format&fit=crop"
+  },
+  "_places": {
+    "شاطئ المغسيل": "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=75&auto=format&fit=crop",
+    "وادي دربات": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=75&auto=format&fit=crop",
+    "عين رزات": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=75&auto=format&fit=crop",
+    "حصن مرباط": "https://images.unsplash.com/photo-1609767815978-0f92b261bdd8?w=600&q=75&auto=format&fit=crop",
+    "حفرة طوي أعتير": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&q=75&auto=format&fit=crop",
+    "متحف أرض اللبان": "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=75&auto=format&fit=crop",
+    "شاطئ الفزايح": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=75&auto=format&fit=crop",
+    "مطل جبل سمحان": "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=75&auto=format&fit=crop"
+  }
+}
