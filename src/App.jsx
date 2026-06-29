@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.57";
+const APP_VERSION = "1.58";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3833,9 +3833,9 @@ function InstallBanner() {
   ];
 
   const handleInstall = async () => {
-    if (isIOS) { setShowGuide(true); return; }
+    haptic.light(); if (isIOS) { setShowGuide(true); return; }
     if (!prompt) return;
-    prompt.prompt();
+    haptic.medium(); prompt.prompt();
     const choice = await prompt.userChoice;
     if (choice.outcome === "accepted") {
       setDismissed(true);
@@ -4793,7 +4793,161 @@ function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle,
   );
 }
 
+
+// Haptic feedback utility
+function useHaptic() {
+  return {
+    light: () => {
+      try {
+        if (navigator.vibrate) navigator.vibrate(8);
+      } catch(e) {}
+    },
+    medium: () => {
+      try {
+        if (navigator.vibrate) navigator.vibrate(15);
+      } catch(e) {}
+    },
+    success: () => {
+      try {
+        if (navigator.vibrate) navigator.vibrate([8, 50, 8]);
+      } catch(e) {}
+    },
+    error: () => {
+      try {
+        if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+      } catch(e) {}
+    }
+  };
+}
+
+// HapticButton — button with built-in haptic + scale animation
+function HapticButton({ onClick, children, style, className, type="button" }) {
+  const haptic = useHaptic();
+  const [pressed, setPressed] = useState(false);
+  return (
+    <button type={type}
+      className={className}
+      style={{ ...style, transform: pressed ? "scale(0.95)" : "scale(1)",
+        transition: "transform 0.1s ease" }}
+      onPointerDown={() => { setPressed(true); haptic.light(); }}
+      onPointerUp={() => setPressed(false)}
+      onPointerLeave={() => setPressed(false)}
+      onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
+
+const ONBOARDING_SCREENS = [
+  {
+    emoji: "🌿",
+    gradient: "linear-gradient(160deg, #1F3D2B 0%, #2F5D45 50%, #4a8a6a 100%)",
+    titleAr: "مرحباً بك في خريف ظفار 2026",
+    titleEn: "Welcome to Khareef Dhofar 2026",
+    descAr: "دليلك الشامل لموسم الخريف — الطقس والمواقع والفعاليات وأكثر",
+    descEn: "Your complete guide to Dhofar Khareef season — weather, places, events and more"
+  },
+  {
+    emoji: "🗺️",
+    gradient: "linear-gradient(160deg, #1a3a5c 0%, #2a5c8a 50%, #3a7ab8 100%)",
+    titleAr: "استكشف أجمل المواقع السياحية",
+    titleEn: "Explore the Most Beautiful Attractions",
+    descAr: "شواطئ · عيون · أودية · تراث. ابحث وأضف مفضلاتك",
+    descEn: "Beaches · Springs · Valleys · Viewpoints · Heritage Search and save your favorites"
+  },
+  {
+    emoji: "📍",
+    gradient: "linear-gradient(160deg, #3d1f2b 0%, #5d2f45 50%, #8a4a6a 100%)",
+    titleAr: "أقرب الأماكن وتقويم الفعاليات",
+    titleEn: "Nearest Places & Events Calendar",
+    descAr: "حدّد موقعك واكتشف أقرب المواقع وتابع فعاليات الخريف 2026",
+    descEn: "Locate yourself to find nearby spots Follow Khareef 2026 events calendar"
+  }
+];
+
+function Onboarding({ onDone, lang }) {
+  const [step, setStep] = useState(0);
+  const haptic = useHaptic();
+  const screen = ONBOARDING_SCREENS[step];
+  const isLast = step === ONBOARDING_SCREENS.length - 1;
+  const isAr = lang === "ar";
+
+  const finish = () => {
+    haptic.success();
+    localStorage.setItem("kh_onboarded", "1");
+    onDone();
+  };
+
+  const next = () => {
+    haptic.light();
+    if (isLast) finish();
+    else setStep(s => s + 1);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: screen.gradient }}>
+
+      {/* Skip */}
+      {!isLast && (
+        <button onClick={finish}
+          className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold"
+          style={{ background:"rgba(255,255,255,0.2)", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal", zIndex:10 }}>
+          {isAr ? "تخطي" : "Skip"}
+        </button>
+      )}
+
+      {/* Main content */}
+      <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+        <div style={{ fontSize:80, marginBottom:24, lineHeight:1, animation:"bounce-soft 2s infinite" }}>
+          {screen.emoji}
+        </div>
+        <h1 className="font-black mb-4 whitespace-pre-line"
+          style={{ color:"#fff", fontFamily:"Tajawal", fontSize:26, lineHeight:1.3,
+            textShadow:"0 2px 12px rgba(0,0,0,0.3)" }}>
+          {isAr ? screen.titleAr : screen.titleEn}
+        </h1>
+        <p className="text-sm leading-relaxed whitespace-pre-line"
+          style={{ color:"rgba(255,255,255,0.85)", fontFamily:"Tajawal", maxWidth:280 }}>
+          {isAr ? screen.descAr : screen.descEn}
+        </p>
+      </div>
+
+      {/* Bottom nav */}
+      <div className="flex flex-col items-center gap-4 pb-12 px-8">
+        {/* Progress dots */}
+        <div className="flex gap-2">
+          {ONBOARDING_SCREENS.map((_, i) => (
+            <button key={i} onClick={() => { haptic.light(); setStep(i); }}
+              style={{
+                width: i === step ? 24 : 8, height:8, borderRadius:4,
+                background: i === step ? "#fff" : "rgba(255,255,255,0.4)",
+                border:"none", cursor:"pointer",
+                transition:"all 0.3s ease"
+              }} />
+          ))}
+        </div>
+
+        {/* CTA button */}
+        <HapticButton onClick={next}
+          className="w-full rounded-2xl py-4 text-base font-black"
+          style={{ background:"#fff", color: "#1F3D2B", border:"none", cursor:"pointer",
+            fontFamily:"Tajawal", boxShadow:"0 4px 24px rgba(0,0,0,0.25)" }}>
+          {isLast
+            ? (isAr ? "🚀 ابدأ الاستكشاف" : "🚀 Start Exploring")
+            : (isAr ? "التالي ←" : "Next →")}
+        </HapticButton>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+
+  const haptic = useHaptic();
+  const [showOnboarding, setShowOnboarding] = useState(
+    () => localStorage.getItem("kh_onboarded") !== "1"
+  );
   const [tab, setTab] = useState("home");
   const [globalAds, setGlobalAds] = useState([]);
 
@@ -4886,6 +5040,10 @@ export default function App() {
   }
 
   return (
+    <>
+      {showOnboarding && (
+        <Onboarding lang={lang} onDone={() => setShowOnboarding(false)} />
+      )}
     <LangContext.Provider value={{ lang, t, theme, th, liveWeather, refetchWeather: fetchLiveWeather }}>
       <div dir={isRTL ? "rtl" : "ltr"} className="min-h-screen w-full" style={{ background: th.page }}>
         <style>{weatherKeyframes}</style>
@@ -4966,7 +5124,7 @@ export default function App() {
                 : t[tb.key] || tb.key;
               return (
                 <button key={tb.key} type="button"
-                  onClick={() => isMore ? toggleMore() : openTab(tb.key)}
+                  onClick={() => { haptic.light(); isMore ? toggleMore() : openTab(tb.key); }}
                   className="flex flex-col items-center gap-1.5 rounded-xl py-2 transition"
                   style={{ background: isActive ? "#2F5D451A" : "transparent" }}>
                   <tb.icon size={24} color={isActive ? "#2F5D45" : th.subColor} strokeWidth={isActive ? 2.3 : 2} />
@@ -5013,5 +5171,6 @@ export default function App() {
         )}
       </div>
     </LangContext.Provider>
+    </>
   );
 }
