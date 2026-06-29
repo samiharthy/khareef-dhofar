@@ -4468,45 +4468,54 @@ function ExploreTab({ globalAds = [] }) {
 
 
 function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
-  const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const mapsUrl = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
   const placeId = place.id || place.ar;
   const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
   const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
   const descText = place.desc ? (lang==="ar" ? place.desc.ar : place.desc.en) : "";
+  const waText = encodeURIComponent(name + " | " + mapsUrl);
+  const waUrl = "https://api.whatsapp.com/send?text=" + waText;
+
+  const openMaps = () => window.open(mapsUrl, "_blank", "noopener,noreferrer");
+  const openWA   = (e) => { e.stopPropagation(); window.open(waUrl, "_blank", "noopener,noreferrer"); };
+  const toggleFav = (e) => { e.stopPropagation(); if(onFavToggle) onFavToggle(placeId); };
+
   return (
-    <div className="overflow-hidden rounded-2xl"
+    <div onClick={openMaps} role="button" tabIndex={0}
+      className="flex items-center gap-3 rounded-2xl p-3 active:scale-[0.98] transition cursor-pointer"
       style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E50":th.border}` }}>
-      <div className="flex items-center gap-3 p-3">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
-          style={{ background: isFav?"#C98A2E12":"#2F5D4510" }}>
-          {catEmoji}
-        </div>
-        <a href={href} target="_blank" rel="noopener noreferrer"
-          className="min-w-0 flex-1" style={{ textDecoration:"none" }}>
-          <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
-          {tagText && (
-            <div className="text-xs font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
-              {"📍 "}{tagText}
-            </div>
-          )}
-          {descText && (
-            <div className="text-xs mt-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-              {descText}
-            </div>
-          )}
-        </a>
-        <div className="flex shrink-0 flex-col items-center gap-2">
-          <button onClick={() => onFavToggle && onFavToggle(placeId)}
-            style={{ background:"none", border:"none", cursor:"pointer", fontSize:18,
-              color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:0 }}>
-            {isFav?"⭐":"☆"}
-          </button>
-          <a href={href} target="_blank" rel="noopener noreferrer"
-            style={{ display:"flex", alignItems:"center", justifyContent:"center",
-              width:26, height:26, borderRadius:8, background:"#2F5D4515", textDecoration:"none" }}>
-            <MapPin size={13} color="#2F5D45" />
-          </a>
-        </div>
+      {/* Category icon */}
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
+        style={{ background: isFav?"#C98A2E12":"#2F5D4510" }}>
+        {catEmoji}
+      </div>
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
+        {tagText && (
+          <div className="text-xs mt-0.5 font-bold" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+            {"📍 "}{tagText}
+          </div>
+        )}
+        {descText && (
+          <div className="text-xs mt-1 leading-snug" style={{ color:th.subColor, fontFamily:"Tajawal",
+            overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>
+            {descText}
+          </div>
+        )}
+      </div>
+      {/* Action buttons — stopPropagation to prevent card click */}
+      <div className="flex shrink-0 flex-col items-center gap-2">
+        <button onClick={toggleFav}
+          style={{ background:"none", border:"none", cursor:"pointer", fontSize:18,
+            color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:"2px 4px" }}>
+          {isFav?"⭐":"☆"}
+        </button>
+        <button onClick={openWA}
+          className="flex items-center justify-center rounded-lg"
+          style={{ width:30, height:30, background:"#25D36618", border:"none", cursor:"pointer", fontSize:16 }}>
+          💬
+        </button>
       </div>
     </div>
   );
@@ -4904,17 +4913,22 @@ function EmptyState({ emoji="🔍", titleAr, titleEn, descAr, descEn,
 function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle, photos={} }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const mapsUrl = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
   const placeId = place.id || place.ar;
   const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
   const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
   const descText = place.desc ? (lang==="ar" ? place.desc.ar : place.desc.en) : "";
-  const photoUrl = photos[place.ar] || photos["_categories"]?.[catKey] || null;
+  const photoUrl = (photos._places && photos._places[place.ar]) || (photos._categories && photos._categories[catKey]) || null;
+  const waUrl = "https://api.whatsapp.com/send?text=" + encodeURIComponent(name + " | " + mapsUrl);
+
+  const openMaps = () => window.open(mapsUrl, "_blank", "noopener,noreferrer");
+  const openWA   = (e) => { e.stopPropagation(); window.open(waUrl, "_blank", "noopener,noreferrer"); };
+  const toggleFav = (e) => { e.stopPropagation(); if(onFavToggle) onFavToggle(placeId); };
 
   return (
-    <div className="overflow-hidden rounded-2xl"
+    <div onClick={openMaps} role="button" tabIndex={0} className="overflow-hidden rounded-2xl cursor-pointer active:scale-[0.98] transition"
       style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E50":th.border}` }}>
-      {/* Photo area */}
+      {/* Photo */}
       {photoUrl && !imgError && (
         <div className="relative" style={{ height:140, overflow:"hidden" }}>
           {!imgLoaded && (
@@ -4922,68 +4936,63 @@ function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle,
               background:"linear-gradient(90deg,#e8e3d8 25%,#f0ece4 50%,#e8e3d8 75%)",
               backgroundSize:"200% 100%", animation:"shimmer 1.4s infinite" }} />
           )}
-          <img src={photoUrl} alt={name}
-            loading="lazy" decoding="async"
-            onLoad={() => setImgLoaded(true)}
-            onError={() => setImgError(true)}
+          <img src={photoUrl} alt={name} loading="lazy" decoding="async"
+            onLoad={() => setImgLoaded(true)} onError={() => setImgError(true)}
             style={{ width:"100%", height:140, objectFit:"cover", display:"block",
-              opacity: imgLoaded ? 1 : 0, transition:"opacity .3s" }} />
-          {/* Fav button overlay */}
-          <button onClick={() => onFavToggle && onFavToggle(placeId)}
-            className="absolute top-2 left-2 flex items-center justify-center rounded-full"
-            style={{ width:30, height:30, background:"rgba(0,0,0,0.4)",
-              border:"none", cursor:"pointer", fontSize:16, backdropFilter:"blur(4px)" }}>
-            {isFav ? "⭐" : "☆"}
+              opacity:imgLoaded?1:0, transition:"opacity .3s" }} />
+          {/* Fav on photo */}
+          <button onClick={toggleFav} style={{ position:"absolute", top:8, left:8,
+            width:32, height:32, borderRadius:"50%", background:"rgba(0,0,0,.4)",
+            border:"none", cursor:"pointer", fontSize:16, backdropFilter:"blur(4px)",
+            display:"flex", alignItems:"center", justifyContent:"center" }}>
+            {isFav?"⭐":"☆"}
           </button>
-          {/* Category badge */}
-          <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full px-2 py-1"
-            style={{ background:"rgba(0,0,0,0.45)", backdropFilter:"blur(4px)" }}>
+          {/* WA on photo */}
+          <button onClick={openWA} style={{ position:"absolute", top:8, right:8,
+            width:32, height:32, borderRadius:"50%", background:"rgba(37,211,102,.85)",
+            border:"none", cursor:"pointer", fontSize:16, backdropFilter:"blur(4px)",
+            display:"flex", alignItems:"center", justifyContent:"center" }}>
+            💬
+          </button>
+          <div style={{ position:"absolute", bottom:8, left:8, background:"rgba(0,0,0,.4)",
+            borderRadius:20, padding:"2px 8px", backdropFilter:"blur(4px)" }}>
             <span style={{ fontSize:14 }}>{catEmoji}</span>
           </div>
         </div>
       )}
-
       {/* Content row */}
       <div className="flex items-center gap-3 p-3">
-        {/* Emoji fallback if no photo */}
         {(!photoUrl || imgError) && (
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
-            style={{ background: isFav?"#C98A2E12":"#2F5D4510" }}>{catEmoji}</div>
+            style={{ background:isFav?"#C98A2E12":"#2F5D4510" }}>{catEmoji}</div>
         )}
-        <a href={href} target="_blank" rel="noopener noreferrer"
-          className="min-w-0 flex-1" style={{ textDecoration:"none" }}>
+        <div className="flex-1 min-w-0">
           <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
           {tagText && (
-            <div className="text-xs mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+            <div className="text-xs font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
               {"📍 "}{tagText}
             </div>
           )}
           {descText && (
-            <div className="text-xs mt-1 leading-snug line-clamp-2"
-              style={{ color:th.subColor, fontFamily:"Tajawal" }}>{descText}</div>
+            <div className="text-xs mt-1 leading-snug" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {descText}
+            </div>
           )}
-        </a>
-        <div className="flex shrink-0 flex-col items-center gap-2">
-          {((!photoUrl || imgError)) && (
-            <button onClick={() => onFavToggle && onFavToggle(placeId)}
+        </div>
+        {(!photoUrl || imgError) && (
+          <div className="flex shrink-0 flex-col items-center gap-2">
+            <button onClick={toggleFav}
               style={{ background:"none", border:"none", cursor:"pointer", fontSize:18,
-                color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:0 }}>
+                color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:"2px 4px" }}>
               {isFav?"⭐":"☆"}
             </button>
-          )}
-          <a href={href} target="_blank" rel="noopener noreferrer"
-            style={{ display:"flex", alignItems:"center", justifyContent:"center",
-              width:26, height:26, borderRadius:8, background:"#2F5D4315", textDecoration:"none" }}>
-            <MapPin size={13} color="#2F5D45" />
-          </a>
-          <a href={"https://api.whatsapp.com/send?text=" + encodeURIComponent(name + " | " + href)}
-            target="_blank" rel="noopener noreferrer"
-            style={{ display:"flex", alignItems:"center", justifyContent:"center",
-              width:26, height:26, borderRadius:8, background:"#25D36615", textDecoration:"none",
-              fontSize:14 }}>
-            💬
-          </a>
-        </div>
+            <button onClick={openWA}
+              className="flex items-center justify-center rounded-lg"
+              style={{ width:30, height:30, background:"#25D36618", border:"none", cursor:"pointer", fontSize:16 }}>
+              💬
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
