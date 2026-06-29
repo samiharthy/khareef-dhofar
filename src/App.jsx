@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.56";
+const APP_VERSION = "1.57";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -4190,12 +4190,10 @@ function ExploreTab({ globalAds = [] }) {
 
       {/* Favorites empty */}
       {viewMode === "favs" && favorites.size === 0 && (
-        <div className="py-10 text-center rounded-2xl" style={{ background:th.cardBg, border:`1px dashed ${th.border}` }}>
-          <div style={{ fontSize:36, marginBottom:8 }}>⭐</div>
-          <div className="text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-            {lang==="ar" ? "لا توجد مفضلات · اضغط ☆ على أي موقع" : "No favorites · Tap ☆ on any place"}
-          </div>
-        </div>
+        <EmptyState emoji="⭐"
+          titleAr="لا توجد مفضلات بعد" titleEn="No favorites yet"
+          descAr="اضغط ☆ على أي موقع لإضافته" descEn="Tap ☆ on any place to save it"
+          lang={lang} th={th} />
       )}
 
       {/* Skeleton while loading */}
@@ -4283,10 +4281,11 @@ function ExploreTab({ globalAds = [] }) {
               isFav={favorites.has(p.id)} onFavToggle={toggleFav} />
           ))}
           {filtered.length === 0 && viewMode !== "favs" && (
-            <div className="py-8 text-center text-sm rounded-2xl"
-              style={{ color:th.subColor, fontFamily:"Tajawal", background:th.cardBg }}>
-              {lang==="ar" ? ("لا نتائج لـ " + (search||"")) : ("No results for " + (search||""))}
-            </div>
+            <EmptyState emoji="🔍"
+              titleAr={"لا نتائج لـ: " + search} titleEn={"No results: " + search}
+              descAr="جرّب كلمة أخرى أو تصفح الأقسام" descEn="Try another word or browse categories"
+              actionAr="مسح البحث" actionEn="Clear search" lang={lang} th={th}
+              onAction={() => setSearch("")} />
           )}
         </div>
       )}
@@ -4454,18 +4453,10 @@ function NearbyPlaces() {
       )}
 
       {status === "error" && (
-        <div className="rounded-2xl p-5 text-center"
-          style={{ background:"#B5402C10", border:`1px solid #B5402C30` }}>
-          <div style={{ fontSize:32 }}>⚠️</div>
-          <div className="text-sm mt-2 mb-3" style={{ color:"#B5402C", fontFamily:"Tajawal" }}>
-            {lang==="ar" ? "تعذّر تحديد الموقع. تأكد من تفعيل الـ GPS وإذن الموقع" : "Could not get location. Check GPS and permission"}
-          </div>
-          <button onClick={findNearby}
-            className="rounded-xl px-4 py-2 text-xs font-bold"
-            style={{ background:"#B5402C", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal" }}>
-            {lang==="ar" ? "إعادة المحاولة" : "Retry"}
-          </button>
-        </div>
+        <EmptyState emoji="📡"
+          titleAr="تعذّر تحديد موقعك" titleEn="Location unavailable"
+          descAr="تأكد من تفعيل GPS وإذن الموقع للتطبيق" descEn="Enable GPS and location permission for the app"
+          actionAr="إعادة المحاولة" actionEn="Retry" onAction={findNearby} lang={lang} th={th} />
       )}
 
       {status === "done" && userPos && (
@@ -4688,6 +4679,115 @@ function SkeletonCard({ lines=2, hasIcon=true }) {
         <Skeleton w="70%" h={14} r={6} mb={8} />
         {lines >= 2 && <Skeleton w="90%" h={11} r={5} mb={6} />}
         {lines >= 3 && <Skeleton w="50%" h={10} r={5} mb={0} />}
+      </div>
+    </div>
+  );
+}
+
+
+function EmptyState({ emoji="🔍", titleAr, titleEn, descAr, descEn,
+                      actionAr, actionEn, onAction, lang, th }) {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-3xl px-6 py-10 text-center"
+      style={{ background:th.cardBg, border:`1.5px dashed ${th.border}` }}>
+      <div style={{ fontSize:52, marginBottom:12, lineHeight:1 }}>{emoji}</div>
+      <div className="text-sm font-bold mb-2" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+        {lang==="ar" ? titleAr : titleEn}
+      </div>
+      {(descAr||descEn) && (
+        <div className="text-xs mb-4 max-w-[220px] leading-relaxed"
+          style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? descAr : descEn}
+        </div>
+      )}
+      {onAction && (
+        <button onClick={onAction}
+          className="rounded-2xl px-5 py-2 text-xs font-bold"
+          style={{ background:"#2F5D45", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal" }}>
+          {lang==="ar" ? actionAr : actionEn}
+        </button>
+      )}
+    </div>
+  );
+}
+
+
+function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle, photos={} }) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const href = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const placeId = place.id || place.ar;
+  const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
+  const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
+  const descText = place.desc ? (lang==="ar" ? place.desc.ar : place.desc.en) : "";
+  const photoUrl = photos[place.ar] || photos["_categories"]?.[catKey] || null;
+
+  return (
+    <div className="overflow-hidden rounded-2xl"
+      style={{ background:th.cardBg, border:`1.5px solid ${isFav?"#C98A2E50":th.border}` }}>
+      {/* Photo area */}
+      {photoUrl && !imgError && (
+        <div className="relative" style={{ height:140, overflow:"hidden" }}>
+          {!imgLoaded && (
+            <div className="absolute inset-0" style={{
+              background:"linear-gradient(90deg,#e8e3d8 25%,#f0ece4 50%,#e8e3d8 75%)",
+              backgroundSize:"200% 100%", animation:"shimmer 1.4s infinite" }} />
+          )}
+          <img src={photoUrl} alt={name}
+            loading="lazy" decoding="async"
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+            style={{ width:"100%", height:140, objectFit:"cover", display:"block",
+              opacity: imgLoaded ? 1 : 0, transition:"opacity .3s" }} />
+          {/* Fav button overlay */}
+          <button onClick={() => onFavToggle && onFavToggle(placeId)}
+            className="absolute top-2 left-2 flex items-center justify-center rounded-full"
+            style={{ width:30, height:30, background:"rgba(0,0,0,0.4)",
+              border:"none", cursor:"pointer", fontSize:16, backdropFilter:"blur(4px)" }}>
+            {isFav ? "⭐" : "☆"}
+          </button>
+          {/* Category badge */}
+          <div className="absolute top-2 right-2 flex items-center gap-1 rounded-full px-2 py-1"
+            style={{ background:"rgba(0,0,0,0.45)", backdropFilter:"blur(4px)" }}>
+            <span style={{ fontSize:14 }}>{catEmoji}</span>
+          </div>
+        </div>
+      )}
+
+      {/* Content row */}
+      <div className="flex items-center gap-3 p-3">
+        {/* Emoji fallback if no photo */}
+        {(!photoUrl || imgError) && (
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
+            style={{ background: isFav?"#C98A2E12":"#2F5D4510" }}>{catEmoji}</div>
+        )}
+        <a href={href} target="_blank" rel="noopener noreferrer"
+          className="min-w-0 flex-1" style={{ textDecoration:"none" }}>
+          <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
+          {tagText && (
+            <div className="text-xs mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+              {"📍 "}{tagText}
+            </div>
+          )}
+          {descText && (
+            <div className="text-xs mt-1 leading-snug line-clamp-2"
+              style={{ color:th.subColor, fontFamily:"Tajawal" }}>{descText}</div>
+          )}
+        </a>
+        <div className="flex shrink-0 flex-col items-center gap-2">
+          {((!photoUrl || imgError)) && (
+            <button onClick={() => onFavToggle && onFavToggle(placeId)}
+              style={{ background:"none", border:"none", cursor:"pointer", fontSize:18,
+                color:isFav?"#C98A2E":th.subColor, opacity:isFav?1:0.35, lineHeight:1, padding:0 }}>
+              {isFav?"⭐":"☆"}
+            </button>
+          )}
+          <a href={href} target="_blank" rel="noopener noreferrer"
+            style={{ display:"flex", alignItems:"center", justifyContent:"center",
+              width:26, height:26, borderRadius:8, background:"#2F5D4315", textDecoration:"none" }}>
+            <MapPin size={13} color="#2F5D45" />
+          </a>
+        </div>
       </div>
     </div>
   );
