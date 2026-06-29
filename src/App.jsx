@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.59";
+const APP_VERSION = "1.60";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -2772,6 +2772,7 @@ function About() {
   const th = THEMES[theme];
   const haptic = useHaptic();
   const [resetDone, setResetDone] = useState(false);
+  const [showSuggest, setShowSuggest] = useState(false);
 
   const resetOnboarding = () => {
     haptic.success();
@@ -2903,6 +2904,23 @@ function About() {
         </div>
         <InstallAction lang={lang} th={th} />
       </div>
+
+      {/* Suggest */}
+      {showSuggest && <SuggestModal onClose={() => setShowSuggest(false)} lang={lang} th={th} />}
+      <button onClick={() => setShowSuggest(true)}
+        className="flex items-center gap-2 w-full rounded-2xl p-4"
+        style={{ background:"#25D36610", border:"1.5px dashed #25D36640",
+          cursor:"pointer" }}>
+        <span style={{fontSize:22}}>💡</span>
+        <div className="text-right">
+          <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "اقترح موقعاً أو خدمة" : "Suggest a Place or Service"}
+          </div>
+          <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "ساعدنا في تحسين الدليل السياحي" : "Help us improve the tourist guide"}
+          </div>
+        </div>
+      </button>
 
       {/* Footer */}
       <div className="text-center py-2">
@@ -4205,6 +4223,7 @@ function ExploreTab({ globalAds = [] }) {
   });
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [viewMode, setViewMode] = useState("list"); // list | map | favs
+  const [showSuggest, setShowSuggest] = useState(false);
 
   useEffect(() => {
     // Load overrides
@@ -4339,6 +4358,18 @@ function ExploreTab({ globalAds = [] }) {
           )}
         </button>
       </div>
+
+      {/* Suggest button */}
+      <button onClick={() => setShowSuggest(true)}
+        className="flex items-center gap-2 rounded-2xl px-3 py-2 text-xs font-bold w-full"
+        style={{ background:"#2F5D4510", border:"1.5px dashed #2F5D4540",
+          color:"#2F5D45", fontFamily:"Tajawal", cursor:"pointer" }}>
+        <span style={{fontSize:16}}>💡</span>
+        <span>{lang==="ar" ? "اقترح موقعاً أو خدمة لم تجدها هنا" : "Suggest a place or service not listed here"}</span>
+        <span style={{marginRight:"auto"}}>←</span>
+      </button>
+
+      {showSuggest && <SuggestModal onClose={() => setShowSuggest(false)} lang={lang} th={th} />}
 
       {/* Category filter */}
       {viewMode === "list" && (
@@ -4951,6 +4982,7 @@ function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle,
               backgroundSize:"200% 100%", animation:"shimmer 1.4s infinite" }} />
           )}
           <img src={photoUrl} alt={name} loading="lazy" decoding="async"
+            width="600" height="140"
             onLoad={() => setImgLoaded(true)} onError={() => setImgError(true)}
             style={{ width:"100%", height:140, objectFit:"cover", display:"block",
               opacity:imgLoaded?1:0, transition:"opacity .3s" }} />
@@ -5103,7 +5135,8 @@ function Onboarding({ onDone, lang }) {
   return (
     <div style={{ position:"fixed", inset:0, zIndex:50, display:"flex", flexDirection:"column", overflow:"hidden" }}>
       {/* Background photo */}
-      <img src={screen.photo} alt="" loading="eager"
+      <img src={screen.photo} alt="" loading="eager" fetchPriority="high"
+        width="800" height="600"
         style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", zIndex:0 }} />
       {/* Gradient overlay */}
       <div style={{ position:"absolute", inset:0, background:screen.gradient, zIndex:1 }} />
@@ -5261,6 +5294,163 @@ function InstallAction({ lang, th }) {
         </div>
       )}
     </>
+  );
+}
+
+
+// Suggestion form — sends via WhatsApp to admin
+function SuggestModal({ onClose, lang, th }) {
+  const haptic = useHaptic();
+  const [type, setType] = useState("place");
+  const [name, setName] = useState("");
+  const [desc, setDesc] = useState("");
+  const [coords, setCoords] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const types = [
+    { key:"place",   ar:"📍 موقع سياحي",   en:"📍 Tourist Place" },
+    { key:"rest",    ar:"🍽️ مطعم",         en:"🍽️ Restaurant" },
+    { key:"service", ar:"🛎️ خدمة",         en:"🛎️ Service" },
+    { key:"fix",     ar:"✏️ تصحيح معلومة", en:"✏️ Fix Info" },
+  ];
+
+  const handleSubmit = () => {
+    if (!name.trim()) return;
+    haptic.medium();
+    const typeLbl = types.find(t=>t.key===type);
+    const msg = encodeURIComponent(
+      "💡 اقتراح خريف ظفار\n" +
+      "النوع: " + (lang==="ar" ? typeLbl?.ar : typeLbl?.en) + "\n" +
+      "الاسم: " + name + "\n" +
+      (desc ? "التفاصيل: " + desc + "\n" : "") +
+      (coords ? "الإحداثيات: " + coords + "\n" : "") +
+      "---\nأُرسل من تطبيق خريف ظفار 2026"
+    );
+    window.open("https://api.whatsapp.com/send?phone=96890000000&text=" + msg, "_blank");
+    setSent(true);
+    haptic.success();
+    setTimeout(onClose, 1500);
+  };
+
+  return (
+    <div style={{ position:"fixed", inset:0, zIndex:200,
+      background:"rgba(0,0,0,0.65)", display:"flex", alignItems:"flex-end", padding:16 }}
+      onClick={onClose}>
+      <div style={{ width:"100%", maxWidth:480, margin:"0 auto",
+        background:th.cardBg, borderRadius:24, overflow:"hidden" }}
+        onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
+        <div style={{ background:"linear-gradient(135deg,#1F3D2B,#2F5D45)",
+          padding:"16px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <div>
+            <div style={{ color:"#fff", fontWeight:800, fontSize:16, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "💡 اقترح إضافة" : "💡 Suggest Addition"}
+            </div>
+            <div style={{ color:"rgba(255,255,255,0.7)", fontSize:12, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "ساعدنا في تحسين الدليل" : "Help us improve the guide"}
+            </div>
+          </div>
+          <button onClick={onClose}
+            style={{ background:"rgba(255,255,255,0.15)", border:"none", borderRadius:20,
+              color:"#fff", cursor:"pointer", padding:"4px 10px", fontSize:16 }}>✕</button>
+        </div>
+
+        <div style={{ padding:20 }}>
+          {sent ? (
+            <div style={{ textAlign:"center", padding:"20px 0" }}>
+              <div style={{ fontSize:48 }}>✅</div>
+              <div style={{ fontSize:14, fontWeight:700, color:th.titleColor,
+                fontFamily:"Tajawal", marginTop:12 }}>
+                {lang==="ar" ? "شكراً! سيتم مراجعة اقتراحك" : "Thanks! We'll review your suggestion"}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Type selector */}
+              <div style={{ marginBottom:14 }}>
+                <div style={{ fontSize:12, fontWeight:700, color:th.subColor,
+                  fontFamily:"Tajawal", marginBottom:8 }}>
+                  {lang==="ar" ? "نوع الاقتراح" : "Suggestion Type"}
+                </div>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
+                  {types.map(t => (
+                    <button key={t.key} onClick={() => { haptic.light(); setType(t.key); }}
+                      style={{ padding:"8px 12px", borderRadius:12,
+                        background: type===t.key ? "#2F5D45" : th.border,
+                        color: type===t.key ? "#fff" : th.subColor,
+                        border: "none", cursor:"pointer", fontSize:13,
+                        fontFamily:"Tajawal", fontWeight:700, textAlign:"center" }}>
+                      {lang==="ar" ? t.ar : t.en}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Name */}
+              <div style={{ marginBottom:12 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:th.subColor,
+                  fontFamily:"Tajawal", display:"block", marginBottom:4 }}>
+                  {lang==="ar" ? "الاسم *" : "Name *"}
+                </label>
+                <input value={name} onChange={e=>setName(e.target.value)}
+                  placeholder={lang==="ar" ? "اسم الموقع أو الخدمة" : "Place or service name"}
+                  style={{ width:"100%", padding:"10px 14px", borderRadius:10,
+                    border:`1.5px solid ${name?'#2F5D45':th.border}`, fontSize:14,
+                    fontFamily:"Tajawal", background:th.cardBg, color:th.titleColor,
+                    outline:"none", boxSizing:"border-box" }} />
+              </div>
+
+              {/* Description */}
+              <div style={{ marginBottom:12 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:th.subColor,
+                  fontFamily:"Tajawal", display:"block", marginBottom:4 }}>
+                  {lang==="ar" ? "وصف (اختياري)" : "Description (optional)"}
+                </label>
+                <textarea value={desc} onChange={e=>setDesc(e.target.value)}
+                  placeholder={lang==="ar" ? "معلومات إضافية..." : "Additional info..."}
+                  rows={2}
+                  style={{ width:"100%", padding:"10px 14px", borderRadius:10,
+                    border:`1.5px solid ${th.border}`, fontSize:13, fontFamily:"Tajawal",
+                    background:th.cardBg, color:th.titleColor, outline:"none",
+                    resize:"none", boxSizing:"border-box" }} />
+              </div>
+
+              {/* Coordinates */}
+              <div style={{ marginBottom:16 }}>
+                <label style={{ fontSize:12, fontWeight:700, color:th.subColor,
+                  fontFamily:"Tajawal", display:"block", marginBottom:4 }}>
+                  {lang==="ar" ? "الإحداثيات (اختياري)" : "Coordinates (optional)"}
+                </label>
+                <input value={coords} onChange={e=>setCoords(e.target.value)}
+                  placeholder="17.1299, 54.2381"
+                  style={{ width:"100%", padding:"10px 14px", borderRadius:10,
+                    border:`1.5px solid ${th.border}`, fontSize:13, fontFamily:"Tajawal",
+                    background:th.cardBg, color:th.titleColor, outline:"none",
+                    boxSizing:"border-box", direction:"ltr" }} />
+              </div>
+
+              <button onClick={handleSubmit} disabled={!name.trim()}
+                style={{ width:"100%", padding:"14px", borderRadius:14,
+                  background: name.trim() ? "#25D366" : "#ccc",
+                  color:"#fff", border:"none", cursor: name.trim() ? "pointer" : "default",
+                  fontSize:14, fontWeight:800, fontFamily:"Tajawal",
+                  display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
+                <span>💬</span>
+                {lang==="ar" ? "إرسال عبر واتساب" : "Send via WhatsApp"}
+              </button>
+
+              <div style={{ textAlign:"center", marginTop:10, fontSize:11,
+                color:th.subColor, fontFamily:"Tajawal" }}>
+                {lang==="ar"
+                  ? "سيُفتح واتساب بالاقتراح جاهزاً للإرسال"
+                  : "WhatsApp will open with your suggestion ready to send"}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
