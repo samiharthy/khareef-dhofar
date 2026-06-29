@@ -5326,7 +5326,7 @@ function SuggestModal({ onClose, lang, th }) {
       (coords ? "الإحداثيات: " + coords + "\n" : "") +
       "---\nأُرسل من تطبيق خريف ظفار 2026"
     );
-    window.open("https://api.whatsapp.com/send?phone=96890000000&text=" + msg, "_blank");
+    window.open("https://api.whatsapp.com/send?phone=96877556881&text=" + msg, "_blank");
     setSent(true);
     haptic.success();
     setTimeout(onClose, 1500);
