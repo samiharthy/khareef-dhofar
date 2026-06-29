@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.58";
+const APP_VERSION = "1.59";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -4015,7 +4015,7 @@ function TouristGuide() {
 const NAV_LABELS = {
   home:    { ar:"الرئيسية", en:"Home"    },
   explore: { ar:"استكشف",  en:"Explore" },
-  today:   { ar:"اليوم",   en:"Today"   },
+  today:   { ar:"الخريف",  en:"Season"  },
   more:    { ar:"المزيد",  en:"More"    },
 };
 
@@ -4443,11 +4443,27 @@ function NearbyPlaces() {
       )}
 
       {status === "loading" && (
-        <div className="rounded-2xl p-8 text-center"
+        <div className="rounded-2xl p-6 text-center"
           style={{ background:th.cardBg, border:`1px dashed ${th.border}` }}>
-          <div style={{ fontSize:32 }}>🛰️</div>
-          <div className="text-sm mt-2" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          <div style={{ fontSize:40, marginBottom:12 }}>🛰️</div>
+          <div className="text-sm font-bold mb-3" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
             {lang==="ar" ? "جاري تحديد موقعك..." : "Locating you..."}
+          </div>
+          {/* Animated progress dots */}
+          <div style={{ display:"flex", justifyContent:"center", gap:6, marginBottom:12 }}>
+            {[0,1,2,3,4].map(i => (
+              <div key={i} style={{
+                width:8, height:8, borderRadius:"50%", background:"#2F5D45",
+                animation: `pulse-dot 1.4s ease-in-out ${i*0.2}s infinite`
+              }} />
+            ))}
+          </div>
+          <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "قد يستغرق حتى 10 ثوانٍ" : "May take up to 10 seconds"}
+          </div>
+          <div className="mt-3 rounded-full overflow-hidden" style={{ height:3, background:th.border }}>
+            <div style={{ height:3, background:"#2F5D45",
+              animation:"gps-progress 10s linear forwards" }} />
           </div>
         </div>
       )}
@@ -4787,6 +4803,13 @@ function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle,
               width:26, height:26, borderRadius:8, background:"#2F5D4315", textDecoration:"none" }}>
             <MapPin size={13} color="#2F5D45" />
           </a>
+          <a href={"https://wa.me/?text=" + encodeURIComponent((lang==="ar"?"اكتشف ":"Discover ") + name + " - " + href)}
+            target="_blank" rel="noopener noreferrer"
+            style={{ display:"flex", alignItems:"center", justifyContent:"center",
+              width:26, height:26, borderRadius:8, background:"#25D36615", textDecoration:"none",
+              fontSize:14 }}>
+            💬
+          </a>
         </div>
       </div>
     </div>
@@ -4873,70 +4896,61 @@ function Onboarding({ onDone, lang }) {
   const isLast = step === ONBOARDING_SCREENS.length - 1;
   const isAr = lang === "ar";
 
-  const finish = () => {
-    haptic.success();
-    localStorage.setItem("kh_onboarded", "1");
-    onDone();
-  };
-
-  const next = () => {
-    haptic.light();
-    if (isLast) finish();
-    else setStep(s => s + 1);
-  };
+  const finish = () => { haptic.success(); localStorage.setItem("kh_onboarded","1"); onDone(); };
+  const next = () => { haptic.light(); if(isLast) finish(); else setStep(s=>s+1); };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: screen.gradient }}>
+    <div style={{ position:"fixed", inset:0, zIndex:50, display:"flex", flexDirection:"column", overflow:"hidden" }}>
+      {/* Background photo */}
+      <img src={screen.photo} alt="" loading="eager"
+        style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", zIndex:0 }} />
+      {/* Gradient overlay */}
+      <div style={{ position:"absolute", inset:0, background:screen.gradient, zIndex:1 }} />
 
       {/* Skip */}
       {!isLast && (
-        <button onClick={finish}
-          className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-bold"
-          style={{ background:"rgba(255,255,255,0.2)", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal", zIndex:10 }}>
+        <button onClick={finish} style={{ position:"absolute", top:16, left:16, zIndex:10,
+          padding:"6px 14px", borderRadius:20, background:"rgba(255,255,255,0.2)",
+          color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal", fontSize:13, fontWeight:700 }}>
           {isAr ? "تخطي" : "Skip"}
         </button>
       )}
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
-        <div style={{ fontSize:80, marginBottom:24, lineHeight:1, animation:"bounce-soft 2s infinite" }}>
+      <div style={{ position:"relative", zIndex:2, flex:1, display:"flex", flexDirection:"column",
+        alignItems:"center", justifyContent:"flex-end", padding:"0 32px 0", textAlign:"center" }}>
+        <div style={{ fontSize:72, marginBottom:16, lineHeight:1, animation:"bounce-soft 2s infinite" }}>
           {screen.emoji}
         </div>
-        <h1 className="font-black mb-4 whitespace-pre-line"
-          style={{ color:"#fff", fontFamily:"Tajawal", fontSize:26, lineHeight:1.3,
-            textShadow:"0 2px 12px rgba(0,0,0,0.3)" }}>
+        <h1 style={{ color:"#fff", fontFamily:"Tajawal", fontSize:26, fontWeight:900,
+          lineHeight:1.3, marginBottom:12, textShadow:"0 2px 16px rgba(0,0,0,0.5)" }}>
           {isAr ? screen.titleAr : screen.titleEn}
         </h1>
-        <p className="text-sm leading-relaxed whitespace-pre-line"
-          style={{ color:"rgba(255,255,255,0.85)", fontFamily:"Tajawal", maxWidth:280 }}>
+        <p style={{ color:"rgba(255,255,255,0.9)", fontFamily:"Tajawal", fontSize:14,
+          lineHeight:1.6, maxWidth:280 }}>
           {isAr ? screen.descAr : screen.descEn}
         </p>
       </div>
 
-      {/* Bottom nav */}
-      <div className="flex flex-col items-center gap-4 pb-12 px-8">
+      {/* Bottom controls */}
+      <div style={{ position:"relative", zIndex:2, display:"flex", flexDirection:"column",
+        alignItems:"center", gap:16, padding:"24px 32px 48px" }}>
         {/* Progress dots */}
-        <div className="flex gap-2">
-          {ONBOARDING_SCREENS.map((_, i) => (
+        <div style={{ display:"flex", gap:8 }}>
+          {ONBOARDING_SCREENS.map((_,i) => (
             <button key={i} onClick={() => { haptic.light(); setStep(i); }}
-              style={{
-                width: i === step ? 24 : 8, height:8, borderRadius:4,
-                background: i === step ? "#fff" : "rgba(255,255,255,0.4)",
-                border:"none", cursor:"pointer",
-                transition:"all 0.3s ease"
-              }} />
+              style={{ width: i===step ? 24 : 8, height:8, borderRadius:4,
+                background: i===step ? "#fff" : "rgba(255,255,255,0.4)",
+                border:"none", cursor:"pointer", transition:"all 0.3s" }} />
           ))}
         </div>
-
-        {/* CTA button */}
-        <HapticButton onClick={next}
-          className="w-full rounded-2xl py-4 text-base font-black"
-          style={{ background:"#fff", color: "#1F3D2B", border:"none", cursor:"pointer",
-            fontFamily:"Tajawal", boxShadow:"0 4px 24px rgba(0,0,0,0.25)" }}>
-          {isLast
-            ? (isAr ? "🚀 ابدأ الاستكشاف" : "🚀 Start Exploring")
-            : (isAr ? "التالي ←" : "Next →")}
-        </HapticButton>
+        {/* CTA */}
+        <button onClick={next}
+          style={{ width:"100%", padding:"16px", borderRadius:16, background:"#fff",
+            color:"#1F3D2B", border:"none", cursor:"pointer", fontFamily:"Tajawal",
+            fontSize:16, fontWeight:900, boxShadow:"0 4px 24px rgba(0,0,0,0.3)" }}>
+          {isLast ? (isAr?"🚀 ابدأ الاستكشاف":"🚀 Start Exploring") : (isAr?"التالي ←":"Next →")}
+        </button>
       </div>
     </div>
   );
@@ -5166,6 +5180,17 @@ export default function App() {
                   </button>
                 ))}
               </div>
+            </div>
+            {/* About link at bottom of More sheet */}
+            <div className="pt-3 border-t" style={{ borderColor:th.border }}>
+              <button onClick={() => { openTab("about"); toggleMore(); }}
+                className="flex items-center gap-2 w-full px-2 py-2 rounded-xl"
+                style={{ background:"none", border:"none", cursor:"pointer" }}>
+                <Info size={15} color={th.subColor} />
+                <span className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? "عن التطبيق · الإصدار " + APP_VERSION : "About · v" + APP_VERSION}
+                </span>
+              </button>
             </div>
           </div>
         )}
