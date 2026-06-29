@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.54";
+const APP_VERSION = "1.55";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1754,6 +1754,8 @@ const PRIMARY_TABS = [
 ];
 
 const MORE_TABS = [
+  { key: "nearby",   labelAr:"أقرب الأماكن",      labelEn:"Nearby",       icon: Navigation },
+  { key: "calendar",  labelAr:"تقويم الخريف",     labelEn:"Calendar",     icon: Calendar },
   { key: "events",   labelAr:"الفعاليات",         labelEn:"Events",       icon: Calendar },
   { key: "food",     labelAr:"دليل المطاعم",      labelEn:"Restaurants",  icon: Coffee },
   { key: "sites",    labelAr:"خريطة المواقع",     labelEn:"Sites Map",    icon: Navigation },
@@ -4396,6 +4398,292 @@ function AdBanner({ ad, lang, th }) {
   );
 }
 
+
+function NearbyPlaces() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [status, setStatus] = useState("idle"); // idle | loading | done | error
+  const [places, setPlaces] = useState([]);
+  const [userPos, setUserPos] = useState(null);
+
+  // Haversine distance in km
+  function haversine(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function findNearby() {
+    setStatus("loading");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude: ulat, longitude: ulng } = pos.coords;
+        setUserPos({ lat: ulat, lng: ulng });
+        const allPlaces = GUIDE_CATS.flatMap(cat =>
+          cat.places.map(p => ({
+            ar: p.ar, en: p.en, lat: p.lat, lng: p.lng,
+            tag: p.tag, catEmoji: cat.emoji, catKey: cat.key,
+            dist: haversine(ulat, ulng, p.lat, p.lng)
+          }))
+        ).sort((a, b) => a.dist - b.dist);
+        setPlaces(allPlaces.slice(0, 10));
+        setStatus("done");
+      },
+      (err) => { setStatus("error"); },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  }
+
+  const distLabel = (km) => {
+    if (km < 1) return Math.round(km * 1000) + (lang==="ar" ? " م" : " m");
+    return km.toFixed(1) + (lang==="ar" ? " كم" : " km");
+  };
+
+  return (
+    <div className="space-y-3 pb-4">
+      <SectionTitle
+        eyebrow={lang==="ar" ? "اكتشف" : "Discover"}
+        title={lang==="ar" ? "أقرب الأماكن إليك" : "Nearest Places"}
+        icon={Navigation} />
+
+      {status === "idle" && (
+        <div className="rounded-2xl p-6 text-center"
+          style={{ background:th.cardBg, border:`1px solid ${th.border}` }}>
+          <div style={{ fontSize:48, marginBottom:12 }}>📍</div>
+          <div className="text-sm font-bold mb-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "اعرف أقرب معالم ظفار منك" : "Find nearest Dhofar attractions"}
+          </div>
+          <div className="text-xs mb-4" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "سيطلب التطبيق إذن الوصول لموقعك" : "App will request location access"}
+          </div>
+          <button onClick={findNearby}
+            className="rounded-2xl px-6 py-2.5 text-sm font-bold"
+            style={{ background:"#2F5D45", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal" }}>
+            📍 {lang==="ar" ? "تحديد موقعي" : "Find My Location"}
+          </button>
+        </div>
+      )}
+
+      {status === "loading" && (
+        <div className="rounded-2xl p-8 text-center"
+          style={{ background:th.cardBg, border:`1px dashed ${th.border}` }}>
+          <div style={{ fontSize:32 }}>🛰️</div>
+          <div className="text-sm mt-2" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "جاري تحديد موقعك..." : "Locating you..."}
+          </div>
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="rounded-2xl p-5 text-center"
+          style={{ background:"#B5402C10", border:`1px solid #B5402C30` }}>
+          <div style={{ fontSize:32 }}>⚠️</div>
+          <div className="text-sm mt-2 mb-3" style={{ color:"#B5402C", fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "تعذّر تحديد الموقع. تأكد من تفعيل الـ GPS وإذن الموقع" : "Could not get location. Check GPS and permission"}
+          </div>
+          <button onClick={findNearby}
+            className="rounded-xl px-4 py-2 text-xs font-bold"
+            style={{ background:"#B5402C", color:"#fff", border:"none", cursor:"pointer", fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "إعادة المحاولة" : "Retry"}
+          </button>
+        </div>
+      )}
+
+      {status === "done" && userPos && (
+        <>
+          <div className="rounded-xl px-3 py-2 text-xs"
+            style={{ background:"#2F5D4510", color:"#2F5D45", fontFamily:"Tajawal" }}>
+            📡 {lang==="ar"
+              ? `موقعك: ${userPos.lat.toFixed(4)}°, ${userPos.lng.toFixed(4)}°`
+              : `Your position: ${userPos.lat.toFixed(4)}°, ${userPos.lng.toFixed(4)}°`}
+          </div>
+          <div className="space-y-2">
+            {places.map((p, i) => (
+              <a key={i}
+                href={"https://maps.google.com/?q=" + p.lat + "," + p.lng}
+                target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-2xl p-3 transition active:scale-[0.98]"
+                style={{ background:th.cardBg, border:`1px solid ${th.border}`, textDecoration:"none" }}>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl"
+                  style={{ background:"#2F5D4510" }}>{p.catEmoji}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? p.ar : p.en}
+                  </div>
+                  {p.tag && (
+                    <div className="text-[10px]" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                      📍 {lang==="ar" ? p.tag.ar : p.tag.en}
+                    </div>
+                  )}
+                </div>
+                <div className="text-center flex-shrink-0">
+                  <div className="text-sm font-bold" style={{ color: i<3?"#2F5D45":"#C98A2E" }}>
+                    {distLabel(p.dist)}
+                  </div>
+                  <div className="text-[9px]" style={{ color:th.subColor }}>
+                    {lang==="ar" ? (i===0?"الأقرب":"") : (i===0?"Nearest":"")}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <button onClick={() => { setStatus("idle"); setPlaces([]); }}
+            className="w-full rounded-2xl py-2.5 text-xs font-bold"
+            style={{ background:th.border, border:"none", color:th.subColor, cursor:"pointer", fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "↺ تحديث الموقع" : "↺ Refresh Location"}
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
+
+const KHAREEF_EVENTS_2026 = [
+  { date:"2026-07-01", titleAr:"بداية موسم الخريف الرسمي", titleEn:"Khareef Season Opens", emoji:"🌿", type:"season" },
+  { date:"2026-07-05", titleAr:"مهرجان صلالة السياحي - الافتتاح", titleEn:"Salalah Tourism Festival Opening", emoji:"🎪", type:"festival" },
+  { date:"2026-07-10", titleAr:"ليالي الفنون الشعبية", titleEn:"Folk Arts Nights", emoji:"🎭", type:"culture" },
+  { date:"2026-07-15", titleAr:"سباق الهجن بميدان صلالة", titleEn:"Camel Racing at Salalah", emoji:"🐪", type:"sport" },
+  { date:"2026-07-20", titleAr:"معرض اللبان والبخور", titleEn:"Frankincense & Bakhoor Exhibition", emoji:"🌿", type:"heritage" },
+  { date:"2026-07-25", titleAr:"فعاليات المنتزه العام", titleEn:"Public Park Events", emoji:"🎡", type:"family" },
+  { date:"2026-08-01", titleAr:"أمسية ثقافية في خور روري", titleEn:"Cultural Evening at Khor Rori", emoji:"🏛️", type:"culture" },
+  { date:"2026-08-06", titleAr:"يوم الإبل والتراث", titleEn:"Camel & Heritage Day", emoji:"🐫", type:"heritage" },
+  { date:"2026-08-10", titleAr:"مسابقات الأناشيد والشعر", titleEn:"Poetry & Nasheed Competition", emoji:"🎤", type:"culture" },
+  { date:"2026-08-15", titleAr:"ليلة نار الخريف", titleEn:"Khareef Bonfire Night", emoji:"🔥", type:"festival" },
+  { date:"2026-08-20", titleAr:"معرض المنتجات الحرفية", titleEn:"Handicrafts Exhibition", emoji:"🎨", type:"heritage" },
+  { date:"2026-08-25", titleAr:"سباق رياضي على شاطئ المغسيل", titleEn:"Sports Race at Mughsail Beach", emoji:"🏃", type:"sport" },
+  { date:"2026-09-01", titleAr:"احتفالات ختام الموسم", titleEn:"End of Season Celebrations", emoji:"🎆", type:"season" },
+  { date:"2026-09-05", titleAr:"نهاية موسم الخريف الرسمي", titleEn:"Khareef Season Ends", emoji:"🍂", type:"season" },
+];
+
+const EVENT_COLORS = { season:"#2F5D45", festival:"#C98A2E", culture:"#3C6E8F", sport:"#8A4A23", heritage:"#6B4B8A", family:"#2B8A6A" };
+
+function KhareefCalendar() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [activeMonth, setActiveMonth] = useState(7); // July
+  const today = new Date().toISOString().split("T")[0];
+
+  const months = [
+    { num:7, ar:"يوليو", en:"July" },
+    { num:8, ar:"أغسطس", en:"August" },
+    { num:9, ar:"سبتمبر", en:"September" },
+  ];
+
+  const monthEvents = KHAREEF_EVENTS_2026.filter(e => {
+    const m = parseInt(e.date.split("-")[1]);
+    return m === activeMonth;
+  });
+
+  const isPast = (date) => date < today;
+  const isToday = (date) => date === today;
+  const daysLeft = (date) => {
+    const diff = Math.ceil((new Date(date) - new Date(today)) / (1000*60*60*24));
+    return diff;
+  };
+
+  return (
+    <div className="space-y-4 pb-6">
+      <SectionTitle
+        eyebrow={lang==="ar" ? "خريف 2026" : "Khareef 2026"}
+        title={lang==="ar" ? "تقويم الفعاليات" : "Events Calendar"}
+        icon={Calendar} />
+
+      {/* Season progress */}
+      <div className="rounded-2xl p-4" style={{ background:"linear-gradient(135deg,#1F3D2B,#2F5D45)", color:"#fff" }}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-bold" style={{ fontFamily:"Tajawal", opacity:.8 }}>
+            {lang==="ar" ? "موسم الخريف 2026" : "Khareef Season 2026"}
+          </span>
+          <span style={{ fontSize:20 }}>🌧️</span>
+        </div>
+        <div className="text-xs" style={{ fontFamily:"Tajawal", opacity:.75 }}>
+          {lang==="ar" ? "١ يوليو — ٥ سبتمبر" : "July 1 — September 5"}
+        </div>
+        <div className="mt-3 h-2 rounded-full" style={{ background:"rgba(255,255,255,0.2)" }}>
+          <div className="h-2 rounded-full" style={{
+            background:"rgba(255,255,255,0.8)",
+            width: today < "2026-07-01" ? "0%" : today > "2026-09-05" ? "100%" :
+              Math.round((new Date(today)-new Date("2026-07-01"))/(new Date("2026-09-05")-new Date("2026-07-01"))*100)+"%"
+          }} />
+        </div>
+      </div>
+
+      {/* Month tabs */}
+      <div className="flex gap-2">
+        {months.map(m => (
+          <button key={m.num} onClick={() => setActiveMonth(m.num)}
+            className="flex-1 rounded-2xl py-2 text-xs font-bold"
+            style={{
+              background: activeMonth===m.num ? "#2F5D45" : th.cardBg,
+              color: activeMonth===m.num ? "#fff" : th.subColor,
+              border: `1px solid ${activeMonth===m.num ? "#2F5D45" : th.border}`,
+              cursor:"pointer", fontFamily:"Tajawal"
+            }}>
+            {lang==="ar" ? m.ar : m.en}
+          </button>
+        ))}
+      </div>
+
+      {/* Events */}
+      <div className="space-y-2">
+        {monthEvents.length === 0 && (
+          <div className="py-8 text-center text-sm" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "لا توجد فعاليات مسجلة" : "No events registered"}
+          </div>
+        )}
+        {monthEvents.map((ev, i) => {
+          const past = isPast(ev.date);
+          const todayEv = isToday(ev.date);
+          const days = daysLeft(ev.date);
+          const color = EVENT_COLORS[ev.type] || "#2F5D45";
+          const [, , day] = ev.date.split("-");
+          return (
+            <div key={i} className="flex gap-3 rounded-2xl p-3"
+              style={{ background:th.cardBg, border:`1.5px solid ${todayEv?color:th.border}`,
+                opacity: past ? 0.55 : 1 }}>
+              <div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-xl py-2"
+                style={{ background:`${color}15` }}>
+                <div className="text-lg font-bold" style={{ color, lineHeight:1 }}>{parseInt(day)}</div>
+                <div className="text-[9px] font-bold" style={{ color, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? months.find(m=>m.num===activeMonth)?.ar?.slice(0,3) : months.find(m=>m.num===activeMonth)?.en?.slice(0,3)}
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span style={{ fontSize:16 }}>{ev.emoji}</span>
+                  <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? ev.titleAr : ev.titleEn}
+                  </span>
+                </div>
+                <div className="mt-0.5 text-[10px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                  {past
+                    ? (lang==="ar" ? "✅ انتهت" : "✅ Ended")
+                    : todayEv
+                    ? (lang==="ar" ? "🔴 اليوم!" : "🔴 Today!")
+                    : days === 1
+                    ? (lang==="ar" ? "⏰ غداً" : "⏰ Tomorrow")
+                    : (lang==="ar" ? `بعد ${days} أيام` : `In ${days} days`)}
+                </div>
+              </div>
+              {todayEv && (
+                <div className="flex shrink-0 items-center">
+                  <span className="rounded-lg px-2 py-1 text-[10px] font-bold"
+                    style={{ background:color, color:"#fff", fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? "اليوم" : "Today"}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [tab, setTab] = useState("home");
   const [globalAds, setGlobalAds] = useState([]);
@@ -4549,6 +4837,8 @@ export default function App() {
           {tab === "food" && <FoodGuide adsForSection={getAdsForSection("food")} />}
           {tab === "today" && <TodayTab />}
           {tab === "guide" && <TouristGuide />}
+          {tab === "nearby" && <NearbyPlaces />}
+          {tab === "calendar" && <KhareefCalendar />}
           {tab === "explore" && <ExploreTab globalAds={getAdsForSection("explore")} />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
