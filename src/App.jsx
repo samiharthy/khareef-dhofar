@@ -2134,7 +2134,7 @@ function HomeWeatherForecast() {
   );
 }
 
-function Home() {
+function Home({ go, homeAds = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   const EVENTS_PREVIEW = EVENTS.slice(0, 2);
