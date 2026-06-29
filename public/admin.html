@@ -56,7 +56,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
   <div class="header">
     <div>
       <div style="color:#fff;font-weight:800;font-size:17px">🌿 لوحة التحكم</div>
-      <div style="color:rgba(255,255,255,.65);font-size:11px">خريف ظفار 2026 · v1.59</div>
+      <div style="color:rgba(255,255,255,.65);font-size:11px">خريف ظفار 2026 · v1.60</div>
     </div>
     <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:none" onclick="logout()">خروج</button>
   </div>
@@ -332,6 +332,22 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
       </div>
     </div>
   </div>
+    <!-- WhatsApp Settings -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-weight:700;font-size:14px;margin-bottom:10px">⚙️ إعدادات التطبيق</div>
+
+    <label>📱 رقم واتساب الاقتراحات (مع رمز الدولة)</label>
+    <div style="display:flex;gap:8px">
+      <input id="wa-number-input" placeholder="96890000000" style="flex:1;direction:ltr"
+        value="${localStorage.getItem('admin_wa_number')||''}" />
+      <button onclick="saveWaNumber()" class="btn btn-green btn-sm">حفظ</button>
+    </div>
+    <div style="font-size:11px;color:#888;margin-top:4px;font-family:Tajawal">
+      الرقم الذي تصله اقتراحات المستخدمين عبر واتساب
+    </div>
+    <div id="wa-save-msg" style="font-size:12px;margin-top:4px;display:none"></div>
+  </div>
+
   <a href="https://vercel.com/samiharthys-projects/khareef-dhofar/analytics" target="_blank" style="text-decoration:none;display:block">
     <div class="card" style="background:linear-gradient(135deg,#1F3D2B,#2F5D45);color:#fff;text-align:center;padding:16px">
       <div style="font-size:14px;font-weight:800;margin-bottom:3px">🔗 Vercel Analytics الكامل ↗</div>
@@ -1088,6 +1104,18 @@ async function deleteAd(i) {
   } catch(e) { alert("خطأ: "+e.message); }
 }
 
+function saveWaNumber(){
+  const n = document.getElementById("wa-number-input")?.value?.trim();
+  if(!n){ showMsg("wa-save-msg","أدخل رقم الهاتف",false); return; }
+  localStorage.setItem("admin_wa_number", n);
+  // Update the GitHub file with new WA number
+  showMsg("wa-save-msg","✅ الرقم محفوظ محلياً","true");
+  // Note: to update in app, change ADMIN_WA in App.jsx via GitHub API
+  setTimeout(()=>{
+    const msg="لتطبيق هذا الرقم في التطبيق، يجب تحديث App.jsx من خلال المطور.";
+    document.getElementById("wa-save-msg").textContent=msg;
+  }, 2000);
+}
 function showMsg(id,text,ok){
   const el=document.getElementById(id);
   if(!el) return;
