@@ -67,6 +67,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     <button class="tab" onclick="showTab('locs')">📍 المواقع</button>
     <button class="tab" onclick="showTab('stats')">📊 الإحصائيات</button>
     <button class="tab" onclick="showTab('ads')">📢 الإعلانات</button>
+    <button class="tab" onclick="showTab('photos')">🖼️ الصور</button>
   </div>
 
   <div style="max-width:600px;margin:0 auto;padding:18px">
@@ -422,6 +423,50 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     </div>
 
 
+    <!-- PHOTOS TAB -->
+    <div id="tab-photos" style="display:none">
+      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:12px 16px;margin-bottom:10px">
+        <div style="font-size:12px;font-weight:700;color:#2F5D45;margin-bottom:4px">🖼️ إدارة صور المواقع</div>
+        <div style="font-size:11px;color:#555;line-height:1.7">
+          أضف رابط صورة لكل موقع — تظهر <b>في كارد الموقع</b> عند التصفح في استكشف.<br>
+          يمكن استخدام روابط من: <b>Google Photos · iCloud · Unsplash · أي رابط مباشر</b>
+        </div>
+      </div>
+
+      <!-- How photos appear explanation -->
+      <div class="card" style="padding:12px">
+        <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:8px">📱 أين تظهر الصور؟</div>
+        <div style="display:flex;gap:8px;font-size:11px;color:#666">
+          <div style="flex:1;background:#f5f5f5;border-radius:10px;padding:10px">
+            <div style="font-size:16px;margin-bottom:4px">📸</div>
+            <div style="font-weight:700;margin-bottom:2px">بدون صورة</div>
+            <div>يظهر إيموجي التصنيف</div>
+          </div>
+          <div style="flex:1;background:#2F5D4510;border-radius:10px;padding:10px;border:1px solid #2F5D4530">
+            <div style="font-size:16px;margin-bottom:4px">🌟</div>
+            <div style="font-weight:700;margin-bottom:2px;color:#2F5D45">مع صورة</div>
+            <div>صورة 140px + اسم + أزرار</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category filter -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="sec-filter-btn" style="background:#2F5D45;color:#fff;border-color:#2F5D45"
+          onclick="filterPhotoCat('all')">الكل</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('beaches')">🏖️ الشواطئ</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('springs')">💧 العيون</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('valleys')">🏞️ الأودية</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('viewpoints')">🔭 المطلات</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('heritage')">🏛️ التراث</button>
+        <button class="sec-filter-btn" onclick="filterPhotoCat('religious')">🕌 الديني</button>
+      </div>
+
+      <div id="photos-count" style="font-size:13px;font-weight:700;margin-bottom:10px">...</div>
+      <div id="photos-list"></div>
+    </div>
+
+
 <script>
 const REPO = "samiharthy/khareef-dhofar";
 const ALERT_PATH = "public/alert.json";
@@ -511,7 +556,7 @@ async function ghPut(path,content,sha,msg){
 }
 
 function showTab(tab){
-  ["notif","posts","locs","stats","ads"].forEach(t=>{
+  ["notif","posts","locs","stats","ads","photos"].forEach(t=>{
     const el=document.getElementById("tab-"+t);
     if(el) el.style.display=t===tab?"block":"none";
   });
@@ -522,6 +567,7 @@ function showTab(tab){
   if(tab==="locs"){ renderLocations(); loadLocations(); }
   if(tab==="stats") loadVercelStats();
   if(tab==="ads") loadAds();
+  if(tab==="photos") loadPhotos();
 }
 
 function showSubTab(sub){
@@ -1116,6 +1162,125 @@ function saveWaNumber(){
     document.getElementById("wa-save-msg").textContent=msg;
   }, 2000);
 }
+
+// ── PHOTOS ────────────────────────────────────────────────────────────────────
+const PHOTOS_PATH = "public/place-photos.json";
+const ALL_PLACES = [{"ar": "شاطئ المغسيل", "en": "Mughsail Beach", "lat": 16.8794, "lng": 53.7766, "cat": "beaches", "emoji": "🏖️"}, {"ar": "شاطئ الفزايح", "en": "Fazayah Beach", "lat": 16.8405, "lng": 53.7214, "cat": "beaches", "emoji": "🏖️"}, {"ar": "شاطئ مرباط", "en": "Mirbat Beach", "lat": 16.9931, "lng": 54.691, "cat": "beaches", "emoji": "🏖️"}, {"ar": "شاطئ طاقة", "en": "Taqah Beach", "lat": 17.0334, "lng": 54.3942, "cat": "beaches", "emoji": "🏖️"}, {"ar": "شاطئ الدهاريز", "en": "Dahariz Beach", "lat": 17.0078, "lng": 54.1128, "cat": "beaches", "emoji": "🏖️"}, {"ar": "عين رزات", "en": "Ain Razat", "lat": 17.1299, "lng": 54.2381, "cat": "springs", "emoji": "💧"}, {"ar": "عين حمران", "en": "Ain Hamran", "lat": 17.0974, "lng": 54.2809, "cat": "springs", "emoji": "💧"}, {"ar": "عين صحلنوت", "en": "Ain Sahalnoot", "lat": 17.1481, "lng": 54.1783, "cat": "springs", "emoji": "💧"}, {"ar": "عين أثوم", "en": "Ain Athum", "lat": 17.1132, "lng": 54.365, "cat": "springs", "emoji": "💧"}, {"ar": "عين طبرق", "en": "Ain Tabrok", "lat": 17.1006, "lng": 54.3266, "cat": "springs", "emoji": "💧"}, {"ar": "عين جرزيز", "en": "Ain Garziz", "lat": 17.1059, "lng": 54.0742, "cat": "springs", "emoji": "💧"}, {"ar": "عين كور", "en": "Ain Khor", "lat": 17.0499, "lng": 53.9641, "cat": "springs", "emoji": "💧"}, {"ar": "وادي دربات", "en": "Wadi Darbat", "lat": 17.076, "lng": 54.4358, "cat": "valleys", "emoji": "🏞️"}, {"ar": "شلال وادي دربات", "en": "Darbat Waterfall", "lat": 17.0721, "lng": 54.4528, "cat": "valleys", "emoji": "🏞️"}, {"ar": "وادي نحيز", "en": "Wadi Naheez", "lat": 17.09, "lng": 54.07, "cat": "valleys", "emoji": "🏞️"}, {"ar": "وادي دوكة", "en": "Wadi Dawkah", "lat": 17.3387, "lng": 54.0769, "cat": "valleys", "emoji": "🏞️"}, {"ar": "مطل جبل سمحان", "en": "Jabal Samhan View", "lat": 17.1026, "lng": 54.6981, "cat": "viewpoints", "emoji": "🔭"}, {"ar": "مطل طاقة", "en": "Taqah Viewpoint", "lat": 17.038, "lng": 54.4, "cat": "viewpoints", "emoji": "🔭"}, {"ar": "مطل ثيتام", "en": "Theetham View", "lat": 17.06, "lng": 54.08, "cat": "viewpoints", "emoji": "🔭"}, {"ar": "نقطة الجاذبية العكسية", "en": "Anti-Gravity Point", "lat": 17.0394, "lng": 54.6135, "cat": "viewpoints", "emoji": "🔭"}, {"ar": "متحف أرض اللبان", "en": "Land of Frankincense Museum", "lat": 17.0178, "lng": 54.0934, "cat": "heritage", "emoji": "🏛️"}, {"ar": "خور روري / سمهرم", "en": "Khor Rori / Sumhuram", "lat": 17.0394, "lng": 54.4347, "cat": "heritage", "emoji": "🏛️"}, {"ar": "حصن مرباط", "en": "Mirbat Castle", "lat": 16.9925, "lng": 54.6916, "cat": "heritage", "emoji": "🏛️"}, {"ar": "حفرة طوي أعتير", "en": "Tawi Atair Sinkhole", "lat": 17.1132, "lng": 54.5603, "cat": "heritage", "emoji": "🏛️"}, {"ar": "سوق الحافة", "en": "Haffa Market", "lat": 17.0151, "lng": 54.0881, "cat": "heritage", "emoji": "🏛️"}, {"ar": "ضريح النبي عمران", "en": "Tomb of Prophet Umran", "lat": 17.0094, "lng": 54.101, "cat": "religious", "emoji": "🕌"}, {"ar": "ضريح النبي أيوب", "en": "Tomb of Prophet Ayoub", "lat": 17.049, "lng": 54.147, "cat": "religious", "emoji": "🕌"}, {"ar": "ضريح بن علي", "en": "Bin Ali Tomb", "lat": 16.9925, "lng": 54.695, "cat": "religious", "emoji": "🕌"}, {"ar": "جامع السلطان قابوس", "en": "Sultan Qaboos Mosque", "lat": 17.018, "lng": 54.094, "cat": "religious", "emoji": "🕌"}];
+const CAT_LABELS = {"beaches":"الشواطئ","springs":"العيون","valleys":"الأودية","viewpoints":"المطلات","heritage":"التراث","religious":"الديني"};
+let photosData = {"_categories": {"beaches": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75&auto=format&fit=crop", "springs": "https://images.unsplash.com/photo-1541974590-e9dc18449327?w=600&q=75&auto=format&fit=crop", "valleys": "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=75&auto=format&fit=crop", "viewpoints": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=75&auto=format&fit=crop", "heritage": "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600&q=75&auto=format&fit=crop", "religious": "https://images.unsplash.com/photo-1564769625905-50e93615e769?w=600&q=75&auto=format&fit=crop"}, "_places": {"شاطئ المغسيل": "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=75&auto=format&fit=crop", "وادي دربات": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=75&auto=format&fit=crop", "عين رزات": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=75&auto=format&fit=crop", "حصن مرباط": "https://images.unsplash.com/photo-1609767815978-0f92b261bdd8?w=600&q=75&auto=format&fit=crop", "حفرة طوي أعتير": "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&q=75&auto=format&fit=crop", "متحف أرض اللبان": "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=600&q=75&auto=format&fit=crop", "شاطئ الفزايح": "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=75&auto=format&fit=crop", "مطل جبل سمحان": "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&q=75&auto=format&fit=crop"}};
+let photosSha = "2bd96ad43b4e1829de3b51a1cb45ca849dc209aa";
+let photosCatFilter = "all";
+
+async function loadPhotos() {
+  document.getElementById("photos-count").textContent = "⏳ تحميل...";
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+    if(r.ok) {
+      const d = await r.json();
+      photosSha = d.sha;
+      const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
+      photosData = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+    }
+  } catch(e) {}
+  renderPhotos();
+}
+
+function filterPhotoCat(cat) {
+  photosCatFilter = cat;
+  document.querySelectorAll("#tab-photos .sec-filter-btn").forEach(b => {
+    const isActive = b.getAttribute("onclick")?.includes("'"+cat+"'");
+    b.style.background = isActive ? "#2F5D45" : "#fff";
+    b.style.color = isActive ? "#fff" : "#555";
+    b.style.borderColor = isActive ? "#2F5D45" : "#ddd";
+  });
+  renderPhotos();
+}
+
+function renderPhotos() {
+  const placePhotos = photosData._places || {};
+  const catPhotos = photosData._categories || {};
+  const filtered = photosCatFilter === "all" ? ALL_PLACES : ALL_PLACES.filter(p => p.cat === photosCatFilter);
+  const withPhoto = filtered.filter(p => placePhotos[p.ar]).length;
+  document.getElementById("photos-count").textContent = `${filtered.length} موقع · ${withPhoto} مع صورة · ${filtered.length - withPhoto} بدون`;
+
+  const list = document.getElementById("photos-list");
+  list.innerHTML = "";
+
+  filtered.forEach(function(place) {
+    const currentUrl = placePhotos[place.ar] || "";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.cssText = "padding:12px;margin-bottom:8px";
+
+    // Preview + info row
+    const topRow = document.createElement("div");
+    topRow.style.cssText = "display:flex;gap:10px;align-items:center;margin-bottom:10px";
+
+    // Photo preview
+    const previewWrap = document.createElement("div");
+    previewWrap.style.cssText = "width:70px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0f0f0;display:flex;align-items:center;justify-content:center";
+    if (currentUrl) {
+      const img = document.createElement("img");
+      img.src = currentUrl + (currentUrl.includes("?")?"&":"?") + "w=70&h=52&fit=crop&q=60";
+      img.style.cssText = "width:100%;height:100%;object-fit:cover";
+      img.onerror = function() { this.parentElement.innerHTML = "<span style=\"font-size:24px\">" + place.emoji + "</span>"; };
+      previewWrap.appendChild(img);
+    } else {
+      previewWrap.innerHTML = `<span style="font-size:24px">${place.emoji}</span>`;
+    }
+    topRow.appendChild(previewWrap);
+
+    // Name + cat
+    const info = document.createElement("div");
+    info.style.cssText = "flex:1;min-width:0";
+    info.innerHTML = `<div style="font-size:13px;font-weight:700">${place.ar}</div>
+      <div style="font-size:11px;color:#888">${place.en}</div>
+      <div style="font-size:10px;color:#2F5D45">${place.emoji} ${CAT_LABELS[place.cat]||place.cat}</div>`;
+    topRow.appendChild(info);
+
+    card.appendChild(topRow);
+
+    // URL input row
+    const inputRow = document.createElement("div");
+    inputRow.style.cssText = "display:flex;gap:6px";
+    const input = document.createElement("input");
+    input.value = currentUrl;
+    input.placeholder = "https://images.unsplash.com/photo-... أو رابط صورة مباشر";
+    input.style.cssText = "flex:1;border:1.5px solid #ddd;border-radius:8px;padding:6px 10px;font-size:12px;font-family:Tajawal;direction:ltr";
+    input.addEventListener("input", function() {
+      input.style.borderColor = input.value ? "#2F5D45" : "#ddd";
+    });
+
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "💾 حفظ";
+    saveBtn.style.cssText = "background:#2F5D45;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:Tajawal;flex-shrink:0";
+    (function(p, inp) {
+      saveBtn.onclick = async function() {
+        const url = inp.value.trim();
+        if (!photosData._places) photosData._places = {};
+        if (url) {
+          photosData._places[p.ar] = url;
+        } else {
+          delete photosData._places[p.ar];
+        }
+        try {
+          const res = await ghPut(PHOTOS_PATH, photosData, photosSha, "photo: " + p.ar);
+          photosSha = res.content.sha;
+          renderPhotos();
+          saveBtn.textContent = "✅";
+          setTimeout(() => { saveBtn.textContent = "💾 حفظ"; }, 1500);
+        } catch(e) { alert("خطأ: " + e.message); }
+      };
+    })(place, input);
+
+    inputRow.appendChild(input);
+    inputRow.appendChild(saveBtn);
+    card.appendChild(inputRow);
+    list.appendChild(card);
+  });
+}
+
 function showMsg(id,text,ok){
   const el=document.getElementById(id);
   if(!el) return;
