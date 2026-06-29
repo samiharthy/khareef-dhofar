@@ -15,6 +15,21 @@
     "phone": "+96823210000"
   },
   {
+    "nAr": "مطعم البيك",
+    "nEn": "Al Baik",
+    "type": "fast",
+    "priceAr": "اقتصادي",
+    "priceEn": "Budget",
+    "lat": 17.0144,
+    "lng": 54.0867,
+    "note": {
+      "ar": "وجبات سريعة شعبي",
+      "en": "Popular fast food"
+    },
+    "open": "10:00-02:00",
+    "phone": ""
+  },
+  {
     "nAr": "مطعم نزوى",
     "nEn": "Nizwa Restaurant",
     "type": "seafood",
@@ -73,5 +88,20 @@
     },
     "open": "6:00-23:00",
     "phone": ""
+  },
+  {
+    "nAr": "مطعم ومطبخ عين الخليج (مضابي9)",
+    "nEn": "Ain Alkhaleej Madbi 9 - Salalah",
+    "type": "arabic",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "lat": 17.0330278,
+    "lng": 54.1093611,
+    "open": "08:00-23:00",
+    "phone": "+96892002158",
+    "note": {
+      "ar": "ما يطلبه أهلُ الدار لأنفسهم، ويقدّمونه لضيوفهم أوّلًا — أربعةُ أطباقٍ عليها قامت الدار.",
+      "en": "First time here? Start with these four — the dishes we sign our name to."
+    }
   }
 ]
