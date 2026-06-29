@@ -2209,24 +2209,7 @@ function Home({ go, homeAds = [] }) {
 
       {/* Sponsored */}
       {homeAds.map((ad, i) => (
-        <a key={"had"+i} href={ad.url||"#"} target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-2xl p-3"
-          style={{ background:`${ad.color||"#2F5D45"}10`,
-            border:`1px solid ${ad.color||"#2F5D45"}25`, textDecoration:"none" }}>
-          <span style={{fontSize:22,flexShrink:0}}>{ad.emoji||"🌟"}</span>
-          <div className="flex-1 min-w-0">
-            <span style={{fontSize:9,fontWeight:700,padding:"1px 6px",borderRadius:4,
-              background:ad.color||"#2F5D45",color:"#fff",fontFamily:"Tajawal"}}>
-              {lang==="ar"?"مُموَّل":"Sponsored"}
-            </span>
-            <div style={{fontSize:13,fontWeight:700,color:th.titleColor,fontFamily:"Tajawal",marginTop:2}}>
-              {lang==="ar"?ad.titleAr:ad.titleEn}
-            </div>
-            <div style={{fontSize:11,color:th.subColor,fontFamily:"Tajawal"}}>
-              {lang==="ar"?ad.descAr:ad.descEn}
-            </div>
-          </div>
-        </a>
+        <AdBanner key={"had"+i} ad={ad} lang={lang} th={th} />
       ))}
 
 
@@ -3290,16 +3273,7 @@ function FoodGuide({ adsForSection = [] }) {
     <div className="space-y-4 pb-6">
       <SectionTitle eyebrow={lang==="ar"?"دليل":"Guide"} title={lang==="ar"?"دليل المطاعم":"Restaurant Guide"} icon={Coffee} />
       {adsForSection.map((ad,i)=>(
-        <a key={"fad"+i} href={ad.url||"#"} target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-3 rounded-2xl p-3"
-          style={{background:`${ad.color||"#C98A2E"}10`,border:`1px solid ${ad.color||"#C98A2E"}30`,textDecoration:"none"}}>
-          <span style={{fontSize:22}}>{ad.emoji||"🍽️"}</span>
-          <div className="flex-1">
-            <span style={{fontSize:9,background:ad.color||"#C98A2E",color:"#fff",borderRadius:4,padding:"1px 6px",fontWeight:700,fontFamily:"Tajawal"}}>{lang==="ar"?"مُموَّل":"Sponsored"}</span>
-            <div style={{fontSize:13,fontWeight:700,color:th.titleColor,fontFamily:"Tajawal",marginTop:2}}>{lang==="ar"?ad.titleAr:ad.titleEn}</div>
-            <div style={{fontSize:11,color:th.subColor,fontFamily:"Tajawal"}}>{lang==="ar"?ad.descAr:ad.descEn}</div>
-          </div>
-        </a>
+        <AdBanner key={"fad"+i} ad={ad} lang={lang} th={th} />
       ))}
       <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth:"none" }}>
         {Object.entries(FOOD_TYPES).map(([key, val]) => (
@@ -4386,6 +4360,42 @@ function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
     </div>
   );
 }
+
+function AdBanner({ ad, lang, th }) {
+  if (!ad) return null;
+  return (
+    <a href={ad.url || "#"} target="_blank" rel="noopener noreferrer"
+      className="block overflow-hidden rounded-2xl transition active:scale-[0.98]"
+      style={{ textDecoration:"none", border:`1px solid ${ad.color||"#2F5D45"}30` }}>
+      {ad.imageUrl && (
+        <img src={ad.imageUrl} alt={lang==="ar"?ad.titleAr:ad.titleEn}
+          style={{ width:"100%", height:120, objectFit:"cover", display:"block" }}
+          onError={e => e.target.style.display="none"} />
+      )}
+      <div className="flex items-center gap-3 p-3"
+        style={{ background:`${ad.color||"#2F5D45"}10` }}>
+        <span style={{ fontSize:22, flexShrink:0 }}>{ad.emoji || "🌟"}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+              style={{ background:ad.color||"#2F5D45", color:"#fff", fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "مُموَّل" : "Sponsored"}
+            </span>
+          </div>
+          <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? ad.titleAr : ad.titleEn}
+          </div>
+          {(ad.descAr || ad.descEn) && (
+            <div className="text-[11px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? ad.descAr : ad.descEn}
+            </div>
+          )}
+        </div>
+      </div>
+    </a>
+  );
+}
+
 export default function App() {
   const [tab, setTab] = useState("home");
   const [globalAds, setGlobalAds] = useState([]);
@@ -4397,8 +4407,12 @@ export default function App() {
       .catch(() => {});
   }, []);
 
+  const today = new Date().toISOString().split("T")[0];
   const getAdsForSection = (section) =>
-    globalAds.filter(ad => !ad.section || ad.section === "all" || ad.section === section);
+    globalAds.filter(ad => {
+      if (ad.expiry && ad.expiry < today) return false; // expired
+      return !ad.section || ad.section === "all" || ad.section === section;
+    });
   const [moreOpen, setMoreOpen] = useState(false);
   const [lang, setLang] = useState("ar");
   const [theme, setTheme] = useState("light");
