@@ -370,6 +370,14 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
         <label>وصف إنجليزي</label><input id="ad-desc-en" placeholder="Short description..." />
         <label>الرابط (عند الضغط)</label><input id="ad-url" placeholder="https://..." />
         <label>إيموجي</label><input id="ad-emoji" placeholder="🏨" style="width:80px" />
+        <label>رابط الصورة (اختياري)</label>
+        <input id="ad-image" placeholder="https://example.com/image.jpg" oninput="previewAdImg()" />
+        <div id="ad-img-preview" style="display:none;margin:6px 0">
+          <img id="ad-img-el" style="width:100%;max-height:120px;object-fit:cover;border-radius:10px"
+            onerror="this.parentElement.style.display='none'" />
+        </div>
+        <label>تاريخ انتهاء الإعلان</label>
+        <input type="date" id="ad-expiry" />
         <label>القسم (أين يظهر في التطبيق)</label>
         <select id="ad-section" style="width:100%;border:1.5px solid #E5E0D5;border-radius:10px;padding:10px 14px;font-size:13px;background:#FAFAF8">
           <option value="all">كل الأقسام</option>
@@ -464,11 +472,20 @@ async function ghGet(path){
   return {content:JSON.parse(new TextDecoder("utf-8").decode(bytes)),sha:d.sha};
 }
 async function ghPut(path,content,sha,msg){
-  const body={message:msg,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))};
-  if(sha) body.sha=sha;
-  const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{method:"PUT",headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify(body)});
-  if(!r.ok) throw new Error(`GitHub ${r.status}: ${await r.text()}`);
-  return await r.json();
+  // If SHA is stale, fetch fresh one
+  async function tryPut(s){
+    const body={message:msg,content:btoa(unescape(encodeURIComponent(JSON.stringify(content,null,2))))};
+    if(s) body.sha=s;
+    const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{method:"PUT",headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(r.status===409){
+      // SHA conflict — fetch fresh SHA and retry
+      const fr=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`,{headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+      if(fr.ok){const fd=await fr.json();return tryPut(fd.sha);}
+    }
+    if(!r.ok) throw new Error(`GitHub ${r.status}: ${await r.text()}`);
+    return await r.json();
+  }
+  return tryPut(sha);
 }
 
 function showTab(tab){
@@ -952,10 +969,16 @@ let adsData = {enabled:false, ads:[]}, adsSha = null;
 
 async function loadAds() {
   try {
-    const {content, sha} = await ghGet(ADS_PATH);
-    adsSha = sha;
-    adsData = content || {enabled:false, ads:[]};
-  } catch(e) { adsData = {enabled:false, ads:[]}; }
+    // Always fetch with SHA from GitHub API directly
+    const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${ADS_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+    if(r.ok){
+      const d=await r.json();
+      adsSha=d.sha;
+      const bytes=Uint8Array.from(atob(d.content.replace(/\n/g,"")),c=>c.charCodeAt(0));
+      adsData=JSON.parse(new TextDecoder("utf-8").decode(bytes));
+    } else { adsData={enabled:false,ads:[]}; }
+  } catch(e) { adsData={enabled:false,ads:[]}; }
   renderAds();
 }
 
@@ -976,6 +999,7 @@ function renderAds() {
     card.className = "card";
     card.style.cssText = "padding:12px 14px;margin-bottom:8px;border-right:4px solid "+(ad.color||"#2F5D45");
     card.innerHTML = `
+      ${ad.imageUrl?`<img src="${ad.imageUrl}" style="width:100%;height:80px;object-fit:cover;border-radius:10px;margin-bottom:8px" onerror="this.style.display='none'" />`:""}
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
@@ -986,7 +1010,11 @@ function renderAds() {
             </div>
           </div>
           <div style="font-size:11px;color:#555;margin-bottom:4px">${ad.descAr||""}</div>
-          ${ad.url?`<a href="${ad.url}" target="_blank" style="font-size:10px;color:#3C6E8F">${ad.url.slice(0,40)}...</a>`:""}
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            ${ad.url?`<a href="${ad.url}" target="_blank" style="font-size:10px;color:#3C6E8F">${ad.url.slice(0,35)}...</a>`:""}
+            ${ad.expiry?`<span style="font-size:10px;color:#C98A2E">⏰ ينتهي: ${ad.expiry}</span>`:""}
+            <span style="font-size:10px;color:#2F5D45">📍 ${ad.section==="all"?"كل الأقسام":ad.section||"كل"}</span>
+          </div>
         </div>
         <button onclick="deleteAd(${i})"
           style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700;flex-shrink:0;margin-right:4px">حذف</button>
@@ -1015,16 +1043,26 @@ async function addAd() {
     url:     document.getElementById("ad-url").value.trim(),
     emoji:   document.getElementById("ad-emoji").value.trim() || "🌟",
     color:   document.getElementById("ad-color").value.trim() || "#2F5D45",
-    section: document.getElementById("ad-section").value || "all",
+    section:  document.getElementById("ad-section").value || "all",
+    imageUrl: document.getElementById("ad-image").value.trim() || null,
+    expiry:   document.getElementById("ad-expiry").value || null,
   };
   adsData.ads = [...(adsData.ads||[]), ad];
   try {
     const res = await ghPut(ADS_PATH, adsData, adsSha, "add ad: "+titleAr);
     adsSha = res.content.sha;
     renderAds();
-    ["ad-title-ar","ad-title-en","ad-desc-ar","ad-desc-en","ad-url","ad-emoji","ad-color"].forEach(id=>document.getElementById(id).value="");
+    ["ad-title-ar","ad-title-en","ad-desc-ar","ad-desc-en","ad-url","ad-emoji","ad-color","ad-image","ad-expiry"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("ad-img-preview").style.display="none";
     showMsg("ad-msg","✅ تمت الإضافة! فعّل الإعلانات لتظهر في التطبيق",true);
   } catch(e) { showMsg("ad-msg","❌ "+e.message,false); }
+}
+
+function previewAdImg(){
+  const url=document.getElementById("ad-image").value.trim();
+  const wrap=document.getElementById("ad-img-preview");
+  if(url){document.getElementById("ad-img-el").src=url;wrap.style.display="block";}
+  else wrap.style.display="none";
 }
 
 async function deleteAd(i) {
