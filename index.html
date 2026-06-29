@@ -56,7 +56,13 @@
         button { min-height: 48px; }
       }
     </style>
-  </head>
+    <style>
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+  </style>
+</head>
   <body><!-- v1.50 -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
