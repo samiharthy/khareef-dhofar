@@ -2893,20 +2893,16 @@ function About() {
       </div>
 
       {/* Install from About */}
-      {!window.matchMedia("(display-mode: standalone)").matches && (
-        <div className="rounded-2xl p-4 text-center"
-          style={{ background:"#2F5D4510", border:"1.5px solid #2F5D4540" }}>
-          <div className="text-sm font-bold mb-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-            {lang==="ar" ? "📲 تثبيت التطبيق" : "📲 Install App"}
-          </div>
-          <div className="text-xs mb-3" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-            {lang==="ar"
-              ? "أضف التطبيق لشاشتك الرئيسية للوصول السريع"
-              : "Add to home screen for quick access"}
-          </div>
-          <InstallBanner />
+      <div className="rounded-2xl p-4"
+        style={{ background:"#2F5D4510", border:"1.5px solid #2F5D4540" }}>
+        <div className="text-sm font-bold mb-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "📲 تثبيت التطبيق" : "📲 Install App"}
         </div>
-      )}
+        <div className="text-xs mb-3" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "أضف التطبيق لشاشتك الرئيسية للوصول السريع" : "Add to home screen for quick access"}
+        </div>
+        <InstallAction lang={lang} th={th} />
+      </div>
 
       {/* Footer */}
       <div className="text-center py-2">
@@ -4980,7 +4976,7 @@ function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle,
               width:26, height:26, borderRadius:8, background:"#2F5D4315", textDecoration:"none" }}>
             <MapPin size={13} color="#2F5D45" />
           </a>
-          <a href={"https://wa.me/?text=" + encodeURIComponent((lang==="ar"?"اكتشف ":"Discover ") + name + " - " + href)}
+          <a href={"https://api.whatsapp.com/send?text=" + encodeURIComponent(name + " | " + href)}
             target="_blank" rel="noopener noreferrer"
             style={{ display:"flex", alignItems:"center", justifyContent:"center",
               width:26, height:26, borderRadius:8, background:"#25D36615", textDecoration:"none",
@@ -5042,27 +5038,30 @@ function HapticButton({ onClick, children, style, className, type="button" }) {
 const ONBOARDING_SCREENS = [
   {
     emoji: "🌿",
-    gradient: "linear-gradient(160deg, #1F3D2B 0%, #2F5D45 50%, #4a8a6a 100%)",
+    photo: "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80&auto=format&fit=crop",
+    gradient: "linear-gradient(180deg,rgba(5,20,10,0.25) 0%,rgba(15,40,25,0.88) 55%,rgba(25,60,35,0.98) 100%)",
     titleAr: "مرحباً بك في خريف ظفار 2026",
     titleEn: "Welcome to Khareef Dhofar 2026",
     descAr: "دليلك الشامل لموسم الخريف — الطقس والمواقع والفعاليات وأكثر",
     descEn: "Your complete guide to Dhofar Khareef season — weather, places, events and more"
   },
   {
-    emoji: "🗺️",
-    gradient: "linear-gradient(160deg, #1a3a5c 0%, #2a5c8a 50%, #3a7ab8 100%)",
+    emoji: "🏖️",
+    photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80&auto=format&fit=crop",
+    gradient: "linear-gradient(180deg,rgba(5,15,30,0.20) 0%,rgba(10,35,70,0.88) 55%,rgba(15,50,100,0.98) 100%)",
     titleAr: "استكشف أجمل المواقع السياحية",
     titleEn: "Explore the Most Beautiful Attractions",
-    descAr: "شواطئ · عيون · أودية · تراث. ابحث وأضف مفضلاتك",
-    descEn: "Beaches · Springs · Valleys · Viewpoints · Heritage Search and save your favorites"
+    descAr: "شواطئ · عيون · أودية · تراث · مطلات. ابحث وأضف مفضلاتك",
+    descEn: "Beaches · Springs · Valleys · Heritage · Viewpoints. Save your favorites"
   },
   {
     emoji: "📍",
-    gradient: "linear-gradient(160deg, #3d1f2b 0%, #5d2f45 50%, #8a4a6a 100%)",
+    photo: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&auto=format&fit=crop",
+    gradient: "linear-gradient(180deg,rgba(20,10,5,0.20) 0%,rgba(50,25,10,0.88) 55%,rgba(80,35,15,0.98) 100%)",
     titleAr: "أقرب الأماكن وتقويم الفعاليات",
     titleEn: "Nearest Places & Events Calendar",
     descAr: "حدّد موقعك واكتشف أقرب المواقع وتابع فعاليات الخريف 2026",
-    descEn: "Locate yourself to find nearby spots Follow Khareef 2026 events calendar"
+    descEn: "Locate yourself to find nearby spots and follow Khareef 2026 events"
   }
 ];
 
@@ -5130,6 +5129,113 @@ function Onboarding({ onDone, lang }) {
         </button>
       </div>
     </div>
+  );
+}
+
+
+function InstallAction({ lang, th }) {
+  const haptic = useHaptic();
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showGuide, setShowGuide] = useState(false);
+  const [installed, setInstalled] = useState(false);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+
+  useEffect(() => {
+    const h = e => { e.preventDefault(); setDeferredPrompt(e); };
+    window.addEventListener("beforeinstallprompt", h);
+    window.addEventListener("appinstalled", () => setInstalled(true));
+    return () => {
+      window.removeEventListener("beforeinstallprompt", h);
+    };
+  }, []);
+
+  if (isStandalone || installed) {
+    return (
+      <div className="rounded-2xl p-3 text-center text-xs"
+        style={{ background:"#2F5D4510", color:"#2F5D45", fontFamily:"Tajawal" }}>
+        {lang==="ar" ? "✅ التطبيق مثبّت على شاشتك الرئيسية" : "✅ App is installed on your home screen"}
+      </div>
+    );
+  }
+
+  const handleInstall = async () => {
+    haptic.medium();
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setInstalled(true);
+        haptic.success();
+        const n = parseInt(localStorage.getItem("kh_installs")||"0")+1;
+        localStorage.setItem("kh_installs", n.toString());
+      }
+      setDeferredPrompt(null);
+    } else {
+      setShowGuide(true);
+    }
+  };
+
+  const iosSteps = [
+    { ar:"افتح التطبيق في Safari (ليس Chrome)", en:"Open in Safari (not Chrome)" },
+    { ar:"اضغط زر المشاركة ↑ في الشريط السفلي", en:"Tap Share ↑ button at the bottom" },
+    { ar:'اختر "إضافة إلى الشاشة الرئيسية"', en:'Select "Add to Home Screen"' },
+    { ar:'اضغط "إضافة"', en:'Tap "Add"' },
+  ];
+  const androidSteps = [
+    { ar:"افتح قائمة المتصفح (⋮) في الأعلى", en:"Open browser menu (⋮) at top" },
+    { ar:'اختر "إضافة إلى الشاشة الرئيسية"', en:'Select "Add to Home Screen"' },
+    { ar:'اضغط "إضافة"', en:'Tap "Add"' },
+  ];
+
+  return (
+    <>
+      <button onClick={handleInstall}
+        className="flex items-center justify-center gap-2 w-full rounded-2xl py-3.5 font-bold text-sm"
+        style={{ background:"#2F5D45", color:"#fff", border:"none",
+          cursor:"pointer", fontFamily:"Tajawal" }}>
+        {deferredPrompt
+          ? (lang==="ar" ? "⬇️ تثبيت التطبيق مباشرة" : "⬇️ Install App Now")
+          : (lang==="ar" ? "📲 كيفية إضافة للشاشة الرئيسية" : "📲 How to Add to Home Screen")}
+      </button>
+
+      {showGuide && (
+        <div style={{ position:"fixed", inset:0, zIndex:200, background:"rgba(0,0,0,.75)",
+          display:"flex", alignItems:"flex-end", padding:16 }}
+          onClick={() => setShowGuide(false)}>
+          <div style={{ width:"100%", maxWidth:420, margin:"0 auto",
+            background:th.cardBg, borderRadius:20, padding:20 }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:16 }}>
+              <span style={{ fontSize:15, fontWeight:800, color:th.titleColor, fontFamily:"Tajawal" }}>
+                {"📲 "}{lang==="ar"
+                  ? (isIOS ? "تثبيت على iPhone/iPad" : "إضافة للشاشة الرئيسية")
+                  : (isIOS ? "Install on iPhone/iPad" : "Add to Home Screen")}
+              </span>
+              <button onClick={() => setShowGuide(false)}
+                style={{ background:"none", border:"none", fontSize:22, cursor:"pointer", color:th.subColor }}>✕</button>
+            </div>
+            {(isIOS ? iosSteps : androidSteps).map((s, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"center", gap:12,
+                padding:"10px 12px", background:th.border, borderRadius:12, marginBottom:8 }}>
+                <span style={{ background:"#2F5D45", color:"#fff", borderRadius:"50%",
+                  width:26, height:26, display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:12, fontWeight:800, flexShrink:0 }}>{i+1}</span>
+                <span style={{ fontSize:13, color:th.subColor, fontFamily:"Tajawal", lineHeight:1.5 }}>
+                  {lang==="ar" ? s.ar : s.en}
+                </span>
+              </div>
+            ))}
+            {isIOS && (
+              <div style={{ marginTop:10, padding:"10px 12px", background:"#C98A2E15",
+                borderRadius:12, fontSize:12, color:"#C98A2E", fontFamily:"Tajawal", textAlign:"center" }}>
+                {"⚠️ "}{lang==="ar" ? "يجب استخدام Safari لتثبيت التطبيق" : "Safari required for iPhone installation"}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
