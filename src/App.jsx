@@ -219,10 +219,10 @@ function WeatherBadge() {
         (code>=80&&code<=82) ? "🌦️" :
         (code>=95) ? "⛈️" : "🌤️"
       }</span>
-      <span className="text-[11px] font-bold" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
+      <span className="text-xs font-bold" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
         {temp}°{lang === "ar" ? "م" : "C"}
       </span>
-      <span className="text-[10px] font-medium opacity-80" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
+      <span className="text-xs font-medium opacity-80" style={{ color: isLive ? color : pattern.text, fontFamily: "Tajawal" }}>
         · {label}
       </span>
     </button>
@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.55";
+const APP_VERSION = "1.56";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -1728,23 +1728,12 @@ const PRIMARY_TABS = [
 ];
 
 const MORE_TABS = [
-  { key: "nearby",   labelAr:"أقرب الأماكن",      labelEn:"Nearby",       icon: Navigation },
-  { key: "calendar",  labelAr:"تقويم الخريف",     labelEn:"Calendar",     icon: Calendar },
-  { key: "events",   labelAr:"الفعاليات",         labelEn:"Events",       icon: Calendar },
-  { key: "food",     labelAr:"دليل المطاعم",      labelEn:"Restaurants",  icon: Coffee },
-  { key: "sites",    labelAr:"خريطة المواقع",     labelEn:"Sites Map",    icon: Navigation },
-  { key: "crowd",    labelAr:"كثافة الأماكن",     labelEn:"Crowd",        icon: Gauge },
-  { key: "planner",  labelAr:"مخطط سياحي",      labelEn:"Planner",   icon: MapPinned },
-  { key: "stays",    labelAr:"الإقامة والفنادق", labelEn:"Hotels",    icon: Building2 },
-  { key: "best",     labelAr:"أفضل وقت",         labelEn:"Best Time", icon: Sun },
-  { key: "evening",  labelAr:"المساء",            labelEn:"Evening",   icon: Moon },
-  { key: "heritage", labelAr:"التراث",            labelEn:"Heritage",  icon: Landmark },
-  { key: "access",   labelAr:"الوصول",            labelEn:"Access",    icon: Route },
-  { key: "health",   labelAr:"الصحة",             labelEn:"Health",    icon: Stethoscope },
-  { key: "tips",     labelAr:"نصائح وأرقام",      labelEn:"Tips",      icon: ClipboardList },
-  { key: "today", labelAr: "اليوم", labelEn: "Today", labelHi: "आज", labelFr: "Jour", icon: Calendar },
-  { key: "food", labelAr: "مطاعم", labelEn: "Food", labelHi: "भोजन", labelFr: "Food", icon: Coffee },
-  { key: "about", icon: Info },
+  { key: "food",     labelAr:"دليل المطاعم",      labelEn:"Restaurants",    icon: Coffee },
+  { key: "stays",    labelAr:"الإقامة",            labelEn:"Stays",          icon: Building2 },
+  { key: "nearby",   labelAr:"أقرب الأماكن",      labelEn:"Nearby",         icon: Navigation },
+  { key: "calendar", labelAr:"تقويم الخريف",      labelEn:"Calendar",       icon: Calendar },
+  { key: "access",   labelAr:"الوصول إلى ظفار",   labelEn:"Getting Here",   icon: Route },
+  { key: "health",   labelAr:"الصحة والطوارئ",    labelEn:"Health",         icon: HeartPulse },
 ];
 
 /* ===================================================================
@@ -1771,7 +1760,7 @@ function SectionTitle({ eyebrow, title, icon: Icon }) {
 
 function Pill({ children, color }) {
   return (
-    <span className="inline-block rounded-full px-2.5 py-1 text-[11px] font-medium" style={{ background: color ? `${color}1A` : "#EFEAD9", color: color || "#5C6B53" }}>
+    <span className="inline-block rounded-full px-2.5 py-1 text-xs font-medium" style={{ background: color ? `${color}1A` : "#EFEAD9", color: color || "#5C6B53" }}>
       {children}
     </span>
   );
@@ -1786,7 +1775,7 @@ function MapLink({ name, item }) {
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
-      className="flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] font-bold transition active:scale-95"
+      className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-bold transition active:scale-95"
       style={{ background: "#2F5D451A", color: "#2F5D45", fontFamily: "Tajawal" }}
     >
       <Navigation size={11} /> {t.location}
@@ -1799,7 +1788,7 @@ function SocialBar() {
     <div className="flex gap-2">
       {SOCIAL.map((s) => (
         <a key={s.handle} href={s.url} target="_blank" rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2 text-[11px] font-bold"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold"
           style={{ borderColor: "#E3DCC8", background: "#FBF8F0", color: "#A3373B", fontFamily: "Tajawal" }}>
           <XIcon size={13} /> {s.handle}
         </a>
@@ -1811,7 +1800,7 @@ function SocialBar() {
 function SponsoredBadge() {
   const { t } = useLang();
   return (
-    <span className="flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "#C98A2E", color: "#fff", fontFamily: "Tajawal" }}>
+    <span className="flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: "#C98A2E", color: "#fff", fontFamily: "Tajawal" }}>
       <Star size={9} fill="#fff" /> {t.sponsoredBadge}
     </span>
   );
@@ -1855,7 +1844,7 @@ function AboutCard() {
           <div className="text-base font-bold text-white" style={{ fontFamily: lang === "ar" ? "Aref Ruqaa" : "inherit" }}>
             {lang === "ar" ? "خريف ظفار 2026" : "Khareef Dhofar 2026"}
           </div>
-          <div className="text-[11px] opacity-80 text-white" style={{ fontFamily: "Tajawal" }}>
+          <div className="text-xs opacity-80 text-white" style={{ fontFamily: "Tajawal" }}>
             {lang === "ar" ? "صلالة، سلطنة عُمان" : "Salalah, Sultanate of Oman"}
           </div>
         </div>
@@ -1868,7 +1857,7 @@ function AboutCard() {
         </p>
 
         {/* Play Protect note */}
-        <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: "#C98A2E", background: "#C98A2E10" }}>
+        <div className="flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: "#C98A2E", background: "#C98A2E10" }}>
           <span className="mt-0.5 shrink-0 text-base">🛡️</span>
           <span style={{ color: th.subColor, fontFamily: "Tajawal" }}>
             {lang === "ar"
@@ -1895,12 +1884,12 @@ function AboutCard() {
         </button>
 
         {/* Hint */}
-        <p className="text-[10px] leading-relaxed text-center" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+        <p className="text-xs leading-relaxed text-center" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
           {t.downloadNote}
         </p>
 
         {/* Version badge instead of raw URL */}
-        <div className="flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-center text-[11px]"
+        <div className="flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-center text-xs"
           style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.subColor, fontFamily: "Tajawal" }}>
           <span style={{ color: "#2F5D45", fontWeight: "bold" }}>v{APP_VERSION}</span>
           <span>·</span>
@@ -1924,11 +1913,11 @@ function BecomeSponsorCard() {
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
           <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.becomeSponsorTitle}</div>
-          <span className="shrink-0 rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "#C98A2E", color: "#fff", fontFamily: "Tajawal" }}>v{APP_VERSION}</span>
+          <span className="shrink-0 rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: "#C98A2E", color: "#fff", fontFamily: "Tajawal" }}>v{APP_VERSION}</span>
         </div>
         <div className="mt-1 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.becomeSponsorDesc}</div>
         <a href={`mailto:${sponsorEmail}?subject=${encodeURIComponent("استفسار عن الإعلان")}`}
-          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-bold text-white"
+          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold text-white"
           style={{ background: "#C98A2E", fontFamily: "Tajawal" }}>
           <Megaphone size={12} /> {t.becomeSponsorCta}
         </a>
@@ -1990,7 +1979,7 @@ function HomeWeatherForecast() {
           </div>
           <div>
             {/* Location label */}
-            <div className="text-[10px] font-medium mb-0.5" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{locationLabel}</div>
+            <div className="text-xs font-medium mb-0.5" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{locationLabel}</div>
             {/* Temperature — same as badge */}
             <div className="text-3xl font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
               {currentTemp}°{lang === "ar" ? "م" : "C"}
@@ -1998,20 +1987,20 @@ function HomeWeatherForecast() {
             <div className="text-xs font-medium" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{currentLabel}</div>
             {(windSpeed != null || precipProb != null) && (
               <div className="flex gap-3 mt-0.5">
-                {windSpeed != null && <span className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>💨 {windSpeed} km/h</span>}
-                {precipProb != null && <span className="text-[10px]" style={{ color: "#3C6E8F", fontFamily: "Tajawal" }}>🌧️ {precipProb}%</span>}
+                {windSpeed != null && <span className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>💨 {windSpeed} km/h</span>}
+                {precipProb != null && <span className="text-xs" style={{ color: "#3C6E8F", fontFamily: "Tajawal" }}>🌧️ {precipProb}%</span>}
               </div>
             )}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">
           {/* Live/estimated badge */}
-          <span className="text-[9px] font-bold rounded-full px-2 py-0.5" style={{ background: isLive ? "#2F7D4A1A" : "#C98A2E1A", color: isLive ? "#2F7D4A" : "#C98A2E", fontFamily: "Tajawal" }}>
+          <span className="text-xs font-bold rounded-full px-2 py-0.5" style={{ background: isLive ? "#2F7D4A1A" : "#C98A2E1A", color: isLive ? "#2F7D4A" : "#C98A2E", fontFamily: "Tajawal" }}>
             {isLive ? (lang==="ar"?"🟢 حي":"🟢 Live") : (lang==="ar"?"⭕ تقديري":"⭕ Est.")}
           </span>
           {/* Forecast label + chevron */}
           <div className="flex flex-col items-center gap-0.5" style={{ color: "#2F5D45" }}>
-            <span className="text-[10px] font-bold" style={{ fontFamily: "Tajawal" }}>{t.forecastTitle}</span>
+            <span className="text-xs font-bold" style={{ fontFamily: "Tajawal" }}>{t.forecastTitle}</span>
             <svg width="16" height="10" viewBox="0 0 16 10" fill="none"
               style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>
               <path d="M1 1L8 9L15 1" stroke="#2F5D45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -2040,7 +2029,7 @@ function HomeWeatherForecast() {
               return (
                 <div key={i} className="flex shrink-0 flex-col items-center gap-1 rounded-xl p-2.5"
                   style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", minWidth: 62 }}>
-                  <span className="text-[10px] font-bold" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                  <span className="text-xs font-bold" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                     {i === 0 ? t.today : tx(DAYS[dayIdx], lang)}
                   </span>
                   <span style={{fontSize:20}}>
@@ -2054,18 +2043,18 @@ function HomeWeatherForecast() {
                   </span>
                   <span className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{temp2}°</span>
                   {precipP != null && precipP > 0 && (
-                    <span className="text-[9px]" style={{ color: "#3C6E8F", fontFamily: "Tajawal" }}>💧{precipP}%</span>
+                    <span className="text-xs" style={{ color: "#3C6E8F", fontFamily: "Tajawal" }}>💧{precipP}%</span>
                   )}
                 </div>
               );
             })}
           </div>
           <div className="mt-2 flex items-center justify-between">
-            <p className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+            <p className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
               {isLive ? locationLabel : t.forecastDisclaimer}
             </p>
             <button type="button" onClick={handleRefresh}
-              className="flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] font-bold"
+              className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-bold"
               style={{ background: "#2F5D451A", color: "#2F5D45", fontFamily: "Tajawal" }}>
               <RefreshCw size={11} className={loading ? "animate-spin" : ""} />
               {lang === "ar" ? "تحديث" : "Refresh"}
@@ -2078,87 +2067,123 @@ function HomeWeatherForecast() {
 }
 
 function Home({ go, homeAds = [] }) {
-  const { lang, theme } = useLang();
+  const { lang, t, theme, liveWeather, refetchWeather } = useLang();
   const th = THEMES[theme];
-  const EVENTS_PREVIEW = EVENTS.slice(0, 2);
+  const [aiDone, setAiDone] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [postsLoaded, setPostsLoaded] = useState(false);
+
+  // Countdown to Khareef
+  const today = new Date();
+  const khareefStart = new Date("2026-07-01");
+  const khareefEnd = new Date("2026-09-05");
+  const inSeason = today >= khareefStart && today <= khareefEnd;
+  const daysToStart = Math.ceil((khareefStart - today) / 86400000);
+  const dayInSeason = inSeason ? Math.ceil((today - khareefStart) / 86400000) : 0;
+  const totalDays = Math.ceil((khareefEnd - khareefStart) / 86400000);
+
+  const temp = liveWeather ? Math.round(liveWeather.current.temperature_2m) : null;
+  const weatherCode = liveWeather?.current?.weather_code;
+  const wxEmoji = weatherCode == null ? "🌤️" :
+    weatherCode===0?"☀️": weatherCode<=2?"⛅": weatherCode===3?"☁️":
+    (weatherCode===45||weatherCode===48)?"🌫️":
+    (weatherCode>=51&&weatherCode<=67)?"🌧️":
+    (weatherCode>=80&&weatherCode<=82)?"🌦️":
+    weatherCode>=95?"⛈️":"🌤️";
 
   return (
     <div className="space-y-4 pb-6">
-      {/* Weather */}
-      <HomeWeatherForecast />
 
-      {/* AI Where to go today */}
-      <WhereToGoToday />
+      {/* ── HERO CARD ── */}
+      <div className="overflow-hidden rounded-3xl"
+        style={{ background:"linear-gradient(145deg,#1F3D2B 0%,#2F5D45 60%,#3d7a5c 100%)" }}>
 
-      {/* Latest 2 events */}
-      <div>
-        <div className="flex items-center justify-between mb-2 px-1">
-          <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily:"Tajawal" }}>
-            {lang === "ar" ? "الفعاليات الجارية" : "Current Events"}
-          </span>
-          <button onClick={() => window.dispatchEvent(new CustomEvent("switchTab", { detail: "events" }))}
-            className="text-xs font-bold"
-            style={{ background:"none", border:"none", color:"#2F5D45", cursor:"pointer", fontFamily:"Tajawal" }}>
-            {lang === "ar" ? "المزيد ←" : "More →"}
+        {/* Top row: title + weather */}
+        <div className="flex items-start justify-between p-4 pb-0">
+          <div>
+            <div className="text-xs font-bold opacity-60" style={{ color:"#fff", fontFamily:"Tajawal" }}>
+              {lang==="ar"?"خريف ظفار":"Khareef Dhofar"} 2026
+            </div>
+            <div className="text-lg font-black" style={{ color:"#fff", fontFamily:"Tajawal", lineHeight:1.2 }}>
+              {inSeason
+                ? (lang==="ar"?"الموسم جارٍ الآن 🌿":"Season is Live 🌿")
+                : (lang==="ar"?`${daysToStart} يوم للخريف`:`${daysToStart} days to Khareef`)}
+            </div>
+          </div>
+          <button onClick={refetchWeather}
+            className="flex flex-col items-center rounded-2xl px-3 py-2 active:scale-95"
+            style={{ background:"rgba(255,255,255,0.15)", border:"none", cursor:"pointer" }}>
+            <span style={{ fontSize:26 }}>{wxEmoji}</span>
+            {temp !== null && (
+              <span className="text-sm font-bold" style={{ color:"#fff", fontFamily:"Tajawal" }}>
+                {temp}°{lang==="ar"?"م":"C"}
+              </span>
+            )}
           </button>
         </div>
-        <div className="space-y-2">
-          {EVENTS_PREVIEW.map(ev => (
-            <a key={ev.nAr} href={bestUrl(ev, lang)} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-2xl p-3 active:scale-[0.98] transition"
-              style={{ background: th.cardBg, border:`1px solid ${th.border}` }}>
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg"
-                style={{ background: (ev.color||"#2F5D45") + "20" }}>🎪</div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-bold truncate" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-                  {lang==="ar" ? ev.nAr : ev.nEn}
-                </div>
-                <div className="text-[11px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-                  📍 {lang==="ar" ? ev.placeAr : ev.placeEn}
-                </div>
-              </div>
-              <MapPin size={14} color={th.subColor} />
-            </a>
+
+        {/* Season progress bar */}
+        {inSeason && (
+          <div className="px-4 pt-3">
+            <div className="flex justify-between text-xs mb-1 opacity-70" style={{ color:"#fff", fontFamily:"Tajawal" }}>
+              <span>{lang==="ar"?"اليوم "+dayInSeason:"Day "+dayInSeason}</span>
+              <span>{lang==="ar"?"من "+totalDays+" يوم":"of "+totalDays+" days"}</span>
+            </div>
+            <div className="h-1.5 rounded-full" style={{ background:"rgba(255,255,255,0.2)" }}>
+              <div className="h-1.5 rounded-full" style={{
+                background:"rgba(255,255,255,0.85)",
+                width: Math.round(dayInSeason/totalDays*100)+"%" }} />
+            </div>
+          </div>
+        )}
+
+        {/* Quick actions */}
+        <div className="grid grid-cols-4 gap-2 p-4">
+          {[
+            { key:"explore", emoji:"🗺️", ar:"استكشف", en:"Explore" },
+            { key:"calendar", emoji:"📅", ar:"الفعاليات", en:"Events" },
+            { key:"nearby", emoji:"📍", ar:"قريب منك", en:"Nearby" },
+            { key:"food", emoji:"🍽️", ar:"مطاعم", en:"Food" },
+          ].map(item => (
+            <button key={item.key} onClick={() => go(item.key)}
+              className="flex flex-col items-center gap-1 rounded-2xl py-2.5 active:scale-95 transition"
+              style={{ background:"rgba(255,255,255,0.12)", border:"1px solid rgba(255,255,255,0.15)", cursor:"pointer" }}>
+              <span style={{ fontSize:20 }}>{item.emoji}</span>
+              <span className="text-xs font-bold" style={{ color:"#fff", fontFamily:"Tajawal" }}>
+                {lang==="ar"?item.ar:item.en}
+              </span>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Quick nav grid */}
+      {/* ── AI SUGGESTION ── */}
+      <WhereToGoToday />
+
+      {/* ── NEWS ── */}
       <div>
-        <div className="text-sm font-bold mb-2 px-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-          {lang==="ar" ? "استكشف" : "Explore"}
+        <div className="flex items-center justify-between mb-3 px-1">
+          <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar"?"أخبار ظفار":"Dhofar News"}
+          </span>
+          <a href="https://x.com/khareef_dhofar" target="_blank" rel="noopener noreferrer"
+            className="text-xs font-bold" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar"?"المزيد ←":"More →"}
+          </a>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          {MORE_TABS.slice(0,6).map(tb => {
-            const Icon = tb.icon;
-            return (
-              <button key={tb.key}
-                className="flex flex-col items-center gap-1.5 rounded-2xl p-3 active:scale-95 transition"
-                style={{ background:th.cardBg, border:`1px solid ${th.border}`, cursor:"pointer" }}
-                onClick={() => window.dispatchEvent(new CustomEvent("switchTab", { detail: tb.key }))}>
-                <Icon size={22} color="#2F5D45" />
-                <span className="text-[11px] font-bold text-center leading-tight"
-                  style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-                  {tb.labelAr ? (lang==="ar" ? tb.labelAr : tb.labelEn) : t[tb.key]}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        <XFeed />
       </div>
 
-      {/* X Feed */}
-      <XFeed />
-
-      {/* Sponsored */}
+      {/* ── SPONSORED ── */}
       {homeAds.map((ad, i) => (
         <AdBanner key={"had"+i} ad={ad} lang={lang} th={th} />
       ))}
 
-
     </div>
   );
 }
+
 
 function Tips() {
   const { lang, t, theme } = useLang();
@@ -2196,7 +2221,7 @@ function Tips() {
 
       <div>
         <SectionTitle title={t.contactsTitle} icon={Siren} />
-        <div className="mb-3 flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
+        <div className="mb-3 flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
           <Info size={13} className="mt-0.5 shrink-0" color="#A36A2E" />
           <span style={{ fontFamily: "Tajawal" }}>{t.contactsNote}</span>
         </div>
@@ -2217,13 +2242,13 @@ function Tips() {
                   </div>
                   <div>
                     <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{tx(c.title, lang)}</div>
-                    <div className="mt-0.5 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{tx(c.desc, lang)}</div>
+                    <div className="mt-0.5 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{tx(c.desc, lang)}</div>
                     {c.action.type === "tel" && (
                       <div className="mt-1 text-base font-bold" style={{ color: c.color, fontFamily: "Tajawal" }}>{c.action.value}</div>
                     )}
                   </div>
                 </div>
-                <span className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold" style={{ background: c.color, color: "#fff", fontFamily: "Tajawal" }}>
+                <span className="shrink-0 rounded-full px-2.5 py-1 text-xs font-bold" style={{ background: c.color, color: "#fff", fontFamily: "Tajawal" }}>
                   {actionLabel}
                 </span>
               </a>
@@ -2305,7 +2330,7 @@ function BestTimes() {
             <div className="mt-3 grid grid-cols-3 gap-2 text-center">
               {[[t.colFest, p.fest], [t.colNature, p.nature], [t.colWeather, p.weather]].map(([l, v]) => (
                 <div key={l}>
-                  <div className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{l}</div>
+                  <div className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{l}</div>
                   <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{v}%</div>
                 </div>
               ))}
@@ -2363,31 +2388,31 @@ function Sites() {
             className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
             style={{ borderColor: th.border, background: th.cardBg }}>
             <div className="flex items-center gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ background: data.color }}>{i + 1}</span>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: data.color }}>{i + 1}</span>
               <div>
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(s, lang)}</div>
                 {s.spotType && SPOT_TYPES[s.spotType] && (
-                  <div className="mt-0.5 flex items-center gap-1 text-[10px] font-bold" style={{ color: region === "hike" ? "#4C7A3D" : data.color, fontFamily: "Tajawal" }}>
+                  <div className="mt-0.5 flex items-center gap-1 text-xs font-bold" style={{ color: region === "hike" ? "#4C7A3D" : data.color, fontFamily: "Tajawal" }}>
                     <span>{SPOT_TYPES[s.spotType].emoji}</span>
                     <span>{tx(SPOT_TYPES[s.spotType].label, lang)}</span>
                   </div>
                 )}
                 {s.spotDescAr && (
-                  <div className="mt-0.5 text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                  <div className="mt-0.5 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                     {lang === "ar" ? s.spotDescAr : s.spotDescEn}
                   </div>
                 )}
-                {s.extra && <div className="mt-0.5 text-[10px]" style={{ color: "#A36A2E", fontFamily: "Tajawal" }}>{tx(s.extra, lang)}</div>}
-                {lc(s, lang) && <div className="mt-0.5 text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{lc(s, lang)}</div>}
+                {s.extra && <div className="mt-0.5 text-xs" style={{ color: "#A36A2E", fontFamily: "Tajawal" }}>{tx(s.extra, lang)}</div>}
+                {lc(s, lang) && <div className="mt-0.5 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{lc(s, lang)}</div>}
                 {region === "hike" && (
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "#4C7A3D1A", color: "#4C7A3D", fontFamily: "Tajawal" }}>
+                    <span className="rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: "#4C7A3D1A", color: "#4C7A3D", fontFamily: "Tajawal" }}>
                       {t.elevationLabel}: {s.elev}{lang === "ar" ? "م" : "m"}
                     </span>
-                    <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: s.fourByFour ? "#B5402C1A" : "#2F7D4A1A", color: s.fourByFour ? "#B5402C" : "#2F7D4A", fontFamily: "Tajawal" }}>
+                    <span className="rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: s.fourByFour ? "#B5402C1A" : "#2F7D4A1A", color: s.fourByFour ? "#B5402C" : "#2F7D4A", fontFamily: "Tajawal" }}>
                       {s.fourByFour ? t.fourByFourYes : t.fourByFourNo}
                     </span>
-                    <span className="flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "#C98A2E1A", color: "#C98A2E", fontFamily: "Tajawal" }}>
+                    <span className="flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: "#C98A2E1A", color: "#C98A2E", fontFamily: "Tajawal" }}>
                       {t.campingLabel} {"⭐".repeat(s.camp)}
                     </span>
                   </div>
@@ -2420,7 +2445,7 @@ function Sites() {
             <div className="space-y-2">
               {TOP5_HIKER_TRAILS.map((tr, i) => (
                 <div key={tr.nAr} className="flex items-center gap-3 rounded-xl border p-3" style={{ borderColor: th.border, background: th.cardBg }}>
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ background: "#4C7A3D" }}>{i + 1}</span>
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: "#4C7A3D" }}>{i + 1}</span>
                   <span className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(tr, lang)}</span>
                 </div>
               ))}
@@ -2429,7 +2454,7 @@ function Sites() {
         </>
       )}
 
-      <div className="rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, color: th.subColor, fontFamily: "Tajawal" }}>{t.distanceFooter}</div>
+      <div className="rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, color: th.subColor, fontFamily: "Tajawal" }}>{t.distanceFooter}</div>
     </div>
   );
 }
@@ -2475,7 +2500,7 @@ function Heritage() {
     <div className="space-y-6 pb-6">
       <SectionTitle eyebrow={t.heritageEyebrow} title={t.heritageTitle} icon={Landmark} />
 
-      <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
+      <div className="flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
         <Info size={14} className="mt-0.5 shrink-0" color="#A36A2E" />
         <span style={{ fontFamily: "Tajawal" }}>{t.hoursDisclaimer}</span>
       </div>
@@ -2486,11 +2511,11 @@ function Heritage() {
             className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
             style={{ borderColor: th.border, background: th.cardBg }}>
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ background: "#6B4226" }}>{i + 1}</span>
+              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: "#6B4226" }}>{i + 1}</span>
               <div>
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(h, lang)}</div>
-                <div className="mt-0.5 text-[11px]" style={{ color: "#A36A2E", fontFamily: "Tajawal" }}>{lc(h, lang)}</div>
-                <div className="mt-1 flex items-start gap-1 text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                <div className="mt-0.5 text-xs" style={{ color: "#A36A2E", fontFamily: "Tajawal" }}>{lc(h, lang)}</div>
+                <div className="mt-1 flex items-start gap-1 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <Clock size={11} className="mt-0.5 shrink-0" />
                   <span>{tx(HOURS_LABELS[h.hoursKey], lang)}</span>
                 </div>
@@ -2510,10 +2535,10 @@ function Heritage() {
               style={{ borderColor: th.border, background: th.cardBg }}>
               <div>
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(m, lang)}</div>
-                <div className="mt-0.5 flex items-center gap-1.5 text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                <div className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <span>{tx(TYPE_LABELS[m.type], lang)}</span><span>·</span><span>{lc(m, lang)}</span>
                 </div>
-                <div className="mt-1 flex items-start gap-1 text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                <div className="mt-1 flex items-start gap-1 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <Clock size={11} className="mt-0.5 shrink-0" />
                   <span>{tx(HOURS_LABELS[m.hoursKey], lang)}</span>
                 </div>
@@ -2558,11 +2583,11 @@ function Access() {
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{lang === "ar" ? r.fromAr : r.fromEn}</div>
                 <Car size={15} color="#2F5D45" />
               </div>
-              <div className="mt-2 flex gap-3 text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+              <div className="mt-2 flex gap-3 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                 <span className="flex items-center gap-1"><Navigation size={11} />{lang === "ar" ? r.distAr : r.distEn}</span>
                 <span className="flex items-center gap-1"><Clock size={11} />{lang === "ar" ? r.timeAr : r.timeEn}</span>
               </div>
-              <p className="mt-2 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{tx(r.note, lang)}</p>
+              <p className="mt-2 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{tx(r.note, lang)}</p>
               <a href={directionsUrl("Salalah Oman", lang === "ar" ? r.fromAr : r.fromEn)} target="_blank" rel="noopener noreferrer"
                 className="mt-3 flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-bold text-white" style={{ background: "#2F5D45", fontFamily: "Tajawal" }}>
                 <Navigation size={13} /> {t.startNav}
@@ -2585,7 +2610,7 @@ function Access() {
               <Navigation size={13} /> {t.airportBtn}
             </a>
           </div>
-          <div className="rounded-xl p-3 text-[11px] leading-relaxed" style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor, fontFamily: "Tajawal" }}>{t.airportNote}</div>
+          <div className="rounded-xl p-3 text-xs leading-relaxed" style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor, fontFamily: "Tajawal" }}>{t.airportNote}</div>
         </div>
       )}
     </div>
@@ -2598,7 +2623,7 @@ function Health() {
   return (
     <div className="space-y-5 pb-6">
       <SectionTitle eyebrow={t.healthEyebrow} title={t.healthTitle} icon={Stethoscope} />
-      <div className="rounded-xl p-3 text-[11px] leading-relaxed" style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor, fontFamily: "Tajawal" }}>
+      <div className="rounded-xl p-3 text-xs leading-relaxed" style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor, fontFamily: "Tajawal" }}>
         {t.emergencyNote} <strong>9999</strong>. {t.emergencyNote2}
       </div>
       <div className="space-y-2">
@@ -2612,7 +2637,7 @@ function Health() {
               </div>
               <div>
                 <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(h, lang)}</div>
-                <div className="mt-0.5 flex items-center gap-1.5 text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                <div className="mt-0.5 flex items-center gap-1.5 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                   <span>{tx(TYPE_LABELS[h.type], lang)}</span>
                   {lc(h, lang) && <><span>·</span><span>{lc(h, lang)}</span></>}
                 </div>
@@ -2685,7 +2710,7 @@ function Crowd() {
     <div className="space-y-5 pb-6">
       <SectionTitle eyebrow={t.crowdEyebrow} title={t.crowdTitle} icon={Gauge} />
 
-      <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
+      <div className="flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
         <Info size={14} className="mt-0.5 shrink-0" color="#A36A2E" />
         <span style={{ fontFamily: "Tajawal" }}>{t.crowdNewNote}</span>
       </div>
@@ -2813,7 +2838,7 @@ function Planner() {
       {/* Step 2: regions */}
       <div>
         <div className="mb-1 text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.plannerStep2}</div>
-        <div className="mb-2 text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.selectRegionNote}</div>
+        <div className="mb-2 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.selectRegionNote}</div>
         <div className="space-y-2">
           {Object.entries(ITIN_REGIONS).map(([key, r]) => {
             const selected = regions.includes(key);
@@ -2826,7 +2851,7 @@ function Planner() {
                 </div>
                 <div className="flex-1">
                   <div className="text-sm font-bold" style={{ color: selected ? r.color : th.titleColor, fontFamily: "Tajawal" }}>{tx(r.label, lang)}</div>
-                  <div className="text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                  <div className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                     {r.days.length} {lang === "ar" ? "أيام متاحة" : lang === "fr" ? "jours disponibles" : lang === "hi" ? "दिन उपलब्ध" : "days available"}
                   </div>
                 </div>
@@ -2842,7 +2867,7 @@ function Planner() {
       {/* Step 3: travel style */}
       <div>
         <div className="mb-1 text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.plannerStep3}</div>
-        <div className="mb-2 text-[11px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.plannerStep3Note}</div>
+        <div className="mb-2 text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.plannerStep3Note}</div>
         <div className="grid grid-cols-3 gap-2">
           {Object.entries(TRAVEL_STYLES).map(([key, s]) => {
             const sel = tripStyle === key;
@@ -2851,7 +2876,7 @@ function Planner() {
                 className="flex flex-col items-center gap-1.5 rounded-xl border py-2.5 transition active:scale-[0.97]"
                 style={{ borderColor: sel ? s.color : th.border, background: sel ? `${s.color}18` : th.cardBg }}>
                 <span className="text-xl">{s.icon}</span>
-                <span className="text-[11px] font-bold" style={{ color: sel ? s.color : th.subColor, fontFamily: "Tajawal" }}>{tx(s.label, lang)}</span>
+                <span className="text-xs font-bold" style={{ color: sel ? s.color : th.subColor, fontFamily: "Tajawal" }}>{tx(s.label, lang)}</span>
               </button>
             );
           })}
@@ -2887,7 +2912,7 @@ function Planner() {
                 );
               })()}
 
-              <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
+              <div className="flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
                 <Info size={13} className="mt-0.5 shrink-0" color="#A36A2E" />
                 <span style={{ fontFamily: "Tajawal" }}>{t.plannerNote}</span>
               </div>
@@ -2923,16 +2948,16 @@ function Planner() {
                         <a key={spot.nAr} href={itinUrl(spot.nEn)} target="_blank" rel="noopener noreferrer"
                           className="flex items-start gap-3 p-3 transition active:bg-black/5"
                           style={{ borderColor: th.border }}>
-                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white" style={{ background: dayColor }}>{si + 1}</span>
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ background: dayColor }}>{si + 1}</span>
                           <div className="min-w-0 flex-1">
                             <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{lang === "ar" ? spot.nAr : spot.nEn}</div>
-                            <div className="mt-0.5 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                            <div className="mt-0.5 text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                               {lang === "ar" ? spot.descAr : spot.descEn}
                             </div>
                             {spot.styles && (
                               <div className="mt-1.5 flex flex-wrap gap-1">
                                 {spot.styles.map((st) => TRAVEL_STYLES[st] && (
-                                  <span key={st} className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: `${TRAVEL_STYLES[st].color}18`, color: TRAVEL_STYLES[st].color, fontFamily: "Tajawal" }}>
+                                  <span key={st} className="rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: `${TRAVEL_STYLES[st].color}18`, color: TRAVEL_STYLES[st].color, fontFamily: "Tajawal" }}>
                                     {TRAVEL_STYLES[st].icon} {tx(TRAVEL_STYLES[st].label, lang)}
                                   </span>
                                 ))}
@@ -2998,7 +3023,7 @@ function Stays() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-lg font-bold text-white" style={{ fontFamily: lang === "ar" ? "Aref Ruqaa" : "inherit" }}>{p.nameAr}</span>
-                <span className="rounded-full px-2 py-0.5 text-[9px] font-bold" style={{ background: "rgba(255,255,255,0.25)", color: "#fff", fontFamily: "Tajawal" }}>⭐ {t.localBadge}</span>
+                <span className="rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: "rgba(255,255,255,0.25)", color: "#fff", fontFamily: "Tajawal" }}>⭐ {t.localBadge}</span>
               </div>
               <p className="mt-1 text-xs leading-relaxed text-white opacity-85" style={{ fontFamily: "Tajawal" }}>
                 {lang === "ar" ? p.descAr : lang === "hi" ? p.descHi : lang === "fr" ? p.descFr : p.descEn}
@@ -3013,7 +3038,7 @@ function Stays() {
         </div>
       ))}
 
-      <div className="flex items-start gap-2 rounded-xl border p-3 text-[11px] leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
+      <div className="flex items-start gap-2 rounded-xl border p-3 text-xs leading-relaxed" style={{ borderColor: th.border, background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor }}>
         <Info size={13} className="mt-0.5 shrink-0" color="#A36A2E" />
         <span style={{ fontFamily: "Tajawal" }}>{t.staysNote}</span>
       </div>
@@ -3031,7 +3056,7 @@ function Stays() {
         <div className="flex gap-1.5 overflow-x-auto pb-1">
           {areaKeys.map((k) => (
             <button key={k} type="button" onClick={() => setAreaFilter(k)}
-              className="shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-bold transition"
+              className="shrink-0 rounded-full border px-3 py-1.5 text-xs font-bold transition"
               style={{ borderColor: areaFilter === k ? "#2F5D45" : th.border, background: areaFilter === k ? "#2F5D45" : th.cardBg, color: areaFilter === k ? "#fff" : th.subColor, fontFamily: "Tajawal" }}>
               {k === "all" ? t.filterAll : tx(ACCOM_AREAS[k], lang)}
             </button>
@@ -3045,7 +3070,7 @@ function Stays() {
         <div className="grid grid-cols-3 gap-1.5">
           {typeKeys.map((k) => (
             <button key={k} type="button" onClick={() => setTypeFilter(k)}
-              className="flex items-center justify-center gap-1 rounded-xl border py-2 text-[11px] font-bold transition"
+              className="flex items-center justify-center gap-1 rounded-xl border py-2 text-xs font-bold transition"
               style={{ borderColor: typeFilter === k ? "#C98A2E" : th.border, background: typeFilter === k ? "#C98A2E" : th.cardBg, color: typeFilter === k ? "#fff" : th.subColor, fontFamily: "Tajawal" }}>
               {k !== "all" && <span>{ACCOM_TYPES[k].emoji}</span>}
               {k === "all" ? t.filterAll : tx(ACCOM_TYPES[k], lang)}
@@ -3072,13 +3097,13 @@ function Stays() {
                   {lang === "ar" ? a.nAr : a.nEn}
                 </div>
                 <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: "#2F5D451A", color: "#2F5D45", fontFamily: "Tajawal" }}>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: "#2F5D451A", color: "#2F5D45", fontFamily: "Tajawal" }}>
                     {tx(ACCOM_TYPES[a.type], lang)}
                   </span>
-                  <span className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
+                  <span className="text-xs" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
                     📍 {tx(ACCOM_AREAS[a.area], lang)}
                   </span>
-                  {a.stars > 0 && <span className="text-[11px]">{starStr(a.stars)}</span>}
+                  {a.stars > 0 && <span className="text-xs">{starStr(a.stars)}</span>}
                 </div>
               </div>
             </div>
@@ -3239,7 +3264,7 @@ function FoodGuide({ adsForSection = [] }) {
                   <div className="text-sm font-bold" style={{ color: th.titleColor, fontFamily:"Tajawal" }}>
                     {lang==="ar" ? r.nAr : r.nEn}
                   </div>
-                  <div className="text-[11px] mt-0.5" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
+                  <div className="text-xs mt-0.5" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
                     {lang==="ar" ? FOOD_TYPES[r.type]?.ar : FOOD_TYPES[r.type]?.en}
                     {" · "}{lang==="ar" ? r.priceAr : r.priceEn}
                     {r.open ? " · 🕐 " + r.open : ""}
@@ -3399,7 +3424,7 @@ function WhereToGoToday() {
             <div className="text-sm font-bold text-white" style={{ fontFamily:"Tajawal" }}>
               {lang==="ar" ? "أين أذهب اليوم؟" : "Where to go today?"}
             </div>
-            <div className="text-[11px] text-white opacity-70" style={{ fontFamily:"Tajawal" }}>
+            <div className="text-xs text-white opacity-70" style={{ fontFamily:"Tajawal" }}>
               {lang==="ar" ? "اختر اهتماماً واحداً" : "Pick one interest"}
             </div>
           </div>
@@ -3454,10 +3479,10 @@ function WhereToGoToday() {
                 <span style={{ fontSize:28, lineHeight:1, flexShrink:0 }}>{r.emoji}</span>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-                    {i===0 && <span className="text-[10px] font-bold ml-1 px-1.5 py-0.5 rounded" style={{ background:"#2F5D45", color:"#fff" }}>#{i+1} الأفضل</span>} {r.place}
+                    {i===0 && <span className="text-xs font-bold ml-1 px-1.5 py-0.5 rounded" style={{ background:"#2F5D45", color:"#fff" }}>#{i+1} الأفضل</span>} {r.place}
                   </div>
-                  <div className="text-[11px] mt-0.5 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>{r.reason}</div>
-                  {r.tip && <div className="text-[10px] mt-1 font-bold" style={{ color:"#C98A2E", fontFamily:"Tajawal" }}>💡 {r.tip}</div>}
+                  <div className="text-xs mt-0.5 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>{r.reason}</div>
+                  {r.tip && <div className="text-xs mt-1 font-bold" style={{ color:"#C98A2E", fontFamily:"Tajawal" }}>💡 {r.tip}</div>}
                 </div>
               </div>
             ))}
@@ -3532,7 +3557,7 @@ function PrayerTimes() {
             {lang === "ar" ? "مواقيت الصلاة — صلالة" : "Prayer Times — Salalah"}
           </span>
         </div>
-        <span className="text-[11px] font-bold rounded-full px-2 py-0.5"
+        <span className="text-xs font-bold rounded-full px-2 py-0.5"
           style={{ background: "#2F5D45", color: "#fff", fontFamily: "Tajawal" }}>
           {lang === "ar" ? "اليوم" : "Today"}
         </span>
@@ -3544,14 +3569,14 @@ function PrayerTimes() {
             <div key={k} className="flex flex-col items-center py-3 px-2"
               style={{ background: isNext ? "#2F5D4518" : th.cardBg }}>
               <span style={{ fontSize: 16 }}>{ICONS[k]}</span>
-              <span className="text-[11px] font-bold mt-1" style={{ color: isNext ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>
+              <span className="text-xs font-bold mt-1" style={{ color: isNext ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>
                 {PRAYER_NAMES[lang]?.[k] || PRAYER_NAMES.en[k]}
               </span>
               <span className="text-xs font-bold mt-0.5" style={{ color: th.titleColor }}>
                 {times[k]?.slice(0,5) || "—"}
               </span>
               {isNext && (
-                <span className="text-[9px] mt-0.5 rounded-full px-1.5 py-0.5"
+                <span className="text-xs mt-0.5 rounded-full px-1.5 py-0.5"
                   style={{ background: "#2F5D45", color: "#fff", fontFamily: "Tajawal" }}>
                   {lang === "ar" ? "التالية" : "Next"}
                 </span>
@@ -3638,7 +3663,7 @@ function DhofarRainMap() {
           </span>
         </div>
         <button onClick={fetchAllRegions} disabled={loading}
-          className="flex items-center gap-1 rounded-full px-2 py-1 text-[11px]"
+          className="flex items-center gap-1 rounded-full px-2 py-1 text-xs"
           style={{ background: th.border, color: th.subColor, border: "none", cursor: "pointer" }}>
           <RefreshCw size={11} className={loading ? "animate-spin" : ""} color={th.subColor} />
         </button>
@@ -3659,7 +3684,7 @@ function DhofarRainMap() {
                 <div className="text-xs font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>
                   {lang === "ar" ? region.nameAr : region.nameEn}
                 </div>
-                <div className="text-[11px] mt-0.5" style={{ color: rainColor(region.code), fontFamily: "Tajawal" }}>
+                <div className="text-xs mt-0.5" style={{ color: rainColor(region.code), fontFamily: "Tajawal" }}>
                   {rainLabel(region.code, lang)}
                   {region.precip > 0 ? ` · ${region.precip}mm` : ""}
                 </div>
@@ -3675,7 +3700,7 @@ function DhofarRainMap() {
 
       {/* Last update */}
       {lastUpdate && (
-        <div className="px-4 py-1.5 text-center text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal", borderTop: `1px solid ${th.border}` }}>
+        <div className="px-4 py-1.5 text-center text-xs" style={{ color: th.subColor, fontFamily: "Tajawal", borderTop: `1px solid ${th.border}` }}>
           {lang === "ar" ? `آخر تحديث: ${lastUpdate.toLocaleTimeString("ar-OM", { hour: "2-digit", minute: "2-digit" })}` 
                          : `Updated: ${lastUpdate.toLocaleTimeString("en-OM", { hour: "2-digit", minute: "2-digit" })}`}
         </div>
@@ -3735,7 +3760,7 @@ function XFeed() {
           </span>
         </div>
         <a href="https://x.com/khareef_dhofar" target="_blank" rel="noopener noreferrer"
-          className="text-[11px] font-bold" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          className="text-xs font-bold" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
           {lang==="ar" ? "المزيد ←" : "More →"}
         </a>
       </div>
@@ -3831,7 +3856,7 @@ function InstallBanner() {
             <div className="text-xs font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
               {lang==="ar" ? "أضف للشاشة الرئيسية" : "Add to Home Screen"}
             </div>
-            <div className="text-[10px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
               {isIOS ? "Safari فقط" : lang==="ar" ? "يعمل بدون إنترنت" : "Works offline"}
             </div>
           </div>
@@ -3867,7 +3892,7 @@ function InstallBanner() {
                 </span>
               </div>
             ))}
-            <div className="mt-2 rounded-xl p-2 text-center text-[11px]" style={{ background:"#C98A2E18", color:"#C98A2E", fontFamily:"Tajawal" }}>
+            <div className="mt-2 rounded-xl p-2 text-center text-xs" style={{ background:"#C98A2E18", color:"#C98A2E", fontFamily:"Tajawal" }}>
               {"⚠️ "}{lang==="ar" ? "Safari مطلوب لتثبيت التطبيق على iPhone" : "Safari is required for iPhone/iPad installation"}
             </div>
           </div>
@@ -3935,7 +3960,7 @@ function TouristGuide() {
   return (
     <div className="space-y-4 pb-6">
       <SectionTitle eyebrow={lang==="ar"?"ظفار":"Dhofar"} title={lang==="ar"?"الدليل السياحي":"Tourist Guide"} icon={Compass} />
-      <div className="rounded-xl px-3 py-2 text-[11px]" style={{ background:"#2F5D4510", color:"#2F5D45", fontFamily:"Tajawal" }}>
+      <div className="rounded-xl px-3 py-2 text-xs" style={{ background:"#2F5D4510", color:"#2F5D45", fontFamily:"Tajawal" }}>
         {"📚 "}{lang==="ar"?"مصادر: الدليل الرسمي + khareefsalalah.com":"Sources: Official Guide + khareefsalalah.com"}
       </div>
       <input value={search} onChange={e=>setSearch(e.target.value)}
@@ -3965,11 +3990,11 @@ function TouristGuide() {
               <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
                 {lang==="ar"?p.ar:p.en}
               </div>
-              <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+              <div className="text-xs font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
                 {"📍 "}{lang==="ar"?p.tag.ar:p.tag.en}
               </div>
               {p.desc&&(
-                <div className="text-[11px] mt-1 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                <div className="text-xs mt-1 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
                   {lang==="ar"?p.desc.ar:p.desc.en}
                 </div>
               )}
@@ -4134,7 +4159,7 @@ function ExploreTab({ globalAds = [] }) {
             fontFamily:"Tajawal", cursor:"pointer" }}>
           ⭐ {lang==="ar"?"المفضلة":"Favorites"}
           {favorites.size > 0 && (
-            <span className="ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+            <span className="ml-1 rounded-full px-1.5 py-0.5 text-xs font-bold"
               style={{ background:"#fff3", color: viewMode==="favs"?"#fff":"#C98A2E" }}>
               {favorites.size}
             </span>
@@ -4173,8 +4198,22 @@ function ExploreTab({ globalAds = [] }) {
         </div>
       )}
 
+      {/* Skeleton while loading */}
+      {!search && activeCat==="all" && viewMode==="list" && allPlaces.length===0 && (
+        <div className="space-y-4">
+          {[1,2,3].map(n => (
+            <div key={n}>
+              <Skeleton w="40%" h={14} r={6} mb={10} />
+              <div className="space-y-2">
+                <SkeletonCard /><SkeletonCard /><SkeletonCard />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Grouped view */}
-      {grouped && viewMode === "list" && (
+      {grouped && viewMode === "list" && allPlaces.length > 0 && (
         <div className="space-y-5">
           {grouped.map(cat => (
             <div key={cat.key}>
@@ -4274,12 +4313,12 @@ function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
           className="min-w-0 flex-1" style={{ textDecoration:"none" }}>
           <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>{name}</div>
           {tagText && (
-            <div className="text-[10px] font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+            <div className="text-xs font-bold mt-0.5" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
               {"📍 "}{tagText}
             </div>
           )}
           {descText && (
-            <div className="text-[11px] mt-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            <div className="text-xs mt-1" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
               {descText}
             </div>
           )}
@@ -4317,7 +4356,7 @@ function AdBanner({ ad, lang, th }) {
         <span style={{ fontSize:22, flexShrink:0 }}>{ad.emoji || "🌟"}</span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded"
+            <span className="text-xs font-bold px-1.5 py-0.5 rounded"
               style={{ background:ad.color||"#2F5D45", color:"#fff", fontFamily:"Tajawal" }}>
               {lang==="ar" ? "مُموَّل" : "Sponsored"}
             </span>
@@ -4326,7 +4365,7 @@ function AdBanner({ ad, lang, th }) {
             {lang==="ar" ? ad.titleAr : ad.titleEn}
           </div>
           {(ad.descAr || ad.descEn) && (
-            <div className="text-[11px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
               {lang==="ar" ? ad.descAr : ad.descEn}
             </div>
           )}
@@ -4451,7 +4490,7 @@ function NearbyPlaces() {
                     {lang==="ar" ? p.ar : p.en}
                   </div>
                   {p.tag && (
-                    <div className="text-[10px]" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                    <div className="text-xs" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
                       📍 {lang==="ar" ? p.tag.ar : p.tag.en}
                     </div>
                   )}
@@ -4460,7 +4499,7 @@ function NearbyPlaces() {
                   <div className="text-sm font-bold" style={{ color: i<3?"#2F5D45":"#C98A2E" }}>
                     {distLabel(p.dist)}
                   </div>
-                  <div className="text-[9px]" style={{ color:th.subColor }}>
+                  <div className="text-xs" style={{ color:th.subColor }}>
                     {lang==="ar" ? (i===0?"الأقرب":"") : (i===0?"Nearest":"")}
                   </div>
                 </div>
@@ -4585,7 +4624,7 @@ function KhareefCalendar() {
               <div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-xl py-2"
                 style={{ background:`${color}15` }}>
                 <div className="text-lg font-bold" style={{ color, lineHeight:1 }}>{parseInt(day)}</div>
-                <div className="text-[9px] font-bold" style={{ color, fontFamily:"Tajawal" }}>
+                <div className="text-xs font-bold" style={{ color, fontFamily:"Tajawal" }}>
                   {lang==="ar" ? months.find(m=>m.num===activeMonth)?.ar?.slice(0,3) : months.find(m=>m.num===activeMonth)?.en?.slice(0,3)}
                 </div>
               </div>
@@ -4596,7 +4635,7 @@ function KhareefCalendar() {
                     {lang==="ar" ? ev.titleAr : ev.titleEn}
                   </span>
                 </div>
-                <div className="mt-0.5 text-[10px]" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                <div className="mt-0.5 text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
                   {past
                     ? (lang==="ar" ? "✅ انتهت" : "✅ Ended")
                     : todayEv
@@ -4608,7 +4647,7 @@ function KhareefCalendar() {
               </div>
               {todayEv && (
                 <div className="flex shrink-0 items-center">
-                  <span className="rounded-lg px-2 py-1 text-[10px] font-bold"
+                  <span className="rounded-lg px-2 py-1 text-xs font-bold"
                     style={{ background:color, color:"#fff", fontFamily:"Tajawal" }}>
                     {lang==="ar" ? "اليوم" : "Today"}
                   </span>
@@ -4617,6 +4656,38 @@ function KhareefCalendar() {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+
+function Skeleton({ w="100%", h=16, r=8, mb=8 }) {
+  const { theme } = useLang();
+  const isDark = theme === "dark";
+  return (
+    <div style={{
+      width: w, height: h, borderRadius: r, marginBottom: mb,
+      background: isDark
+        ? "linear-gradient(90deg,#2a2a2a 25%,#3a3a3a 50%,#2a2a2a 75%)"
+        : "linear-gradient(90deg,#e8e3d8 25%,#f0ece4 50%,#e8e3d8 75%)",
+      backgroundSize: "200% 100%",
+      animation: "shimmer 1.4s infinite"
+    }} />
+  );
+}
+
+function SkeletonCard({ lines=2, hasIcon=true }) {
+  const { theme } = useLang();
+  const th = THEMES[theme];
+  return (
+    <div className="rounded-2xl p-3 flex gap-3"
+      style={{ background:th.cardBg, border:`1px solid ${th.border}` }}>
+      {hasIcon && <Skeleton w={44} h={44} r={12} mb={0} />}
+      <div className="flex-1">
+        <Skeleton w="70%" h={14} r={6} mb={8} />
+        {lines >= 2 && <Skeleton w="90%" h={11} r={5} mb={6} />}
+        {lines >= 3 && <Skeleton w="50%" h={10} r={5} mb={0} />}
       </div>
     </div>
   );
@@ -4741,14 +4812,14 @@ export default function App() {
               <div className="flex gap-1 rounded-full p-0.5" style={{ background: th.navBg, border: `1px solid ${th.border}` }}>
                 {LANGS.map((l) => (
                   <button key={l.key} type="button" onClick={() => setLang(l.key)}
-                    className="rounded-full px-2.5 py-1 text-[11px] font-bold transition"
+                    className="rounded-full px-2.5 py-1 text-xs font-bold transition"
                     style={{ background: lang === l.key ? "#2F5D45" : "transparent", color: lang === l.key ? "#F4EFE2" : th.subColor, fontFamily: "Tajawal" }}>
                     {l.label}
                   </button>
                 ))}
               </div>
               <button type="button" onClick={() => setTheme((v) => (v === "light" ? "dark" : "light"))}
-                className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold transition"
+                className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition"
                 style={{ background: th.navBg, border: `1px solid ${th.border}`, color: th.subColor, fontFamily: "Tajawal" }}>
                 {theme === "light" ? <Moon size={13} /> : <Sun size={13} />}
                 {theme === "light" ? "Dark" : "Light"}
@@ -4780,7 +4851,7 @@ export default function App() {
           {tab === "explore" && <ExploreTab globalAds={getAdsForSection("explore")} />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
-              <p className="mb-2 mt-6 text-center text-[10px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
+              <p className="mb-2 mt-6 text-center text-xs leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.namesNote}</p>
             )}
           </div>
 
@@ -4799,7 +4870,7 @@ export default function App() {
                   className="flex flex-col items-center gap-1.5 rounded-xl py-2 transition"
                   style={{ background: isActive ? "#2F5D451A" : "transparent" }}>
                   <tb.icon size={24} color={isActive ? "#2F5D45" : th.subColor} strokeWidth={isActive ? 2.3 : 2} />
-                  <span className="text-[10px] font-medium"
+                  <span className="text-xs font-medium"
                     style={{ color: isActive ? "#2F5D45" : th.subColor, fontFamily: "Tajawal" }}>
                     {label}
                   </span>
