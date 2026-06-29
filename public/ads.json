@@ -1,4 +1,15 @@
 {
   "enabled": false,
-  "ads": []
+  "ads": [
+    {
+      "titleAr": "تجربة اعلان مذفوع",
+      "titleEn": "Test AD",
+      "descAr": "مرحبا بكم في الاعلان المدفوع",
+      "descEn": "Welcome to AD",
+      "url": "Http://www.almaha.com.om",
+      "emoji": "🌟",
+      "color": "#2F5D45",
+      "section": "all"
+    }
+  ]
 }
