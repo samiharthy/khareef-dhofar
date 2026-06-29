@@ -2892,6 +2892,22 @@ function About() {
         </button>
       </div>
 
+      {/* Install from About */}
+      {!window.matchMedia("(display-mode: standalone)").matches && (
+        <div className="rounded-2xl p-4 text-center"
+          style={{ background:"#2F5D4510", border:"1.5px solid #2F5D4540" }}>
+          <div className="text-sm font-bold mb-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "📲 تثبيت التطبيق" : "📲 Install App"}
+          </div>
+          <div className="text-xs mb-3" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+            {lang==="ar"
+              ? "أضف التطبيق لشاشتك الرئيسية للوصول السريع"
+              : "Add to home screen for quick access"}
+          </div>
+          <InstallBanner />
+        </div>
+      )}
+
       {/* Footer */}
       <div className="text-center py-2">
         <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
@@ -3926,11 +3942,16 @@ function XFeed() {
 function InstallBanner() {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem("install_dismissed")==="1");
+  const haptic = useHaptic();
+  const [dismissed, setDismissed] = useState(
+    () => localStorage.getItem("install_dismissed") === "1"
+  );
   const [prompt, setPrompt] = useState(null);
   const [showGuide, setShowGuide] = useState(false);
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone===true;
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+    || navigator.standalone === true;
 
   useEffect(() => {
     const h = e => { e.preventDefault(); setPrompt(e); };
@@ -3938,79 +3959,119 @@ function InstallBanner() {
     return () => window.removeEventListener("beforeinstallprompt", h);
   }, []);
 
-  if (dismissed || isStandalone) return null;
-  if (!prompt && !isIOS) return null;
+  // Don't show if already installed as PWA
+  if (isStandalone || dismissed) return null;
+  // Show on mobile (iOS or Android) even without prompt
+  if (!prompt && !isIOS && !isAndroid) return null;
 
   const steps = [
     { ar:"افتح الرابط في Safari (ليس Chrome)", en:"Open in Safari (not Chrome)" },
-    { ar:"اضغط زر المشاركة في الأسفل", en:"Tap the Share button at the bottom" },
+    { ar:"اضغط زر المشاركة ↑ في الأسفل", en:"Tap the Share button ↑ at the bottom" },
     { ar:'اختر "إضافة إلى الشاشة الرئيسية"', en:'Select "Add to Home Screen"' },
     { ar:'اضغط "إضافة" في الأعلى', en:'Tap "Add" at the top' },
   ];
 
   const handleInstall = async () => {
-    haptic.light(); if (isIOS) { setShowGuide(true); return; }
-    if (!prompt) return;
-    haptic.medium(); prompt.prompt();
-    const choice = await prompt.userChoice;
-    if (choice.outcome === "accepted") {
-      setDismissed(true);
-      localStorage.setItem("install_dismissed","1");
-      const n = parseInt(localStorage.getItem("kh_installs")||"0")+1;
-      localStorage.setItem("kh_installs", n.toString());
+    haptic.medium();
+    if (isIOS) { setShowGuide(true); return; }
+    if (prompt) {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice;
+      if (outcome === "accepted") {
+        setDismissed(true);
+        localStorage.setItem("install_dismissed","1");
+        const n = parseInt(localStorage.getItem("kh_installs")||"0")+1;
+        localStorage.setItem("kh_installs", n.toString());
+        haptic.success();
+      }
+      setPrompt(null);
+    } else {
+      // Android without prompt — show manual guide
+      setShowGuide(true);
     }
-    setPrompt(null);
+  };
+
+  const dismiss = () => {
+    setDismissed(true);
+    localStorage.setItem("install_dismissed","1");
   };
 
   return (
     <>
       <div className="flex items-center justify-between rounded-2xl p-3 mb-1"
-        style={{ background:th.cardBg, border:`1px solid ${th.border}` }}>
+        style={{ background:th.cardBg, border:`1.5px solid #2F5D4540` }}>
         <div className="flex items-center gap-2">
-          <span style={{fontSize:22}}>🌿</span>
+          <span style={{fontSize:24}}>🌿</span>
           <div>
             <div className="text-xs font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-              {lang==="ar" ? "أضف للشاشة الرئيسية" : "Add to Home Screen"}
+              {lang==="ar" ? "أضف التطبيق للشاشة الرئيسية" : "Add App to Home Screen"}
             </div>
             <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-              {isIOS ? "Safari فقط" : lang==="ar" ? "يعمل بدون إنترنت" : "Works offline"}
+              {isIOS
+                ? (lang==="ar" ? "Safari · اضغط ↑ ثم أضف" : "Safari · Tap ↑ then Add")
+                : prompt
+                ? (lang==="ar" ? "اضغط تثبيت للتنزيل مباشرة" : "Tap Install to download directly")
+                : (lang==="ar" ? "اضغط للتعليمات" : "Tap for instructions")}
             </div>
           </div>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <button onClick={handleInstall}
-            style={{ background:"#2F5D45", color:"#fff", border:"none", borderRadius:10, padding:"6px 14px", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:"Tajawal" }}>
-            {isIOS ? "📲 كيف؟" : lang==="ar" ? "تثبيت" : "Install"}
+            style={{ background:"#2F5D45", color:"#fff", border:"none",
+              borderRadius:10, padding:"7px 16px", fontSize:13, fontWeight:700,
+              cursor:"pointer", fontFamily:"Tajawal" }}>
+            {prompt ? (lang==="ar" ? "⬇️ تثبيت" : "⬇️ Install")
+                    : (lang==="ar" ? "📲 كيف؟" : "📲 How?")}
           </button>
-          <button onClick={() => { setDismissed(true); localStorage.setItem("install_dismissed","1"); }}
-            style={{ background:"none", border:"none", color:th.subColor, cursor:"pointer", fontSize:18 }}>✕</button>
+          <button onClick={dismiss}
+            style={{ background:"none", border:"none", color:th.subColor,
+              cursor:"pointer", fontSize:20, padding:"0 4px" }}>✕</button>
         </div>
       </div>
 
       {showGuide && (
-        <div style={{ position:"fixed", inset:0, zIndex:100, background:"rgba(0,0,0,.7)", display:"flex", alignItems:"flex-end", padding:16 }}
+        <div style={{ position:"fixed", inset:0, zIndex:100,
+          background:"rgba(0,0,0,.75)", display:"flex", alignItems:"flex-end", padding:16 }}
           onClick={() => setShowGuide(false)}>
-          <div style={{ width:"100%", maxWidth:400, margin:"0 auto", background:th.cardBg, borderRadius:20, padding:20 }}
+          <div style={{ width:"100%", maxWidth:420, margin:"0 auto",
+            background:th.cardBg, borderRadius:20, padding:20 }}
             onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-4">
               <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-                {"📲 "}{lang==="ar" ? "تثبيت على iPhone/iPad" : "Install on iPhone/iPad"}
+                {"📲 "}{lang==="ar"
+                  ? (isIOS ? "تثبيت على iPhone / iPad" : "إضافة للشاشة الرئيسية")
+                  : (isIOS ? "Install on iPhone / iPad" : "Add to Home Screen")}
               </div>
               <button onClick={() => setShowGuide(false)}
-                style={{ background:"none", border:"none", fontSize:20, cursor:"pointer", color:th.subColor }}>✕</button>
+                style={{ background:"none", border:"none", fontSize:22,
+                  cursor:"pointer", color:th.subColor }}>✕</button>
             </div>
-            {steps.map((s, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl p-2.5 mb-2"
+            {(isIOS ? steps : [
+              { ar:"افتح قائمة المتصفح (⋮) في أعلى اليمين", en:"Open browser menu (⋮) top right" },
+              { ar:'اختر "إضافة إلى الشاشة الرئيسية"', en:'Select "Add to Home Screen"' },
+              { ar:'اضغط "إضافة"', en:'Tap "Add"' },
+            ]).map((s, i) => (
+              <div key={i} className="flex items-center gap-3 rounded-xl p-3 mb-2"
                 style={{ background:th.border }}>
-                <span style={{ background:"#2F5D45", color:"#fff", borderRadius:"50%", width:26, height:26, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, flexShrink:0 }}>{i+1}</span>
-                <span className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal", lineHeight:1.5 }}>
+                <span style={{ background:"#2F5D45", color:"#fff", borderRadius:"50%",
+                  width:26, height:26, display:"flex", alignItems:"center",
+                  justifyContent:"center", fontSize:12, fontWeight:800, flexShrink:0 }}>
+                  {i+1}
+                </span>
+                <span className="text-xs" style={{ color:th.subColor,
+                  fontFamily:"Tajawal", lineHeight:1.5 }}>
                   {lang==="ar" ? s.ar : s.en}
                 </span>
               </div>
             ))}
-            <div className="mt-2 rounded-xl p-2 text-center text-xs" style={{ background:"#C98A2E18", color:"#C98A2E", fontFamily:"Tajawal" }}>
-              {"⚠️ "}{lang==="ar" ? "Safari مطلوب لتثبيت التطبيق على iPhone" : "Safari is required for iPhone/iPad installation"}
-            </div>
+            {isIOS && (
+              <div className="mt-3 rounded-xl p-2.5 text-center text-xs"
+                style={{ background:"#C98A2E15", color:"#C98A2E", fontFamily:"Tajawal" }}>
+                {"⚠️ "}{lang==="ar"
+                  ? "يجب استخدام Safari لإضافة التطبيق على iPhone"
+                  : "Safari is required to install on iPhone"}
+              </div>
+            )}
           </div>
         </div>
       )}
