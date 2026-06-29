@@ -664,32 +664,6 @@ const REGIONS = {
    "Sponsored" in the UI for transparency with users.
 =================================================================== */
 
-const SPONSORED_LISTINGS = [
-  {
-    cat: "accommodation",
-    nAr: "[مثال] منتجع البحر الذهبي", nEn: "[Example] Golden Sea Resort",
-    descAr: "إقامة فندقية على الواجهة البحرية مع عروض خاصة لموسم الخريف.", descEn: "Beachfront hotel stay with special khareef-season offers.",
-    descHi: "[उदाहरण] ख़रीफ़ सीज़न के विशेष ऑफर के साथ समुद्र तट पर होटल प्रवास।", descFr: "[Exemple] Séjour hôtelier en bord de mer avec offres spéciales pour la saison khareef.",
-    category: { ar: "إقامة", en: "Accommodation", hi: "आवास", fr: "Hébergement" },
-    color: "#C98A2E",
-  },
-  {
-    cat: "restaurant",
-    nAr: "[مثال] مطعم أجواء ظفار", nEn: "[Example] Dhofar Vibes Restaurant",
-    descAr: "مأكولات عُمانية وبحرية طازجة، طاولات مطلة على الضباب الجبلي.", descEn: "Fresh Omani and seafood dishes with tables overlooking the misty mountains.",
-    descHi: "[उदाहरण] ताज़ा ओमानी और समुद्री भोजन, धुंधले पहाड़ों के दृश्य वाली मेज़ें।", descFr: "[Exemple] Cuisine omanaise et fruits de mer frais, tables avec vue sur les montagnes brumeuses.",
-    category: { ar: "مطعم", en: "Restaurant", hi: "रेस्तरां", fr: "Restaurant" },
-    color: "#B5402C",
-  },
-  {
-    cat: "tours",
-    nAr: "[مثال] جولات صلالة 4×4", nEn: "[Example] Salalah 4x4 Tours",
-    descAr: "رحلات مرشدة لوادي دربات وجبل سمحان مع سائق محلي خبير.", descEn: "Guided trips to Wadi Darbat and Jabal Samhan with an experienced local driver.",
-    descHi: "[उदाहरण] अनुभवी स्थानीय ड्राइवर के साथ वादी दरबात और जबल समहान की निर्देशित यात्राएं।", descFr: "[Exemple] Excursions guidées vers Wadi Darbat et Jabal Samhan avec un chauffeur local expérimenté.",
-    category: { ar: "جولات سياحية", en: "Tours", hi: "टूर", fr: "Excursions" },
-    color: "#2F5D45",
-  },
-];
 
 const EVENING = {
   malls: [
@@ -1843,40 +1817,7 @@ function SponsoredBadge() {
   );
 }
 
-function SponsoredSection({ categories, limit }) {
-  const { lang, t, theme } = useLang();
-  const th = THEMES[theme];
-  let listings = categories ? SPONSORED_LISTINGS.filter((s) => categories.includes(s.cat)) : SPONSORED_LISTINGS;
-  if (limit) listings = listings.slice(0, limit);
-  if (listings.length === 0) return null;
-  return (
-    <div>
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{t.sponsoredTitle}</h3>
-        <span className="text-[10px]" style={{ color: th.subColor, fontFamily: "Tajawal" }}>{t.sponsoredDisclosure}</span>
-      </div>
-      <div className="space-y-2">
-        {listings.map((s) => (
-          <a key={s.nAr} href={`mailto:alharthy@gmail.com?subject=${encodeURIComponent("استفسار إعلان - " + s.nAr)}`}
-            className="flex items-center justify-between rounded-xl border p-3 transition active:scale-[0.98]"
-            style={{ borderColor: s.color, background: `${s.color}10` }}>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="truncate text-sm font-bold" style={{ color: th.titleColor, fontFamily: "Tajawal" }}>{nm(s, lang)}</span>
-                <SponsoredBadge />
-              </div>
-              <div className="mt-0.5 text-[10px]" style={{ color: s.color, fontFamily: "Tajawal" }}>{tx(s.category, lang)}</div>
-              <div className="mt-1 text-[11px] leading-relaxed" style={{ color: th.subColor, fontFamily: "Tajawal" }}>
-                {lang === "ar" ? s.descAr : lang === "hi" ? s.descHi : lang === "fr" ? s.descFr : s.descEn}
-              </div>
-            </div>
-            <ExternalLink size={13} color={th.subColor} className="shrink-0" />
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-}
+
 
 function AboutCard() {
   const { lang, t, theme } = useLang();
@@ -2464,7 +2405,6 @@ function Sites() {
 
       {region === "hike" && (
         <>
-          <SponsoredSection categories={["tours"]} />
           <div>
             <SectionTitle title={t.bestCampingTitle} icon={Tent} />
             <div className="flex flex-wrap gap-2">
@@ -2507,7 +2447,6 @@ function Evening() {
   return (
     <div className="space-y-6 pb-6">
       <SectionTitle eyebrow={t.eveningEyebrow} title={t.eveningTitle} icon={Moon} />
-      <SponsoredSection categories={["restaurant"]} />
       {groups.map((g) => (
         <div key={g.title}>
           <div className="mb-2 flex items-center gap-2">
@@ -2596,7 +2535,6 @@ function Access() {
     <div className="space-y-5 pb-6">
       <SectionTitle eyebrow={t.accessEyebrow} title={t.accessTitle} icon={Route} />
 
-      <SponsoredSection categories={["accommodation", "tours"]} />
 
       <div className="flex gap-2">
         <button onClick={() => setMode("land")}
