@@ -462,7 +462,10 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
         <button class="sec-filter-btn" onclick="filterPhotoCat('religious')">🕌 الديني</button>
       </div>
 
-      <div id="photos-count" style="font-size:13px;font-weight:700;margin-bottom:10px">...</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div id="photos-count" style="font-size:13px;font-weight:700">...</div>
+        <button onclick="loadPhotos()" class="btn btn-outline btn-sm">🔄 تحديث</button>
+      </div>
       <div id="photos-list"></div>
     </div>
 
@@ -1172,17 +1175,25 @@ let photosSha = "2bd96ad43b4e1829de3b51a1cb45ca849dc209aa";
 let photosCatFilter = "all";
 
 async function loadPhotos() {
-  document.getElementById("photos-count").textContent = "⏳ تحميل...";
+  document.getElementById("photos-count").textContent = "⏳ جاري التحميل...";
   try {
+    // Always fetch with no-cache to get latest
     const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}`,
-      {headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+      {headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json","Cache-Control":"no-cache"},
+       cache:"no-store"});
     if(r.ok) {
       const d = await r.json();
       photosSha = d.sha;
       const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
-      photosData = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+      const parsed = JSON.parse(new TextDecoder("utf-8").decode(bytes));
+      photosData = parsed;
+      if (!photosData._places) photosData._places = {};
+      if (!photosData._categories) photosData._categories = {};
     }
-  } catch(e) {}
+  } catch(e) {
+    console.error("loadPhotos error:", e);
+    if (!photosData._places) photosData._places = {};
+  }
   renderPhotos();
 }
 
@@ -1198,11 +1209,12 @@ function filterPhotoCat(cat) {
 }
 
 function renderPhotos() {
-  const placePhotos = photosData._places || {};
-  const catPhotos = photosData._categories || {};
+  const placePhotos = (photosData && photosData._places) ? photosData._places : {};
+  const catPhotos = (photosData && photosData._categories) ? photosData._categories : {};
   const filtered = photosCatFilter === "all" ? ALL_PLACES : ALL_PLACES.filter(p => p.cat === photosCatFilter);
   const withPhoto = filtered.filter(p => placePhotos[p.ar]).length;
-  document.getElementById("photos-count").textContent = `${filtered.length} موقع · ${withPhoto} مع صورة · ${filtered.length - withPhoto} بدون`;
+  const totalInFile = Object.keys(placePhotos).length;
+  document.getElementById("photos-count").textContent = `${filtered.length} موقع · ${withPhoto} مع صورة · ${totalInFile} إجمالي محفوظ في الملف`;
 
   const list = document.getElementById("photos-list");
   list.innerHTML = "";
@@ -1264,13 +1276,23 @@ function renderPhotos() {
         } else {
           delete photosData._places[p.ar];
         }
+        saveBtn.textContent = "⏳";
+        saveBtn.disabled = true;
         try {
           const res = await ghPut(PHOTOS_PATH, photosData, photosSha, "photo: " + p.ar);
           photosSha = res.content.sha;
-          renderPhotos();
-          saveBtn.textContent = "✅";
-          setTimeout(() => { saveBtn.textContent = "💾 حفظ"; }, 1500);
-        } catch(e) { alert("خطأ: " + e.message); }
+          // Reload from GitHub to confirm save
+          await loadPhotos();
+          saveBtn.textContent = "✅ محفوظ";
+          setTimeout(() => {
+            saveBtn.textContent = "💾 حفظ";
+            saveBtn.disabled = false;
+          }, 2000);
+        } catch(e) {
+          saveBtn.textContent = "❌ خطأ";
+          saveBtn.disabled = false;
+          alert("خطأ في الحفظ: " + e.message);
+        }
       };
     })(place, input);
 
