@@ -1734,6 +1734,7 @@ const MORE_TABS = [
   { key: "calendar", labelAr:"تقويم الخريف",      labelEn:"Calendar",       icon: Calendar },
   { key: "access",   labelAr:"الوصول إلى ظفار",   labelEn:"Getting Here",   icon: Route },
   { key: "health",   labelAr:"الصحة والطوارئ",    labelEn:"Health",         icon: HeartPulse },
+  { key: "about",    labelAr:"عن التطبيق",         labelEn:"About",          icon: Info },
 ];
 
 /* ===================================================================
@@ -2162,18 +2163,7 @@ function Home({ go, homeAds = [] }) {
       <WhereToGoToday />
 
       {/* ── NEWS ── */}
-      <div>
-        <div className="flex items-center justify-between mb-3 px-1">
-          <span className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
-            {lang==="ar"?"أخبار ظفار":"Dhofar News"}
-          </span>
-          <a href="https://x.com/khareef_dhofar" target="_blank" rel="noopener noreferrer"
-            className="text-xs font-bold" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-            {lang==="ar"?"المزيد ←":"More →"}
-          </a>
-        </div>
-        <XFeed />
-      </div>
+      <XFeed />
 
       {/* ── SPONSORED ── */}
       {homeAds.map((ad, i) => (
@@ -2780,11 +2770,137 @@ function Crowd() {
 function About() {
   const { lang, t, theme } = useLang();
   const th = THEMES[theme];
+  const haptic = useHaptic();
+  const [resetDone, setResetDone] = useState(false);
+
+  const resetOnboarding = () => {
+    haptic.success();
+    localStorage.removeItem("kh_onboarded");
+    setResetDone(true);
+    setTimeout(() => window.location.reload(), 800);
+  };
+
+  const shareApp = () => {
+    haptic.light();
+    if (navigator.share) {
+      navigator.share({
+        title: lang==="ar" ? "خريف ظفار 2026" : "Khareef Dhofar 2026",
+        text: lang==="ar" ? "دليل خريف صلالة الشامل 🌿" : "Complete Salalah Khareef guide 🌿",
+        url: "https://khareef-dhofar.vercel.app"
+      });
+    } else {
+      navigator.clipboard?.writeText("https://khareef-dhofar.vercel.app");
+    }
+  };
+
   return (
-    <div className="space-y-5 pb-6">
-      <SectionTitle eyebrow={`v${APP_VERSION}`} title={t.about} icon={Info} />
-      <AboutCard />
-      <BecomeSponsorCard />
+    <div className="space-y-4 pb-6">
+      <SectionTitle eyebrow={"v" + APP_VERSION} title={lang==="ar"?"عن التطبيق":"About"} icon={Info} />
+
+      {/* App card */}
+      <div className="overflow-hidden rounded-3xl"
+        style={{ background:"linear-gradient(145deg,#1F3D2B,#2F5D45)" }}>
+        <div className="flex items-center gap-4 p-5">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl text-4xl"
+            style={{ background:"rgba(255,255,255,0.15)" }}>🌿</div>
+          <div>
+            <div className="text-lg font-black" style={{ color:"#fff", fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "خريف ظفار 2026" : "Khareef Dhofar 2026"}
+            </div>
+            <div className="text-xs mt-1" style={{ color:"rgba(255,255,255,0.7)", fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "الإصدار " : "Version "}{APP_VERSION}
+            </div>
+            <div className="text-xs mt-0.5" style={{ color:"rgba(255,255,255,0.6)", fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "تطبيق دليل الخريف لمحافظة ظفار" : "Dhofar Khareef Season Guide"}
+            </div>
+          </div>
+        </div>
+        <button onClick={shareApp}
+          className="flex items-center justify-center gap-2 w-full py-3"
+          style={{ background:"rgba(255,255,255,0.12)", border:"none", borderTop:"1px solid rgba(255,255,255,0.1)",
+            cursor:"pointer", color:"#fff", fontFamily:"Tajawal", fontSize:14, fontWeight:700 }}>
+          <Share2 size={16} color="#fff" />
+          {lang==="ar" ? "شارك التطبيق" : "Share App"}
+        </button>
+      </div>
+
+      {/* Quick actions */}
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { emoji:"🌿", ar:"دليل المواقع", en:"Places Guide", tab:"explore" },
+          { emoji:"📅", ar:"تقويم الخريف", en:"Events Calendar", tab:"calendar" },
+          { emoji:"🍽️", ar:"دليل المطاعم", en:"Restaurants", tab:"food" },
+          { emoji:"📍", ar:"أقرب الأماكن", en:"Nearby Places", tab:"nearby" },
+        ].map(item => (
+          <button key={item.tab}
+            onClick={() => { haptic.light(); window.dispatchEvent(new CustomEvent("switchTab", {detail:item.tab})); }}
+            className="flex items-center gap-2 rounded-2xl p-3 text-right"
+            style={{ background:th.cardBg, border:`1px solid ${th.border}`, cursor:"pointer" }}>
+            <span style={{ fontSize:20 }}>{item.emoji}</span>
+            <span className="text-xs font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? item.ar : item.en}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Settings section */}
+      <div className="rounded-2xl overflow-hidden" style={{ border:`1px solid ${th.border}` }}>
+        <div className="px-4 py-2 text-xs font-bold" style={{ background:th.border, color:th.subColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "الإعدادات" : "Settings"}
+        </div>
+
+        {/* Reset onboarding */}
+        <button onClick={resetOnboarding}
+          className="flex items-center justify-between w-full px-4 py-3"
+          style={{ background:th.cardBg, border:"none", borderBottom:`1px solid ${th.border}`, cursor:"pointer" }}>
+          <div className="flex items-center gap-3">
+            <span style={{ fontSize:18 }}>🎓</span>
+            <div className="text-right">
+              <div className="text-sm font-bold text-right" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                {lang==="ar" ? "إعادة عرض دليل التطبيق" : "Show App Guide Again"}
+              </div>
+              <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                {resetDone
+                  ? (lang==="ar" ? "✅ سيعاد التشغيل..." : "✅ Restarting...")
+                  : (lang==="ar" ? "شاشات الترحيب الثلاث" : "The 3 welcome screens")}
+              </div>
+            </div>
+          </div>
+          <span style={{ color:th.subColor, fontSize:18 }}>←</span>
+        </button>
+
+        {/* Clear favorites */}
+        <button onClick={() => {
+            haptic.medium();
+            if(window.confirm(lang==="ar"?"حذف جميع المفضلات؟":"Clear all favorites?")) {
+              localStorage.removeItem("kh_favorites");
+              haptic.success();
+            }
+          }}
+          className="flex items-center gap-3 w-full px-4 py-3"
+          style={{ background:th.cardBg, border:"none", cursor:"pointer" }}>
+          <span style={{ fontSize:18 }}>⭐</span>
+          <div className="text-right">
+            <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "مسح المفضلات" : "Clear Favorites"}
+            </div>
+            <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+              {lang==="ar" ? "حذف كل الأماكن المحفوظة" : "Remove all saved places"}
+            </div>
+          </div>
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className="text-center py-2">
+        <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+          {lang==="ar" ? "صُنع بـ ❤️ لزوار ظفار" : "Made with ❤️ for Dhofar visitors"}
+        </div>
+        <div className="text-xs mt-1" style={{ color:th.subColor, fontFamily:"Tajawal", opacity:0.6 }}>
+          khareef-dhofar.vercel.app
+        </div>
+      </div>
     </div>
   );
 }
@@ -5181,17 +5297,7 @@ export default function App() {
                 ))}
               </div>
             </div>
-            {/* About link at bottom of More sheet */}
-            <div className="pt-3 border-t" style={{ borderColor:th.border }}>
-              <button onClick={() => { openTab("about"); toggleMore(); }}
-                className="flex items-center gap-2 w-full px-2 py-2 rounded-xl"
-                style={{ background:"none", border:"none", cursor:"pointer" }}>
-                <Info size={15} color={th.subColor} />
-                <span className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
-                  {lang==="ar" ? "عن التطبيق · الإصدار " + APP_VERSION : "About · v" + APP_VERSION}
-                </span>
-              </button>
-            </div>
+
           </div>
         )}
       </div>
