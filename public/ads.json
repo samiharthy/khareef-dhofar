@@ -1,5 +1,5 @@
 {
-  "enabled": false,
+  "enabled": true,
   "ads": [
     {
       "titleAr": "تجربة اعلان مذفوع",
@@ -10,18 +10,6 @@
       "emoji": "🌟",
       "color": "#2F5D45",
       "section": "all"
-    },
-    {
-      "titleAr": "تجربة اعلان",
-      "titleEn": "Test ad",
-      "descAr": "تجربة إعلانية مدفوعة",
-      "descEn": "Test new Ad fubctiob",
-      "url": "Http://WWW.TAJDEED.COM.OM",
-      "emoji": "🌟",
-      "color": "#2F5D45",
-      "section": "all",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhnQax7mxqZ-jFg1t7vPS-BEP7xQPcjFr7FyozFw3QDDCLJ4-odVu1cvk&s=10",
-      "expiry": "2026-06-30"
     }
   ]
 }
