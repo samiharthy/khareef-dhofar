@@ -4545,7 +4545,7 @@ function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
           </div>
           {tagText && (
             <div className="text-xs mt-0.5 font-bold" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
-              {"📍 "}{tagText}
+              {"📍 "}{tagText}{place.rating && <span style={{color:"#C98A2E"}}> · ⭐ {place.rating}</span>}
             </div>
           )}
           {descText && (
