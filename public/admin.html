@@ -116,6 +116,63 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
         </div>
         <div id="notif-msg" style="font-size:12px;margin-top:8px;display:none"></div>
       </div>
+
+      <!-- SCHEDULED / AUTOMATED NOTIFICATIONS -->
+      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530">
+        <div style="font-size:13px;font-weight:700;color:#2F5D45;margin-bottom:4px">🕐 إشعار مجدوَل تلقائياً</div>
+        <div style="font-size:11px;color:#555;line-height:1.7">
+          حدّد تاريخاً ووقتاً — سيُفعَّل الإشعار تلقائياً في التطبيق عند وصول ذلك الوقت دون أي تدخل يدوي.
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">➕ جدولة إشعار جديد</div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:12px;font-weight:700;color:#666;margin-bottom:6px">النوع</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="type-btn t-info" id="sch-type-info" onclick="setSchType('info')">📢 إعلان</button>
+            <button class="type-btn" id="sch-type-weather" onclick="setSchType('weather')">🌧️ طقس</button>
+            <button class="type-btn" id="sch-type-urgent" onclick="setSchType('urgent')">🚨 عاجل</button>
+          </div>
+        </div>
+        <label>الرسالة العربية 🇸🇦 *</label>
+        <textarea id="sch-msg-ar" placeholder="اكتب الإشعار المجدوَل..."></textarea>
+        <button class="btn btn-blue" style="width:100%;margin-top:8px;margin-bottom:4px" onclick="translateSchedule()">🌐 ترجمة تلقائية</button>
+        <label>الإنجليزية</label><input id="sch-msg-en" />
+        <label>الهندية</label><input id="sch-msg-hi" />
+        <label>الفرنسية</label><input id="sch-msg-fr" />
+
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <div style="flex:1">
+            <label>📅 التاريخ *</label>
+            <input type="date" id="sch-date" />
+          </div>
+          <div style="flex:1">
+            <label>🕐 الوقت *</label>
+            <input type="time" id="sch-time" />
+          </div>
+        </div>
+
+        <label style="margin-top:10px">⏳ ينتهي تلقائياً بعد (اختياري)</label>
+        <select id="sch-duration">
+          <option value="">لا ينتهي تلقائياً</option>
+          <option value="1">ساعة واحدة</option>
+          <option value="6">6 ساعات</option>
+          <option value="24">يوم واحد</option>
+          <option value="72">3 أيام</option>
+          <option value="168">أسبوع</option>
+        </select>
+
+        <button class="btn btn-green" style="width:100%;margin-top:14px" onclick="addScheduledNotif()">
+          🕐 جدولة الإشعار
+        </button>
+        <div id="sch-msg-status" style="font-size:12px;margin-top:6px;display:none"></div>
+      </div>
+
+      <div id="scheduled-list-wrap">
+        <div style="font-weight:700;font-size:14px;margin:14px 0 10px;padding:0 2px">📋 الإشعارات المجدوَلة</div>
+        <div id="scheduled-list"></div>
+      </div>
     </div>
 
     <!-- POSTS -->
@@ -574,6 +631,7 @@ function showTab(tab){
     el.classList.toggle("active",el.getAttribute("onclick").includes("'"+tab+"'"))
   );
   if(tab==="posts"&&postsSha===null) loadPosts();
+  if(tab==="notif") loadScheduled();
   if(tab==="locs"){ renderLocations(); loadLocations(); }
   if(tab==="stats") loadVercelStats();
   if(tab==="ads") loadAds();
@@ -1766,6 +1824,135 @@ async function importBulkCSV(){
   setTimeout(() => { progress.style.display = "none"; }, 2500);
   fileInput.value = "";
   renderLocations();
+}
+
+
+// ── SCHEDULED / AUTOMATED NOTIFICATIONS ──────────────────────────────────────
+const SCHEDULED_PATH = "public/scheduled_notifications.json";
+let schedData = [], schedSha = null, schedType = "info";
+
+function setSchType(t){
+  schedType = t;
+  ["info","weather","urgent"].forEach(x=>{
+    const el = document.getElementById("sch-type-"+x);
+    if(el) el.className = "type-btn" + (x===t ? " t-"+t : "");
+  });
+}
+
+async function translateSchedule(){
+  const ar = document.getElementById("sch-msg-ar").value.trim();
+  if(!ar){ alert("اكتب النص العربي أولاً"); return; }
+  try{
+    const [en,hi,fr] = await Promise.all([translateTo(ar,"en"),translateTo(ar,"hi"),translateTo(ar,"fr")]);
+    document.getElementById("sch-msg-en").value = en;
+    document.getElementById("sch-msg-hi").value = hi;
+    document.getElementById("sch-msg-fr").value = fr;
+  }catch(e){ alert("خطأ في الترجمة: "+e.message); }
+}
+
+async function loadScheduled(){
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${SCHEDULED_PATH}?t=${Date.now()}`,
+      {cache:"no-store", headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+    if(r.ok){
+      const d = await r.json();
+      schedSha = d.sha;
+      const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
+      schedData = JSON.parse(new TextDecoder("utf-8").decode(bytes)) || [];
+    }
+  }catch(e){ schedData = []; }
+  renderScheduled();
+}
+
+function renderScheduled(){
+  const list = document.getElementById("scheduled-list");
+  if(!list) return;
+  if(!schedData.length){
+    list.innerHTML = '<div class="card" style="text-align:center;color:#888;padding:16px;font-size:12px">لا توجد إشعارات مجدولة</div>';
+    return;
+  }
+  const now = Date.now();
+  // Sort: upcoming first, then past
+  const sorted = [...schedData].sort((a,b) => new Date(a.scheduledFor) - new Date(b.scheduledFor));
+  list.innerHTML = "";
+  sorted.forEach(item => {
+    const schedTime = new Date(item.scheduledFor).getTime();
+    const expiryTime = item.expiresAt ? new Date(item.expiresAt).getTime() : null;
+    let status, statusColor, statusBg;
+    if(now < schedTime){ status = "⏳ قادم"; statusColor = "#3C6E8F"; statusBg = "#3C6E8F15"; }
+    else if(expiryTime && now > expiryTime){ status = "✅ انتهى"; statusColor = "#888"; statusBg = "#88888815"; }
+    else { status = "🟢 نشط الآن"; statusColor = "#2F5D45"; statusBg = "#2F5D4515"; }
+
+    const dt = new Date(item.scheduledFor);
+    const dateStr = dt.toLocaleDateString("ar-OM", {day:"numeric",month:"short",year:"numeric"});
+    const timeStr = dt.toLocaleTimeString("ar-OM", {hour:"2-digit",minute:"2-digit"});
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.cssText = "padding:12px 14px;margin-bottom:8px";
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:${statusBg};color:${statusColor}">${status}</span>
+            <span style="font-size:11px;color:#888">📅 ${dateStr} · 🕐 ${timeStr}</span>
+          </div>
+          <div style="font-size:13px;font-weight:600">${(item.message?.ar||"").slice(0,80)}</div>
+        </div>
+        <button onclick="deleteScheduled('${item.id}')"
+          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700;flex-shrink:0">حذف</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+async function addScheduledNotif(){
+  const ar = document.getElementById("sch-msg-ar").value.trim();
+  const date = document.getElementById("sch-date").value;
+  const time = document.getElementById("sch-time").value;
+  if(!ar){ showMsg("sch-msg-status","أدخل نص الرسالة",false); return; }
+  if(!date || !time){ showMsg("sch-msg-status","حدد التاريخ والوقت",false); return; }
+
+  const scheduledFor = new Date(date+"T"+time+":00").toISOString();
+  const durationHrs = document.getElementById("sch-duration").value;
+  const expiresAt = durationHrs ? new Date(new Date(date+"T"+time+":00").getTime() + parseInt(durationHrs)*3600000).toISOString() : null;
+
+  const item = {
+    id: "sched-" + Date.now(),
+    type: schedType,
+    priority: schedType === "urgent" ? "urgent" : "normal",
+    message: {
+      ar, en: document.getElementById("sch-msg-en").value,
+      hi: document.getElementById("sch-msg-hi").value,
+      fr: document.getElementById("sch-msg-fr").value
+    },
+    scheduledFor, expiresAt,
+    createdAt: new Date().toISOString()
+  };
+
+  const updated = [...schedData, item];
+  try{
+    const res = await ghPut(SCHEDULED_PATH, updated, schedSha, "schedule notification for " + scheduledFor);
+    schedSha = res.content.sha;
+    schedData = updated;
+    renderScheduled();
+    ["sch-msg-ar","sch-msg-en","sch-msg-hi","sch-msg-fr","sch-date","sch-time"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+    document.getElementById("sch-duration").value="";
+    showMsg("sch-msg-status","✅ تمت الجدولة! سيُفعَّل تلقائياً عند الوقت المحدد",true);
+  }catch(e){
+    showMsg("sch-msg-status","❌ "+e.message,false);
+  }
+}
+
+async function deleteScheduled(id){
+  if(!confirm("حذف هذا الإشعار المجدوَل؟")) return;
+  const updated = schedData.filter(s => s.id !== id);
+  try{
+    const res = await ghPut(SCHEDULED_PATH, updated, schedSha, "delete scheduled: "+id);
+    schedSha = res.content.sha;
+    schedData = updated;
+    renderScheduled();
+  }catch(e){ alert("خطأ: "+e.message); }
 }
 
 function showMsg(id,text,ok){
