@@ -727,6 +727,17 @@ async function loadLocations(){
   document.getElementById("locs-count").textContent="⏳ تحميل...";
   try{const {content,sha}=await ghGet(LOCS_PATH);locsSha=sha;locsData=Array.isArray(content)?content:[];}
   catch(e){locsData=[];}
+  // Load photos cache for inline photo editing
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}?t=${Date.now()}`,
+      {cache:"no-store", headers:{Authorization:`token ${GH_TOKEN}`,Accept:"application/vnd.github+json"}});
+    if(r.ok){
+      const d = await r.json();
+      window._photosSha = d.sha;
+      const bytes = Uint8Array.from(atob(d.content.replace(/\n/g,"")), c=>c.charCodeAt(0));
+      window._photosCache = JSON.parse(new TextDecoder("utf-8").decode(bytes)) || {_places:{},_categories:{}};
+    }
+  }catch(e){ window._photosCache = window._photosCache || {_places:{},_categories:{}}; }
   renderLocations();
 }
 function filterLocSearch(){
