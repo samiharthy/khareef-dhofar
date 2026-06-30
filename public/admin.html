@@ -217,9 +217,19 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
           </select>
           <label>الاسم العربي *</label><input id="loc-nar" placeholder="اسم الموقع" />
           <label>الاسم الإنجليزي *</label><input id="loc-nen" placeholder="Location name" />
-          <label>الإحداثيات (lat, lng) *</label>
-          <input id="loc-coords" placeholder="17.1299, 54.2381" oninput="parseLocCoords()" />
+
+          <label>🔗 رابط Google Maps (مشاركة) — اختياري</label>
+          <input id="loc-gmaps-url" placeholder="https://maps.app.goo.gl/..." oninput="onGMapsUrlChange()" style="direction:ltr" />
+          <div style="font-size:11px;color:#888;margin-top:3px;font-family:Tajawal">
+            الصق رابط المشاركة من تطبيق Google Maps — سيُحفظ كما هو دون تحويل
+          </div>
+
+          <label>الإحداثيات (lat, lng)</label>
+          <input id="loc-coords" placeholder="17.1299, 54.2381 (إن وُجدت، أو اتركه فارغاً)" oninput="parseLocCoords()" style="direction:ltr" />
           <div id="loc-coords-prev" style="display:none;font-size:11px;color:#2F5D45;font-weight:700;margin-top:3px"></div>
+          <div style="font-size:11px;color:#888;margin-top:3px;font-family:Tajawal">
+            تُستخدم للخريطة الداخلية فقط — لا تستبدل رابط Google Maps أعلاه
+          </div>
           <input type="hidden" id="loc-lat" /><input type="hidden" id="loc-lng" />
           <div style="display:flex;gap:10px;margin-top:12px">
             <button class="btn btn-green" onclick="addLocation()">✅ إضافة</button>
@@ -234,8 +244,10 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
           <input type="hidden" id="edit-orig-nar" />
           <label>الاسم العربي</label><input id="edit-nar" />
           <label>الاسم الإنجليزي</label><input id="edit-nen" />
+          <label>🔗 رابط Google Maps</label>
+          <input id="edit-gmaps-url" placeholder="https://maps.app.goo.gl/..." style="direction:ltr" />
           <label>الإحداثيات (lat, lng)</label>
-          <input id="edit-coords" oninput="parseEditCoords()" />
+          <input id="edit-coords" oninput="parseEditCoords()" style="direction:ltr" />
           <div id="edit-coords-prev" style="display:none;font-size:11px;color:#3C6E8F;font-weight:700;margin-top:3px"></div>
           <input type="hidden" id="edit-lat" /><input type="hidden" id="edit-lng" />
           <div style="display:flex;gap:10px;margin-top:12px">
@@ -803,10 +815,26 @@ function renderLocations(){
       enEl.textContent = loc.nEn || "";
       info.appendChild(enEl);
 
-      var coordEl = document.createElement("div");
-      coordEl.style.cssText = "font-size:11px;color:#3C6E8F";
-      coordEl.textContent = "\ud83d\udccd " + (loc.lat||"?") + ", " + (loc.lng||"?");
-      info.appendChild(coordEl);
+      if(loc.lat && loc.lng){
+        var coordEl = document.createElement("div");
+        coordEl.style.cssText = "font-size:11px;color:#3C6E8F";
+        coordEl.textContent = "\ud83d\udccd " + loc.lat + ", " + loc.lng;
+        info.appendChild(coordEl);
+      }
+      if(loc.googleMapsUrl){
+        var gmEl = document.createElement("a");
+        gmEl.href = loc.googleMapsUrl;
+        gmEl.target = "_blank";
+        gmEl.style.cssText = "font-size:11px;color:#25D366;text-decoration:none;display:block";
+        gmEl.textContent = "\ud83d\udd17 رابط Google Maps محفوظ";
+        info.appendChild(gmEl);
+      }
+      if(!loc.lat && !loc.googleMapsUrl){
+        var noLocEl = document.createElement("div");
+        noLocEl.style.cssText = "font-size:11px;color:#B5402C";
+        noLocEl.textContent = "\u26a0\ufe0f لا يوجد موقع محدد";
+        info.appendChild(noLocEl);
+      }
 
       var secEl = document.createElement("div");
       secEl.style.cssText = "font-size:10px;color:#aaa";
@@ -821,7 +849,7 @@ function renderLocations(){
       var editBtn = document.createElement("button");
       editBtn.style.cssText = "background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700";
       editBtn.textContent = "\u062a\u0639\u062f\u064a\u0644";
-      (function(l){ editBtn.onclick = function(){ openEdit(l.nAr||"", l.nEn||"", l.lat||0, l.lng||0); }; })(loc);
+      (function(l){ editBtn.onclick = function(){ openEdit(l.nAr||"", l.nEn||"", l.lat||null, l.lng||null, l.googleMapsUrl||""); }; })(loc);
       btns.appendChild(editBtn);
 
       var delBtn = document.createElement("button");
@@ -839,6 +867,18 @@ function renderLocations(){
   }
 }
 function toggleLocForm(){const f=document.getElementById("loc-form");f.style.display=f.style.display==="none"?"block":"none";}
+function onGMapsUrlChange(){
+  const url = document.getElementById("loc-gmaps-url")?.value?.trim() || "";
+  // We do NOT try to extract lat/lng from short links (maps.app.goo.gl) —
+  // they require server-side redirect resolution which isn't reliable client-side.
+  // If it's a FULL google maps URL with @lat,lng in it, we can extract optionally:
+  const m = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if(m){
+    document.getElementById("loc-coords").value = m[1] + ", " + m[2];
+    parseLocCoords();
+  }
+}
+
 function parseLocCoords(){
   const m=document.getElementById("loc-coords").value.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);
   if(m){document.getElementById("loc-lat").value=m[1];document.getElementById("loc-lng").value=m[2];const p=document.getElementById("loc-coords-prev");p.textContent=`📍 ${m[1]}, ${m[2]} ✅`;p.style.display="block";}
@@ -846,20 +886,46 @@ function parseLocCoords(){
 async function addLocation(){
   const nAr=document.getElementById("loc-nar").value.trim();
   const nEn=document.getElementById("loc-nen").value.trim();
-  const lat=parseFloat(document.getElementById("loc-lat").value);
-  const lng=parseFloat(document.getElementById("loc-lng").value);
-  if(!nAr||!nEn||isNaN(lat)||isNaN(lng)){alert("أدخل جميع الحقول المطلوبة");return;}
-  const updated=[...locsData,{id:"loc-"+Date.now(),nAr,nEn,lat,lng,section:document.getElementById("loc-section").value}];
-  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"add location: "+nAr);locsSha=res.content.sha;locsData=updated;renderLocations();toggleLocForm();showMsg("loc-msg","✅ تمت الإضافة!",true);}
+  const gmapsUrl=document.getElementById("loc-gmaps-url").value.trim();
+  const latRaw=document.getElementById("loc-lat").value;
+  const lngRaw=document.getElementById("loc-lng").value;
+  const lat=latRaw?parseFloat(latRaw):null;
+  const lng=lngRaw?parseFloat(lngRaw):null;
+
+  if(!nAr||!nEn){alert("أدخل اسم الموقع بالعربي والإنجليزي");return;}
+  if(!gmapsUrl && (lat===null||lng===null)){
+    alert("أدخل إما رابط Google Maps أو الإحداثيات (أو كلاهما)");return;
+  }
+
+  const newLoc = {
+    id:"loc-"+Date.now(),
+    placeName: nAr,
+    nAr, nEn,
+    googleMapsUrl: gmapsUrl || null,
+    latitude: lat,
+    longitude: lng,
+    lat, lng, // kept for backward-compat with existing app code
+    placeId: null,
+    section: document.getElementById("loc-section").value
+  };
+
+  const updated=[...locsData,newLoc];
+  try{
+    const res=await ghPut(LOCS_PATH,updated,locsSha,"add location: "+nAr);
+    locsSha=res.content.sha;locsData=updated;renderLocations();toggleLocForm();
+    showMsg("loc-msg","✅ تمت الإضافة! "+(gmapsUrl?"(برابط Google Maps محفوظ)":""),true);
+    document.getElementById("loc-gmaps-url").value="";
+  }
   catch(e){alert("خطأ: "+e.message);}
 }
-function openEdit(nAr,nEn,lat,lng){
+function openEdit(nAr,nEn,lat,lng,gmapsUrl){
   document.getElementById("edit-orig-nar").value=nAr;
   document.getElementById("edit-nar").value=nAr;
   document.getElementById("edit-nen").value=nEn;
-  document.getElementById("edit-coords").value=lat+", "+lng;
-  document.getElementById("edit-lat").value=lat;
-  document.getElementById("edit-lng").value=lng;
+  document.getElementById("edit-gmaps-url").value=gmapsUrl||"";
+  document.getElementById("edit-coords").value=(lat&&lng)?(lat+", "+lng):"";
+  document.getElementById("edit-lat").value=lat||"";
+  document.getElementById("edit-lng").value=lng||"";
   document.getElementById("edit-form").style.display="block";
   document.getElementById("edit-form").scrollIntoView({behavior:"smooth"});
 }
@@ -870,15 +936,48 @@ function parseEditCoords(){
 async function saveEdit(){
   const nAr=document.getElementById("edit-nar").value.trim();
   const nEn=document.getElementById("edit-nen").value.trim();
-  const lat=parseFloat(document.getElementById("edit-lat").value);
-  const lng=parseFloat(document.getElementById("edit-lng").value);
-  if(!nAr||isNaN(lat)){alert("أدخل البيانات المطلوبة");return;}
+  const gmapsUrl=document.getElementById("edit-gmaps-url").value.trim();
+  const latRaw=document.getElementById("edit-lat").value;
+  const lngRaw=document.getElementById("edit-lng").value;
+  const lat=latRaw?parseFloat(latRaw):null;
+  const lng=lngRaw?parseFloat(lngRaw):null;
+  if(!nAr){alert("أدخل اسم الموقع");return;}
+
   const origNar=document.getElementById("edit-orig-nar").value;
-  const idx=locsData.findIndex(l=>l.nAr===origNar);
-  if(idx===-1){alert("لم يُعثر على الموقع");return;}
-  const updated=[...locsData];updated[idx]={...updated[idx],nAr,nEn,lat,lng};
-  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"edit: "+nAr);locsSha=res.content.sha;locsData=updated;document.getElementById("edit-form").style.display="none";renderLocations();showMsg("edit-msg","✅ تم التعديل!",true);}
-  catch(e){showMsg("edit-msg","❌ "+e.message,false);}
+  // Could be builtin (needs override) or custom (direct edit)
+  const isBuiltin = BUILTIN_SPOTS.some(s=>s.nAr===origNar);
+
+  if(isBuiltin){
+    // Save as an override entry
+    const filtered = locsData.filter(l=>!(l._override && l.nAr===origNar));
+    const override = {
+      nAr: origNar, // keep original name as the override key
+      _override: true,
+      nEn, googleMapsUrl: gmapsUrl||null,
+      latitude: lat, longitude: lng, lat, lng,
+      // If name changed, store new display name separately
+      displayNAr: nAr !== origNar ? nAr : undefined
+    };
+    if(nAr !== origNar) override.nAr_new = nAr;
+    const updated = [...filtered, override];
+    try{
+      const res=await ghPut(LOCS_PATH,updated,locsSha,"override: "+origNar);
+      locsSha=res.content.sha;locsData=updated;
+      document.getElementById("edit-form").style.display="none";renderLocations();
+      showMsg("edit-msg","✅ تم الحفظ كتعديل (override)",true);
+    }catch(e){showMsg("edit-msg","❌ "+e.message,false);}
+  } else {
+    const idx=locsData.findIndex(l=>l.nAr===origNar);
+    if(idx===-1){alert("لم يُعثر على الموقع");return;}
+    const updated=[...locsData];
+    updated[idx]={...updated[idx],nAr,nEn,googleMapsUrl:gmapsUrl||null,latitude:lat,longitude:lng,lat,lng};
+    try{
+      const res=await ghPut(LOCS_PATH,updated,locsSha,"edit: "+nAr);
+      locsSha=res.content.sha;locsData=updated;
+      document.getElementById("edit-form").style.display="none";renderLocations();
+      showMsg("edit-msg","✅ تم التعديل!",true);
+    }catch(e){showMsg("edit-msg","❌ "+e.message,false);}
+  }
 }
 async function deleteSpotByName(nAr, isBuiltin) {
   if(!confirm("حذف "+nAr+" من التطبيق؟")) return;
