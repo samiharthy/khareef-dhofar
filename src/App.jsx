@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.61";
+const APP_VERSION = "1.63";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3474,6 +3474,7 @@ function WhereToGoToday() {
   const [loading, setLoading] = useState(false);
   const [callCount, setCallCount] = useState(0);
   const [weather, setWeather] = useState(null);
+  const [shownPlaces, setShownPlaces] = useState([]);
 
   useEffect(() => {
     try {
@@ -3485,83 +3486,81 @@ function WhereToGoToday() {
   async function getSuggestions(refresh = false) {
     if (!selected) return;
     setLoading(true);
-    if (refresh) setResults([]);
-    const newCount = callCount + 1;
-    setCallCount(newCount);
-
-    const opt = INTEREST_OPTIONS.find(o => o.id === selected);
-    const now = new Date();
-    const hour = now.getHours();
-    const timeLabel = hour < 10 ? "صباح" : hour < 14 ? "ظهيرة" : hour < 18 ? "عصر" : "مساء";
-    const weatherSummary = weather
-      ? weather.map(r => `${r.nameAr}: ${r.precip > 0 ? r.precip + "mm أمطار" : r.code >= 45 ? "ضباب" : "جاف"} ${r.temp}°`).join("، ")
-      : "لا يوجد";
-    const interest = opt ? (lang === "ar" ? opt.ar : opt.en) : "";
-    const excludeNote = newCount > 1 ? `\nمهم: هذا الطلب رقم ${newCount}، قدّم أماكن مختلفة تماماً عن الاقتراحات السابقة.` : "";
-
-    const prompt = `أنت مرشد سياحي خبير في محافظة ظفار، عُمان، موسم الخريف.
-الوقت: ${timeLabel} (${hour}:${String(now.getMinutes()).padStart(2,'0')})
-الطقس: ${weatherSummary}
-اهتمام الزائر: ${interest}${excludeNote}
-
-اقترح 3 أماكن مختلفة ومناسبة للزيارة الآن. أجب بـ JSON فقط بدون أي نص إضافي أو markdown:
-[{"place":"اسم المكان","emoji":"إيموجي","reason":"سبب مختصر جملة واحدة","tip":"نصيحة سريعة"},{"place":"...","emoji":"...","reason":"...","tip":"..."},{"place":"...","emoji":"...","reason":"...","tip":"..."}]`;
 
     const FALLBACKS = {
-      nature:    [
+      nature: [
         {place:"وادي دربات",emoji:"🏞️",reason:"أجمل وادٍ خريفي، مياه متدفقة وخضرة كثيفة.",tip:"زر الصباح لأجمل منظر"},
         {place:"عين رزات",emoji:"💧",reason:"عين طبيعية هادئة محاطة بالأشجار.",tip:"مناسب للعائلات"},
         {place:"نوافير المغسيل",emoji:"🌊",reason:"ظاهرة طبيعية فريدة، نوافير بحرية مذهلة.",tip:"الأمواج قوية، ابقَ بعيداً عن الحافة"},
+        {place:"شلال عين أثوم",emoji:"💦",reason:"شلال موسمي رائع وسط جبال خضراء خلال الخريف.",tip:"يحتاج مشياً قصيراً للوصول"},
+        {place:"حفرة طوي عتير",emoji:"🕳️",reason:"من أكبر الحفر الطبيعية في العالم، منظر مهيب.",tip:"منصة المشاهدة آمنة للجميع"},
+        {place:"وادي دوكة",emoji:"🌳",reason:"غابة أشجار اللبان البرية، موقع تراث عالمي.",tip:"مكان هادئ بعيد عن الزحام"},
+        {place:"كهف المرنيف",emoji:"🕳️",reason:"كهف ساحلي بإطلالة بحرية مذهلة قرب المغسيل.",tip:"احذر الصخور الزلقة"},
+        {place:"أشجار التبلدي",emoji:"🌲",reason:"أشجار عملاقة نادرة عمرها مئات السنين.",tip:"رائعة للتصوير"},
       ],
       adventure: [
         {place:"جبل سمحان",emoji:"⛰️",reason:"أعلى قمة في ظفار مع إطلالات خلابة.",tip:"انطلق مبكراً واحضر معدات مناسبة"},
         {place:"مسار وادي دربات",emoji:"🥾",reason:"مسار 4كم بين الأشجار والشلالات.",tip:"المسار رطب، احذر الانزلاق"},
         {place:"طريق انعدام الجاذبية",emoji:"🛣️",reason:"ظاهرة بصرية غريبة تبدو فيها السيارة تصعد وحدها.",tip:"مثير جداً للأطفال والكبار"},
+        {place:"مسار جبل القمر",emoji:"🏔️",reason:"مسار تحدٍ حقيقي بإطلالات بانورامية رائعة.",tip:"يفضل الذهاب مع مرشد"},
+        {place:"شاطئ الفزايح",emoji:"🚙",reason:"يحتاج دفعاً رباعياً، مغامرة ساحلية حقيقية.",tip:"تحقق من حالة الطريق قبل الذهاب"},
+        {place:"التخييم في جبل سمحان",emoji:"⛺",reason:"تجربة تخييم تحت النجوم بعيداً عن صخب المدينة.",tip:"احضر ملابس دافئة لليل"},
       ],
-      family:    [
+      family: [
         {place:"عين رزات",emoji:"💧",reason:"بيئة هادئة وآمنة للعائلات مع مياه نقية.",tip:"احضر وجبة ومفرش للجلوس"},
-        {place:"حديقة ارض اللبان",emoji:"🌳",reason:"حديقة واسعة مع أشجار اللبان الأصيلة.",tip:"رائعة للتصوير العائلي"},
+        {place:"حديقة أرض اللبان",emoji:"🌳",reason:"حديقة واسعة مع أشجار اللبان الأصيلة.",tip:"رائعة للتصوير العائلي"},
         {place:"شاطئ الحافة",emoji:"🏖️",reason:"شاطئ هادئ مناسب للعائلات وقت المساء.",tip:"الغروب جميل جداً هنا"},
+        {place:"كورنيش الحافة",emoji:"🎡",reason:"ترفيه عائلي وعجلة فيريس ومطاعم على الواجهة البحرية.",tip:"مزدحم في المساء، اذهب مبكراً"},
+        {place:"حديقة صلالة العامة",emoji:"🌷",reason:"مساحات خضراء واسعة وألعاب للأطفال.",tip:"مفتوحة حتى المساء"},
+        {place:"سلالة جاردنز مول",emoji:"🛍️",reason:"تسوق وترفيه داخلي مكيّف مثالي للعائلة.",tip:"يضم منطقة ألعاب كبيرة للأطفال"},
       ],
-      heritage:  [
+      heritage: [
         {place:"موقع السمهرم (خور روري)",emoji:"🏛️",reason:"موقع أثري مهم لتجارة اللبان القديمة.",tip:"أفضل في الصباح الباكر"},
         {place:"متحف أرض اللبان",emoji:"🏺",reason:"يروي تاريخ ظفار وطريق اللبان العريق.",tip:"خصص ساعتين على الأقل"},
         {place:"حصن مرباط",emoji:"🗼",reason:"قلعة تاريخية بإطلالة بحرية رائعة.",tip:"القلعة مفتوحة نهاراً فقط"},
+        {place:"حصن طاقة",emoji:"🏰",reason:"حصن من القرن التاسع عشر يعرض الحياة العمانية التقليدية.",tip:"غرفه المحفوظة تستحق الزيارة"},
+        {place:"سوق الحافة",emoji:"🛍️",reason:"سوق تراثي للبان والعطور والحرف العمانية.",tip:"لا تنسَ المفاصلة على الأسعار"},
+        {place:"متنزه البليد الأثري",emoji:"🏺",reason:"موقع تراث عالمي بأطلال مدينة ميناء قديمة.",tip:"يضم متحفاً ومقهى بإطلالة بحرية"},
       ],
-      beach:     [
+      beach: [
         {place:"شاطئ مرباط",emoji:"🏖️",reason:"شاطئ طويل هادئ مع قلعة تاريخية بالقرب.",tip:"الأمواج هادئة نسبياً"},
         {place:"شاطئ الحافة",emoji:"🌅",reason:"منظر الغروب من هنا استثنائي.",tip:"زر قبل الغروب بساعة"},
         {place:"شاطئ المغسيل",emoji:"🌊",reason:"شاطئ صخري مع نوافير طبيعية مذهلة.",tip:"لا تقترب كثيراً من الصخور"},
+        {place:"شاطئ الفزايح",emoji:"💎",reason:"يُعتبر أجمل شاطئ في عُمان بمياه فيروزية.",tip:"يحتاج سيارة دفع رباعي"},
+        {place:"شاطئ طاقة",emoji:"⛵",reason:"شاطئ هادئ قريب من بلدة طاقة التاريخية.",tip:"مناسب لمشاهدة قوارب الصيادين"},
+        {place:"شاطئ ريسوت",emoji:"🏝️",reason:"شاطئ أقل ازدحاماً بمناظر طبيعية جميلة.",tip:"هادئ ومثالي للاسترخاء"},
       ],
-      hiking:    [
+      hiking: [
         {place:"مسار وادي دربات",emoji:"🥾",reason:"أشهر مسار في الخريف، 4كم مع شلالات.",tip:"ارتدِ حذاء مقاوم للماء"},
         {place:"جبل القمر الغربي",emoji:"⛰️",reason:"مسار طويل 18كم لمحبي التحدي الحقيقي.",tip:"مع مرشد فقط، يوم كامل"},
         {place:"مسار عين حمران",emoji:"🌿",reason:"مسار قصير 2كم بين الأشجار والينابيع.",tip:"مناسب للمبتدئين والعائلات"},
+        {place:"مسار حفرة طيق وطوي أعتير",emoji:"🧗",reason:"مسار مميز يجمع بين حفرتين طبيعيتين رائعتين.",tip:"يحتاج لياقة بدنية متوسطة"},
+        {place:"عين دربات العليا",emoji:"🚶",reason:"مسار هادئ بعيد عن الزحام بمناظر خضراء خلابة.",tip:"وقت مثالي قبل الظهر"},
+        {place:"سهل حمرير",emoji:"🌄",reason:"سهل مرتفع بإطلالات بانورامية ومسارات مشي متعددة.",tip:"الجو بارد، احضر سترة"},
       ],
     };
 
-    try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6", max_tokens: 600,
-          messages: [{ role: "user", content: prompt }]
-        })
-      });
-      const d = await res.json();
-      const text = d.content?.[0]?.text || "";
-      const clean = text.replace(/```json|```/g,"").trim();
-      const parsed = JSON.parse(clean);
-      setResults(Array.isArray(parsed) ? parsed.slice(0,3) : [parsed]);
-    } catch {
-      // Shuffle fallbacks for variety
-      const fb = FALLBACKS[selected] || FALLBACKS.nature;
-      const shuffled = [...fb].sort(() => Math.random() - 0.5);
-      setResults(shuffled);
+    const pool = FALLBACKS[selected] || FALLBACKS.nature;
+
+    // Avoid repeating previously shown places — track shown names
+    const shownNames = new Set(shownPlaces);
+    let available = pool.filter(p => !shownNames.has(p.place));
+    if (available.length < 3) {
+      // Pool exhausted — reset and start fresh
+      available = pool;
+      setShownPlaces([]);
     }
+
+    // Random sample 3 without replacement
+    const shuffled = [...available].sort(() => Math.random() - 0.5);
+    const picked = shuffled.slice(0, 3);
+
+    setShownPlaces(prev => [...prev, ...picked.map(p => p.place)]);
+    setResults(picked);
     setLoading(false);
   }
+
+
 
   function reset() { setResults([]); setLoading(false); }
 
@@ -3586,7 +3585,7 @@ function WhereToGoToday() {
         <div className="grid grid-cols-3 gap-2 mb-3">
           {INTEREST_OPTIONS.map(opt => (
             <button key={opt.id}
-              onClick={() => { setSelected(selected === opt.id ? null : opt.id); setResults([]); }}
+              onClick={() => { setSelected(selected === opt.id ? null : opt.id); setResults([]); setShownPlaces([]); }}
               className="flex flex-col items-center gap-1 rounded-2xl py-2.5 px-2 text-xs font-bold transition active:scale-95"
               style={{
                 background: selected === opt.id ? "#2F5D45" : th.border,
@@ -4240,6 +4239,7 @@ function ExploreTab({ globalAds = [] }) {
   });
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [photos, setPhotos] = useState({});
+  const [customLocs, setCustomLocs] = useState([]);
   const [viewMode, setViewMode] = useState("list"); // list | map | favs
   const [showSuggest, setShowSuggest] = useState(false);
 
@@ -4258,6 +4258,9 @@ function ExploreTab({ globalAds = [] }) {
       .catch(() => {});
 
     // Load place photos
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/locations.json?t=" + Date.now())
+      .then(r => r.json()).then(d => { if(Array.isArray(d)) setCustomLocs(d.filter(l => !l._override)); })
+      .catch(() => {});
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/place-photos.json?t=" + Date.now())
       .then(r => r.json()).then(d => setPhotos(d || {}))
       .catch(() => {});
@@ -4281,6 +4284,33 @@ function ExploreTab({ globalAds = [] }) {
     }))
   );
 
+  // Custom/imported places (from bulk import or manual add) — grouped by their own section
+  const customPlaces = customLocs.map(l => {
+    const meta = SECTION_META[l.section] || { emoji:"📍", ar:l.section||"أخرى", en:l.section||"Other" };
+    return {
+      ar: l.nAr, en: l.nEn, lat: l.lat||null, lng: l.lng||null,
+      googleMapsUrl: l.googleMapsUrl||null,
+      tag: { ar: meta.ar, en: meta.en },
+      desc: l.noteAr ? { ar: l.noteAr, en: l.noteEn||l.noteAr } : null,
+      rating: l.rating||null,
+      catKey: l.section, catEmoji: meta.emoji, catAr: meta.ar, catEn: meta.en,
+      type: "place", id: l.id||l.nAr,
+    };
+  });
+
+  const allPlacesWithCustom = [...allPlaces, ...customPlaces];
+
+  // Group custom places by section for category browsing
+  const customCatsMap = {};
+  customPlaces.forEach(p => {
+    if (!customCatsMap[p.catKey]) {
+      customCatsMap[p.catKey] = { key:p.catKey, emoji:p.catEmoji, ar:p.catAr, en:p.catEn, places:[] };
+    }
+    customCatsMap[p.catKey].places.push(p);
+  });
+  const customCats = Object.values(customCatsMap);
+  const allCatsForDisplay = [...GUIDE_CATS, ...customCats];
+
   // Restaurant places
   const restPlaces = restaurants
     .filter(r => (r.lat && r.lng) || r.googleMapsUrl)
@@ -4302,11 +4332,12 @@ function ExploreTab({ globalAds = [] }) {
       type: "event", id: "evt-" + e.nAr,
     }));
 
-  const allItems = [...allPlaces, ...restPlaces, ...eventPlaces];
+  const allItems = [...allPlaces, ...customPlaces, ...restPlaces, ...eventPlaces];
 
   const categories = [
     { key: "all",    emoji: "🌍", ar: "الكل",         en: "All"         },
     ...GUIDE_CATS.map(c => ({ key: c.key, emoji: c.emoji, ar: c.ar, en: c.en })),
+    ...customCats.map(c => ({ key: c.key, emoji: c.emoji, ar: c.ar, en: c.en })),
     { key: "food",   emoji: "🍽️", ar: "المطاعم",      en: "Restaurants" },
     { key: "events", emoji: "🎪", ar: "الفعاليات",    en: "Events"      },
   ];
@@ -4323,15 +4354,19 @@ function ExploreTab({ globalAds = [] }) {
   });
 
   const grouped = activeCat === "all" && !search && viewMode === "list" && !showFavOnly
-    ? GUIDE_CATS.map(cat => ({
-        ...cat,
-        places: cat.places.map(p => ({ ...p, ...(overrides[p.ar]||{}), catEmoji: cat.emoji, type:"place", id:p.ar }))
-      }))
+    ? [
+        ...GUIDE_CATS.map(cat => ({
+          ...cat,
+          places: cat.places.map(p => ({ ...p, ...(overrides[p.ar]||{}), catEmoji: cat.emoji, type:"place", id:p.ar }))
+        })),
+        ...customCats
+      ]
     : null;
 
   // Map URL for all filtered places
-  const mapUrl = filtered.length > 0
-    ? "https://www.google.com/maps/dir/" + filtered.slice(0,10).map(p => p.lat+","+p.lng).join("/")
+  const filteredWithCoords = filtered.filter(p => p.lat && p.lng);
+  const mapUrl = filteredWithCoords.length > 0
+    ? "https://www.google.com/maps/dir/" + filteredWithCoords.slice(0,10).map(p => p.lat+","+p.lng).join("/")
     : "https://www.google.com/maps/search/salalah+oman";
 
   return (
@@ -4438,7 +4473,7 @@ function ExploreTab({ globalAds = [] }) {
       )}
 
       {/* Grouped view */}
-      {grouped && viewMode === "list" && allPlaces.length > 0 && (
+      {grouped && viewMode === "list" && allPlacesWithCustom.length > 0 && (
         <div className="space-y-5">
           {grouped.map(cat => (
             <div key={cat.key}>
@@ -4928,6 +4963,34 @@ function KhareefCalendar() {
               )}
             </div>
           );
+
+      {/* Companion activities — things to do around events */}
+      {COMPANION_SITES.length > 0 && (
+        <div>
+          <div className="text-sm font-bold mb-2 px-1" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+            {lang==="ar" ? "🎡 فعاليات مصاحبة" : "🎡 Companion Activities"}
+          </div>
+          <div className="space-y-2">
+            {COMPANION_SITES.map((c, i) => (
+              <div key={i} className="flex items-start gap-3 rounded-2xl p-3"
+                style={{ background:th.cardBg, border:`1px solid ${th.border}` }}>
+                <span style={{ fontSize:24, flexShrink:0 }}>🎪</span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                    {lang==="ar" ? c.nAr : c.nEn}
+                  </div>
+                  {c.desc && (
+                    <div className="text-xs mt-0.5" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? c.desc.ar : c.desc.en}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
         })}
       </div>
     </div>
@@ -5492,6 +5555,28 @@ function SuggestModal({ onClose, lang, th }) {
     </div>
   );
 }
+
+
+const SECTION_META = {
+  beaches:{emoji:"🏖️",ar:"الشواطئ",en:"Beaches"},
+  springs:{emoji:"💧",ar:"العيون",en:"Springs"},
+  valleys:{emoji:"🏞️",ar:"الأودية والشلالات",en:"Valleys & Falls"},
+  viewpoints:{emoji:"🔭",ar:"المطلات",en:"Viewpoints"},
+  heritage:{emoji:"🏛️",ar:"التراث والآثار",en:"Heritage"},
+  religious:{emoji:"🕌",ar:"المواقع الدينية",en:"Religious Sites"},
+  nature:{emoji:"🌿",ar:"الطبيعة",en:"Nature"},
+  hike:{emoji:"🥾",ar:"هايكنج",en:"Hiking"},
+  evening:{emoji:"🌆",ar:"المساء والتسوق",en:"Evening & Shopping"},
+  companion:{emoji:"🎡",ar:"فعاليات مصاحبة",en:"Companion Activities"},
+  west:{emoji:"📍",ar:"غرب صلالة",en:"West Salalah"},
+  mid:{emoji:"📍",ar:"وسط صلالة",en:"Mid Salalah"},
+  east:{emoji:"📍",ar:"شرق صلالة",en:"East Salalah"},
+  health:{emoji:"💊",ar:"الصحة",en:"Health"},
+  access:{emoji:"🛣️",ar:"الوصول والنقل",en:"Access"},
+  events:{emoji:"🎪",ar:"الفعاليات",en:"Events"},
+  stays:{emoji:"🏨",ar:"الإقامة",en:"Stays"},
+  fuel:{emoji:"⛽",ar:"محطات الوقود",en:"Fuel Stations"},
+};
 
 export default function App() {
 
