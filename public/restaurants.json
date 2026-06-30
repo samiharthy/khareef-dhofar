@@ -3,16 +3,15 @@
     "nAr": "مطعم الحصن",
     "nEn": "Al Husn Restaurant",
     "type": "arabic",
-    "priceAr": "متوسط",
-    "priceEn": "Mid-range",
-    "lat": 17.0151,
-    "lng": 54.0924,
+    "priceAr": "اقتصادي",
+    "priceEn": "Budget",
+    "googleMapsUrl": "https://maps.app.goo.gl/kGm365YdPRBUn1fv5?g_st=ac",
+    "open": "12:00-23:00",
+    "phone": "+96823210000",
     "note": {
       "ar": "أكلات عمانية أصيلة، مشهور بالمشاكيك",
       "en": "Authentic Omani cuisine"
-    },
-    "open": "12:00-23:00",
-    "phone": "+96823210000"
+    }
   },
   {
     "nAr": "مطعم نزوى",
