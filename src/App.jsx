@@ -4517,7 +4517,7 @@ function ExploreTab({ globalAds = [] }) {
 
 
 function PlaceCard({ place, catEmoji, lang, th, isFav, onFavToggle }) {
-  const mapsUrl = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const mapsUrl = place.googleMapsUrl || ("https://maps.google.com/?q=" + place.lat + "," + place.lng);
   const placeId = place.id || place.ar;
   const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
   const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
@@ -4976,7 +4976,7 @@ function EmptyState({ emoji="🔍", titleAr, titleEn, descAr, descEn,
 function PhotoPlaceCard({ place, catKey, catEmoji, lang, th, isFav, onFavToggle, photos={} }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const mapsUrl = "https://maps.google.com/?q=" + place.lat + "," + place.lng;
+  const mapsUrl = place.googleMapsUrl || ("https://maps.google.com/?q=" + place.lat + "," + place.lng);
   const placeId = place.id || place.ar;
   const name = lang==="ar" ? (place.ar||place.nAr||"") : (place.en||place.nEn||place.ar||"");
   const tagText = place.tag ? (lang==="ar" ? place.tag.ar : place.tag.en) : "";
