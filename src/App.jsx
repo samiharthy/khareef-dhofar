@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.65";
+const APP_VERSION = "1.66";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -3401,6 +3401,30 @@ function AlertBanner() {
   }, []);
 
   async function fetchAlert() {
+    // Check scheduled/automated notifications first — they take priority if currently active
+    try {
+      const schedRes = await fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/scheduled_notifications.json?t=" + Date.now());
+      const schedList = await schedRes.json();
+      const now = Date.now();
+      const activeScheduled = (Array.isArray(schedList) ? schedList : [])
+        .filter(s => {
+          const start = new Date(s.scheduledFor).getTime();
+          const end = s.expiresAt ? new Date(s.expiresAt).getTime() : null;
+          return now >= start && (!end || now <= end);
+        })
+        .sort((a, b) => new Date(b.scheduledFor) - new Date(a.scheduledFor))[0]; // most recent active
+
+      if (activeScheduled) {
+        const seenId = localStorage.getItem(ALERT_SEEN_KEY);
+        if (seenId !== activeScheduled.id) {
+          setAlert(activeScheduled);
+          setVisible(true);
+          return;
+        }
+      }
+    } catch (e) { /* silent */ }
+
+    // Fall back to manual alert.json
     try {
       const res = await fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/alert.json?t=" + Date.now());
       const data = await res.json();
