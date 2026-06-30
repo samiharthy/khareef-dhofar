@@ -4222,6 +4222,7 @@ function ExploreTab({ globalAds = [] }) {
     catch { return new Set(); }
   });
   const [showFavOnly, setShowFavOnly] = useState(false);
+  const [photos, setPhotos] = useState({});
   const [viewMode, setViewMode] = useState("list"); // list | map | favs
   const [showSuggest, setShowSuggest] = useState(false);
 
@@ -4237,6 +4238,11 @@ function ExploreTab({ globalAds = [] }) {
     // Load restaurants
     fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json()).then(d => { if(Array.isArray(d)) setRestaurants(d); })
+      .catch(() => {});
+
+    // Load place photos
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/place-photos.json?t=" + Date.now())
+      .then(r => r.json()).then(d => setPhotos(d || {}))
       .catch(() => {});
   }, []);
 
