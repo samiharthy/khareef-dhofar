@@ -3423,8 +3423,8 @@ function FoodGuide({ adsForSection = [] }) {
                 </div>
               </div>
               <div className="flex gap-2 mt-3">
-                {r.lat && (
-                  <a href={`https://www.google.com/maps/place/${r.lat},${r.lng}/@${r.lat},${r.lng},17z`}
+                {(r.lat || r.googleMapsUrl) && (
+                  <a href={r.googleMapsUrl || `https://www.google.com/maps/place/${r.lat},${r.lng}/@${r.lat},${r.lng},17z`}
                     target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-bold"
                     style={{ background: "#2F5D4515", color: "#2F5D45", fontFamily:"Tajawal" }}>
