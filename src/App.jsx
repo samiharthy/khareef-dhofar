@@ -2796,7 +2796,7 @@ function About() {
 
   return (
     <div className="space-y-4 pb-6">
-      <SectionTitle eyebrow={lang==="ar"?"التطبيق":"App"} title={lang==="ar"?"عن التطبيق":"About"} icon={Info} />
+      <SectionTitle title={lang==="ar"?"عن التطبيق":"About"} icon={Info} />
 
       {/* App card */}
       <div className="overflow-hidden rounded-3xl"
