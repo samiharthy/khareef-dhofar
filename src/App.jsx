@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.60";
+const APP_VERSION = "1.61";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -2796,7 +2796,7 @@ function About() {
 
   return (
     <div className="space-y-4 pb-6">
-      <SectionTitle eyebrow={"v" + APP_VERSION} title={lang==="ar"?"عن التطبيق":"About"} icon={Info} />
+      <SectionTitle eyebrow={lang==="ar"?"التطبيق":"App"} title={lang==="ar"?"عن التطبيق":"About"} icon={Info} />
 
       {/* App card */}
       <div className="overflow-hidden rounded-3xl"
@@ -3619,7 +3619,10 @@ function WhereToGoToday() {
         {/* Results */}
         {results.length > 0 && (
           <div className="space-y-2">
-            {results.map((r, i) => (
+            {results.map((r, i) => {
+              const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" +
+                encodeURIComponent(r.place + " ظفار صلالة Dhofar Oman");
+              return (
               <div key={i} className="flex items-start gap-3 rounded-xl p-3"
                 style={{ background: i===0 ? "#2F5D4510" : th.border }}>
                 <span style={{ fontSize:28, lineHeight:1, flexShrink:0 }}>{r.emoji}</span>
@@ -3629,9 +3632,18 @@ function WhereToGoToday() {
                   </div>
                   <div className="text-xs mt-0.5 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>{r.reason}</div>
                   {r.tip && <div className="text-xs mt-1 font-bold" style={{ color:"#C98A2E", fontFamily:"Tajawal" }}>💡 {r.tip}</div>}
+                  <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-2 rounded-lg px-2.5 py-1"
+                    style={{ background:"#2F5D4515", textDecoration:"none" }}>
+                    <MapPin size={11} color="#2F5D45" />
+                    <span className="text-xs font-bold" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? "افتح في الخريطة" : "Open in Maps"}
+                    </span>
+                  </a>
                 </div>
               </div>
-            ))}
+              );
+            })}
             <button onClick={() => getSuggestions(true)} disabled={loading}
               style={{ width:"100%", marginTop:4, background:"none", border:`1px solid ${th.border}`,
                 borderRadius:12, padding:"9px", fontSize:13, fontWeight:700,
