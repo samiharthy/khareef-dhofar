@@ -1585,6 +1585,226 @@ function renderPhotos() {
   });
 }
 
+
+// ── BULK IMPORT / EXPORT ─────────────────────────────────────────────────────
+function csvEscape(val){
+  if(val == null) return "";
+  const s = String(val);
+  if(s.includes(",") || s.includes('"') || s.includes("\n")){
+    return '"' + s.replace(/"/g,'""') + '"';
+  }
+  return s;
+}
+
+function csvParseLine(line){
+  const out = []; let cur = ""; let inQ = false;
+  for(let i=0;i<line.length;i++){
+    const c = line[i];
+    if(inQ){
+      if(c === '"'){
+        if(line[i+1] === '"'){ cur += '"'; i++; }
+        else inQ = false;
+      } else cur += c;
+    } else {
+      if(c === '"') inQ = true;
+      else if(c === ","){ out.push(cur); cur = ""; }
+      else cur += c;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).filter(l => l.trim().length);
+  if(!lines.length) return [];
+  const headers = csvParseLine(lines[0]).map(h => h.trim());
+  return lines.slice(1).map(line => {
+    const vals = csvParseLine(line);
+    const obj = {};
+    headers.forEach((h,i) => { obj[h] = (vals[i]||"").trim(); });
+    return obj;
+  });
+}
+
+async function exportBulkCSV(){
+  showMsg("bulk-msg","⏳ جاري تجميع البيانات...",true);
+
+  // Fetch current overrides + photos + restaurants fresh
+  let overridesArr = [];
+  let photosCache = {_places:{}};
+  let restaurantsArr = [];
+  try{
+    const or = await fetch(`https://api.github.com/repos/${REPO}/contents/${OVERRIDES_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    if(or.ok){ const od=await or.json(); const b=Uint8Array.from(atob(od.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); overridesArr=JSON.parse(new TextDecoder().decode(b))||[]; }
+  }catch(e){}
+  try{
+    const pr = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    if(pr.ok){ const pd=await pr.json(); const b=Uint8Array.from(atob(pd.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); photosCache=JSON.parse(new TextDecoder().decode(b))||{_places:{}}; }
+  }catch(e){}
+  try{
+    const rr = await fetch(`https://api.github.com/repos/${REPO}/contents/${REST_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    if(rr.ok){ const rd=await rr.json(); const b=Uint8Array.from(atob(rd.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); restaurantsArr=JSON.parse(new TextDecoder().decode(b))||[]; }
+  }catch(e){}
+
+  const ovMap = {};
+  overridesArr.forEach(o => { ovMap[o.id] = o; });
+  const placePhotos = photosCache._places || {};
+
+  const rows = [];
+  // Places (builtin spots merged with overrides)
+  BUILTIN_SPOTS.forEach(s => {
+    const ov = ovMap[s.nAr] || {};
+    rows.push({
+      type: "place",
+      nameAr: s.nAr, nameEn: s.nEn,
+      section: s.section,
+      googleMapsUrl: ov.googleMapsUrl || "",
+      rating: ov.rating || "",
+      photoUrl: placePhotos[s.nAr] || "",
+      openHours: "", phone: "",
+      priceAr: "", priceEn: "",
+      noteAr: "", noteEn: ""
+    });
+  });
+  // Restaurants
+  restaurantsArr.forEach(r => {
+    rows.push({
+      type: "restaurant",
+      nameAr: r.nAr, nameEn: r.nEn,
+      section: r.type || "",
+      googleMapsUrl: r.googleMapsUrl || "",
+      rating: r.rating || "",
+      photoUrl: r.photoUrl || "",
+      openHours: r.open || "", phone: r.phone || "",
+      priceAr: r.priceAr || "", priceEn: r.priceEn || "",
+      noteAr: r.note?.ar || "", noteEn: r.note?.en || ""
+    });
+  });
+
+  const cols = ["type","nameAr","nameEn","section","googleMapsUrl","rating","photoUrl","openHours","phone","priceAr","priceEn","noteAr","noteEn"];
+  let csv = "\uFEFF" + cols.join(",") + "\n";
+  rows.forEach(row => {
+    csv += cols.map(c => csvEscape(row[c])).join(",") + "\n";
+  });
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "khareef-dhofar-locations-" + new Date().toISOString().split("T")[0] + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showMsg("bulk-msg", "✅ تم التصدير! " + rows.length + " صف (مواقع + مطاعم)", true);
+}
+
+async function importBulkCSV(){
+  const fileInput = document.getElementById("bulk-file-input");
+  const file = fileInput.files[0];
+  if(!file){ alert("اختر ملف CSV أولاً"); return; }
+
+  const progress = document.getElementById("bulk-import-progress");
+  const progressText = document.getElementById("bulk-progress-text");
+  const progressBar = document.getElementById("bulk-progress-bar");
+  progress.style.display = "block";
+  progressText.textContent = "⏳ قراءة الملف...";
+  progressBar.style.width = "5%";
+
+  const text = await file.text();
+  const rows = parseCSV(text.replace(/^\uFEFF/, ""));
+  if(!rows.length){ showMsg("bulk-msg","❌ الملف فارغ أو غير صالح",false); progress.style.display="none"; return; }
+
+  progressText.textContent = `⏳ معالجة ${rows.length} صف...`;
+  progressBar.style.width = "15%";
+
+  // Separate place rows vs restaurant rows
+  const placeRows = rows.filter(r => (r.type||"").toLowerCase() === "place");
+  const restRows = rows.filter(r => (r.type||"").toLowerCase() === "restaurant");
+
+  let updatedCount = 0;
+
+  // ── Update places: write to places_overrides.json + place-photos.json ──────
+  try{
+    progressText.textContent = "⏳ تحديث المواقع...";
+    progressBar.style.width = "30%";
+
+    const or = await fetch(`https://api.github.com/repos/${REPO}/contents/${OVERRIDES_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    let overridesArr = []; let overridesSha = null;
+    if(or.ok){ const od=await or.json(); overridesSha=od.sha; const b=Uint8Array.from(atob(od.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); overridesArr=JSON.parse(new TextDecoder().decode(b))||[]; }
+
+    const pr = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    let photosCache = {_places:{},_categories:{}}; let photosSha2 = null;
+    if(pr.ok){ const pd=await pr.json(); photosSha2=pd.sha; const b=Uint8Array.from(atob(pd.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); photosCache=JSON.parse(new TextDecoder().decode(b))||{_places:{}}; }
+    if(!photosCache._places) photosCache._places = {};
+
+    placeRows.forEach(row => {
+      if(!row.nameAr) return;
+      overridesArr = overridesArr.filter(o => o.id !== row.nameAr);
+      const override = { id: row.nameAr, ar: row.nameAr, en: row.nameEn||"" };
+      if(row.googleMapsUrl) override.googleMapsUrl = row.googleMapsUrl;
+      if(row.rating) override.rating = parseFloat(row.rating)||row.rating;
+      overridesArr.push(override);
+      if(row.photoUrl) photosCache._places[row.nameAr] = row.photoUrl;
+      updatedCount++;
+    });
+
+    progressBar.style.width = "55%";
+    await ghPut(OVERRIDES_PATH, overridesArr, overridesSha, "bulk import: " + placeRows.length + " places");
+    progressBar.style.width = "70%";
+    await ghPut(PHOTOS_PATH, photosCache, photosSha2, "bulk import: photos");
+  }catch(e){
+    showMsg("bulk-msg","❌ خطأ في تحديث المواقع: "+e.message,false);
+  }
+
+  // ── Update restaurants: full upsert into restaurants.json ──────────────────
+  try{
+    progressText.textContent = "⏳ تحديث المطاعم...";
+    progressBar.style.width = "80%";
+
+    const rr = await fetch(`https://api.github.com/repos/${REPO}/contents/${REST_PATH}`,
+      {headers:{Authorization:`token ${GH_TOKEN}`}});
+    let restArr = []; let restSha2 = null;
+    if(rr.ok){ const rd=await rr.json(); restSha2=rd.sha; const b=Uint8Array.from(atob(rd.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); restArr=JSON.parse(new TextDecoder().decode(b))||[]; }
+
+    restRows.forEach(row => {
+      if(!row.nameAr) return;
+      const existingIdx = restArr.findIndex(r => r.nAr === row.nameAr);
+      const restObj = {
+        nAr: row.nameAr, nEn: row.nameEn||"",
+        type: row.section || "arabic",
+        priceAr: row.priceAr||"", priceEn: row.priceEn||"",
+        googleMapsUrl: row.googleMapsUrl||null,
+        rating: row.rating ? (parseFloat(row.rating)||row.rating) : null,
+        photoUrl: row.photoUrl||null,
+        open: row.openHours||"", phone: row.phone||"",
+        note: { ar: row.noteAr||"", en: row.noteEn||"" }
+      };
+      if(existingIdx !== -1) restArr[existingIdx] = restObj;
+      else restArr.push(restObj);
+      updatedCount++;
+    });
+
+    progressBar.style.width = "95%";
+    await ghPut(REST_PATH, restArr, restSha2, "bulk import: " + restRows.length + " restaurants");
+  }catch(e){
+    showMsg("bulk-msg","❌ خطأ في تحديث المطاعم: "+e.message,false);
+  }
+
+  progressBar.style.width = "100%";
+  progressText.textContent = "✅ تم!";
+  showMsg("bulk-msg", `✅ تم تحديث ${updatedCount} عنصر بنجاح! (${placeRows.length} موقع + ${restRows.length} مطعم)`, true);
+  setTimeout(() => { progress.style.display = "none"; }, 2000);
+  fileInput.value = "";
+}
+
 function showMsg(id,text,ok){
   const el=document.getElementById(id);
   if(!el) return;
