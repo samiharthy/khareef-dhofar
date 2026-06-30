@@ -5,9 +5,11 @@
     "type": "arabic",
     "priceAr": "اقتصادي",
     "priceEn": "Budget",
-    "googleMapsUrl": "https://maps.app.goo.gl/kGm365YdPRBUn1fv5?g_st=ac",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%B9%D9%85%20%D8%A7%D9%84%D8%AD%D8%B5%D9%86%20Al%20Husn%20Restaurant%20Salalah%20Dhofar%20Oman%20restaurant",
+    "rating": null,
+    "photoUrl": null,
     "open": "12:00-23:00",
-    "phone": "+96823210000",
+    "phone": "96823210000.0",
     "note": {
       "ar": "أكلات عمانية أصيلة، مشهور بالمشاكيك",
       "en": "Authentic Omani cuisine"
@@ -19,14 +21,15 @@
     "type": "seafood",
     "priceAr": "اقتصادي",
     "priceEn": "Budget",
-    "lat": 17.02,
-    "lng": 54.095,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%B9%D9%85%20%D9%86%D8%B2%D9%88%D9%89%20Nizwa%20Restaurant%20Salalah%20Dhofar%20Oman%20restaurant",
+    "rating": null,
+    "photoUrl": null,
+    "open": "11:00-23:00",
+    "phone": "",
     "note": {
       "ar": "أسماك ومأكولات بحرية طازجة",
       "en": "Fresh seafood"
-    },
-    "open": "11:00-23:00",
-    "phone": ""
+    }
   },
   {
     "nAr": "كافيه ديلا",
@@ -34,14 +37,15 @@
     "type": "cafe",
     "priceAr": "متوسط",
     "priceEn": "Mid-range",
-    "lat": 17.0165,
-    "lng": 54.0905,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%83%D8%A7%D9%81%D9%8A%D9%87%20%D8%AF%D9%8A%D9%84%D8%A7%20Cafe%20Della%20Salalah%20Dhofar%20Oman%20restaurant",
+    "rating": null,
+    "photoUrl": null,
+    "open": "8:00-00:00",
+    "phone": "",
     "note": {
       "ar": "مشروبات وحلويات",
       "en": "Drinks and desserts"
-    },
-    "open": "8:00-00:00",
-    "phone": ""
+    }
   },
   {
     "nAr": "مطعم الساحل",
@@ -49,14 +53,15 @@
     "type": "seafood",
     "priceAr": "مرتفع",
     "priceEn": "High-end",
-    "lat": 17.008,
-    "lng": 54.082,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%B9%D9%85%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AD%D9%84%20Al%20Sahel%20Restaurant%20Salalah%20Dhofar%20Oman%20restaurant",
+    "rating": null,
+    "photoUrl": null,
+    "open": "12:00-23:00",
+    "phone": "",
     "note": {
       "ar": "مأكولات بحرية فاخرة على الشاطئ",
       "en": "Premium seafood on the beach"
-    },
-    "open": "12:00-23:00",
-    "phone": ""
+    }
   },
   {
     "nAr": "مطعم السمحان",
@@ -64,13 +69,110 @@
     "type": "arabic",
     "priceAr": "اقتصادي",
     "priceEn": "Budget",
-    "lat": 17.019,
-    "lng": 54.097,
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%B9%D9%85%20%D8%A7%D9%84%D8%B3%D9%85%D8%AD%D8%A7%D9%86%20Samhan%20Restaurant%20Salalah%20Dhofar%20Oman%20restaurant",
+    "rating": null,
+    "photoUrl": null,
+    "open": "6:00-23:00",
+    "phone": "",
     "note": {
       "ar": "مطعم شعبي بأسعار مناسبة",
       "en": "Popular local prices"
-    },
-    "open": "6:00-23:00",
-    "phone": ""
+    }
+  },
+  {
+    "nAr": "مطعم بيت مظبي",
+    "nEn": "Bait Al Mandi",
+    "type": "arabic",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  {
+    "nAr": "مطعم بن عتيق",
+    "nEn": "Bin Ateeq",
+    "type": "arabic",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  {
+    "nAr": "مطعم بعلبك",
+    "nEn": "Baalbak Restaurant",
+    "type": "seafood",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  {
+    "nAr": "باب اليمن",
+    "nEn": "Baba Yemen",
+    "type": "arabic",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  {
+    "nAr": "كوفي اوشن بلو",
+    "nEn": "Ocean Blue Cafe",
+    "type": "cafe",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
+  },
+  {
+    "nAr": "كوفي اوف وايت",
+    "nEn": "Off White Cafe",
+    "type": "cafe",
+    "priceAr": "",
+    "priceEn": "",
+    "googleMapsUrl": null,
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "",
+      "en": ""
+    }
   }
 ]
