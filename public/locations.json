@@ -1648,5 +1648,15 @@
     "section": "companion",
     "noteAr": "",
     "noteEn": ""
+  },
+  {
+    "nAr": "حديقة وقت الطفل",
+    "_override": true,
+    "nEn": "Kid's Time Park",
+    "googleMapsUrl": "https://maps.app.goo.gl/38GMd3sLXKXBFCnF6"
+  },
+  {
+    "nAr": "الحديقة الصحية",
+    "_deleted": true
   }
 ]
