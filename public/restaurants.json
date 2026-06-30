@@ -9,7 +9,7 @@
     "rating": null,
     "photoUrl": null,
     "open": "12:00-23:00",
-    "phone": "96823210000.0",
+    "phone": "96823210000",
     "note": {
       "ar": "أكلات عمانية أصيلة، مشهور بالمشاكيك",
       "en": "Authentic Omani cuisine"
@@ -173,6 +173,230 @@
     "note": {
       "ar": "",
       "en": ""
+    }
+  },
+  {
+    "nAr": "Lantana Caffe & Dolci",
+    "nEn": "Lantana Caffe & Dolci",
+    "type": "cafe",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Lantana%20Caffe%20%26%20Dolci%2C%20Al%20Baleed%20Beach%2C%20Salalah%20Salalah%20Oman",
+    "rating": 3.9,
+    "photoUrl": null,
+    "open": "",
+    "phone": "96897497710",
+    "note": {
+      "ar": "كافيه على شاطئ البليد بإطلالة بحرية رائعة، مناسب للإفطار والقهوة",
+      "en": "Beachfront cafe on Al Baleed beach with great sea views, ideal for breakfast and coffee"
+    }
+  },
+  {
+    "nAr": "Palm Grove Beach Kitchen",
+    "nEn": "Palm Grove Beach Kitchen",
+    "type": "asian",
+    "priceAr": "مرتفع",
+    "priceEn": "Expensive",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Palm%20Grove%20Beach%20Kitchen%2C%20Hilton%20Salalah%20Resort%2C%20Sultan%20Qaboos%20St%20Salalah%20Oman",
+    "rating": 4.8,
+    "photoUrl": null,
+    "open": "",
+    "phone": "96823133333",
+    "note": {
+      "ar": "مطعم هندي وبحري على الشاطئ، يقدم كاري وبرياني من أفضل ما في المنطقة",
+      "en": "Indian/seafood beachfront restaurant, some of the best curry and biryani in the area"
+    }
+  },
+  {
+    "nAr": "أيال الفريج",
+    "nEn": "Ayal Al Fareej",
+    "type": "arabic",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ayal%20Al%20Fareej%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم عماني وخليجي أصيل بأجواء عصرية، يشتهر بالشواء العماني والمضبي ولحم الضأن وعصائر طازجة",
+      "en": "Authentic Omani & Gulf cuisine in a modern setting; known for Omani Shuwa, mixed grill, lamb Madhbi, seafood"
+    }
+  },
+  {
+    "nAr": "مضبي بن عامر (إتين)",
+    "nEn": "Madabi Bin Amir (Ittin)",
+    "type": "arabic",
+    "priceAr": "اقتصادي",
+    "priceEn": "Affordable",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Madabi%20Bin%20Amir%20%28Ittin%29%2C%20Ittin%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم تقليدي يطهو اللحم على حجارة ساخنة جداً (المضبي) لنكهة دخانية مميزة، من أشهر تجارب الأكل الظفاري الأصيل",
+      "en": "Traditional Madhbi cooking on extremely hot stones; one of Dhofar's signature food experiences"
+    }
+  },
+  {
+    "nAr": "مطعم الخبير التركي",
+    "nEn": "Al Khabeer Turkish Restaurant",
+    "type": "international",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Khabeer%20Turkish%20Restaurant%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم تركي بأجواء عائلية ومساحة واسعة، يقدم الشاورما والدونر كباب والكنافة والشاي التركي",
+      "en": "Family-friendly Turkish restaurant with spacious seating; shawarma, doner kebab, kunafa, Turkish tea"
+    }
+  },
+  {
+    "nAr": "مطعم الرضا",
+    "nEn": "Al Raza Restaurant",
+    "type": "asian",
+    "priceAr": "اقتصادي",
+    "priceEn": "Cheap",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Raza%20Restaurant%2C%20Sanaya%20Industrial%20Area%2C%20near%20Ramez%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.3,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم باكستاني معروف بطبق Mutton Paaya، نظافة عالية وموظفون ودودون",
+      "en": "Pakistani restaurant known for Mutton Paaya, very clean with friendly staff"
+    }
+  },
+  {
+    "nAr": "مطعم الغد",
+    "nEn": "Al Ghad Restaurant",
+    "type": "asian",
+    "priceAr": "اقتصادي",
+    "priceEn": "Affordable",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Ghad%20Restaurant%2C%20211%2023rd%20July%20St%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.2,
+    "photoUrl": null,
+    "open": "",
+    "phone": "96823202177",
+    "note": {
+      "ar": "مطعم باكستاني مشهور بكيرما لحم الضأن والبرياني الحيدر أبادي وغرف عائلية منفصلة",
+      "en": "Pakistani restaurant known for lamb karahi and Hyderabadi biryani, separate family rooms"
+    }
+  },
+  {
+    "nAr": "مطعم القادري",
+    "nEn": "Al Qadri Restaurant",
+    "type": "asian",
+    "priceAr": "اقتصادي",
+    "priceEn": "Cheap",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Qadri%20Restaurant%2C%20Sanaya%20Industrial%20Area%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "من أقدم وأشهر المطاعم الباكستانية في صلالة، يقدم الكراهي والبرياني والنهاري بأسعار معقولة",
+      "en": "One of Salalah's oldest, most popular Pakistani restaurants; karahi, biryani, nihari at affordable prices"
+    }
+  },
+  {
+    "nAr": "مطعم أبو وسيم للمضبي (إتين)",
+    "nEn": "Abu Waseem Madhbi Restaurant (Ittin)",
+    "type": "arabic",
+    "priceAr": "اقتصادي",
+    "priceEn": "Affordable",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Abu%20Waseem%20Madhbi%20Restaurant%20%28Ittin%29%2C%20Ittin%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم مضبي مجاور لبن عامر، يشتهر بجودة اللحم وكمياته السخية، من أعلى المطاعم المحلية تقييماً",
+      "en": "Excellent Madhbi spot known for meat quality and generous portions, one of the highest-rated local spots"
+    }
+  },
+  {
+    "nAr": "مطعم باروك (لبناني)",
+    "nEn": "Barouk Restaurant",
+    "type": "arabic",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Barouk%20Restaurant%2C%20Crowne%20Plaza%20Resort%20Salalah%20Salalah%20Oman",
+    "rating": 4.4,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "مطعم لبناني داخل فندق كراون بلازا، بوفيه إفطار متنوع ومشاوي",
+      "en": "Lebanese restaurant inside Crowne Plaza, varied breakfast buffet and grills"
+    }
+  },
+  {
+    "nAr": "مطعم بيت الجود-4",
+    "nEn": "Bait Al-Joud Restaurant - 4",
+    "type": "arabic",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://maps.app.goo.gl/iWwfarWn5yiHdV1S6",
+    "rating": null,
+    "photoUrl": null,
+    "open": "9:00-02:00",
+    "phone": "71777490",
+    "note": {
+      "ar": "متخصص في المطبخ اليمني والعماني",
+      "en": "specializing in Yemeni and Omani cuisine"
+    }
+  },
+  {
+    "nAr": "مطعم مرمرة التركي",
+    "nEn": "Marmara Al Turkey Restaurant",
+    "type": "international",
+    "priceAr": "متوسط",
+    "priceEn": "Mid-range",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Marmara%20Al%20Turkey%20Restaurant%2C%20Salalah%20Salalah%20Oman",
+    "rating": null,
+    "photoUrl": null,
+    "open": "",
+    "phone": "",
+    "note": {
+      "ar": "من أفضل المطاعم التركية في صلالة، يقدم الكباب والمشاوي والحلويات التركية الأصيلة كالبقلاوة",
+      "en": "One of Salalah's finest Turkish restaurants; kebabs, grills, and authentic Turkish desserts like baklava"
+    }
+  },
+  {
+    "nAr": "مطعم ميكونغ",
+    "nEn": "Mekong Restaurant",
+    "type": "asian",
+    "priceAr": "مرتفع",
+    "priceEn": "Expensive",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mekong%20Restaurant%2C%20Al%20Baleed%20Resort%20Salalah%20by%20Anantara%2C%20Al%20Mansurah%20St%20Salalah%20Oman",
+    "rating": 4.6,
+    "photoUrl": null,
+    "open": "",
+    "phone": "96823228222",
+    "note": {
+      "ar": "مطعم آسيوي راقٍ يقدم أطباق صينية وتايلاندية وفيتنامية مع كوكتيلات متنوعة",
+      "en": "Upscale Asian restaurant with Chinese, Thai, and Vietnamese dishes"
+    }
+  },
+  {
+    "nAr": "مطعم وبار المينا",
+    "nEn": "Al Mina Restaurant and Bar",
+    "type": "international",
+    "priceAr": "مرتفع",
+    "priceEn": "Expensive",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Mina%20Restaurant%20and%20Bar%2C%20Al%20Baleed%20Resort%20Salalah%20by%20Anantara%2C%20Al%20Mansurah%20St%20Salalah%20Oman",
+    "rating": 4.2,
+    "photoUrl": null,
+    "open": "",
+    "phone": "96823228252",
+    "note": {
+      "ar": "مطعم على الشاطئ يقدم البرجر والبيتزا والمأكولات البحرية، إطلالة رائعة على المسبح والبحر",
+      "en": "Beachside dining with burgers, pizza, and seafood; great pool and sea views"
     }
   }
 ]
