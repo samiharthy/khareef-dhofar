@@ -747,7 +747,6 @@ function filterSec(sec){
 }
 function renderLocations(){
   try {
-    // Build merged list: builtin + custom additions, minus deletions, with overrides
     const delSet = new Set((locsData||[]).filter(function(l){return l._deleted;}).map(function(l){return l.nAr;}));
     const ovMap = {};
     (locsData||[]).filter(function(l){return l._override;}).forEach(function(l){ovMap[l.nAr]=l;});
@@ -771,12 +770,17 @@ function renderLocations(){
       return;
     }
 
-    // Clear and rebuild
+    const placePhotos = (window._photosCache && window._photosCache._places) || {};
+
     list.innerHTML = "";
     filtered.forEach(function(loc) {
       var card = document.createElement("div");
       card.className = "card";
-      card.style.cssText = "padding:11px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start";
+      card.style.cssText = "padding:11px 14px;margin-bottom:8px";
+
+      // Top row: info + edit/delete buttons
+      var topRow = document.createElement("div");
+      topRow.style.cssText = "display:flex;gap:10px;align-items:flex-start";
 
       var info = document.createElement("div");
       info.style.cssText = "flex:1;min-width:0";
@@ -788,13 +792,13 @@ function renderLocations(){
 
       if (loc._isModified) {
         var mb = document.createElement("span");
-        mb.style.cssText = "font-size:9px;background:#C98A2E20;color:#C98A2E;border-radius:4px;padding:1px 6px;font-weight:700";
+        mb.style.cssText = "font-size:9px;background:#C98A2E20;color:#C98A2E;border-radius:4px;padding:1px 6px;font-weight:700;margin-right:4px";
         mb.textContent = "\u0645\u064f\u0639\u062f\u0644";
         nameEl.appendChild(mb);
       }
       if (loc._isCustom) {
         var cb = document.createElement("span");
-        cb.style.cssText = "font-size:9px;background:#2F5D4520;color:#2F5D45;border-radius:4px;padding:1px 6px;font-weight:700";
+        cb.style.cssText = "font-size:9px;background:#2F5D4520;color:#2F5D45;border-radius:4px;padding:1px 6px;font-weight:700;margin-right:4px";
         cb.textContent = "\u0645\u064f\u0636\u0627\u0641";
         nameEl.appendChild(cb);
       }
@@ -808,27 +812,27 @@ function renderLocations(){
         var gmEl = document.createElement("a");
         gmEl.href = loc.googleMapsUrl;
         gmEl.target = "_blank";
-        gmEl.style.cssText = "font-size:11px;color:#25D366;text-decoration:none;display:block";
-        gmEl.textContent = "\ud83d\udd17 " + loc.googleMapsUrl.slice(0,40) + "...";
+        gmEl.style.cssText = "font-size:11px;color:#25D366;text-decoration:none;display:block;margin-top:2px";
+        gmEl.textContent = "\ud83d\udd17 " + loc.googleMapsUrl.slice(0,38) + "...";
         info.appendChild(gmEl);
       } else if(loc.lat && loc.lng){
         var coordEl = document.createElement("div");
-        coordEl.style.cssText = "font-size:11px;color:#3C6E8F";
-        coordEl.textContent = "\ud83d\udccd " + loc.lat + ", " + loc.lng + " (إحداثيات أصلية)";
+        coordEl.style.cssText = "font-size:11px;color:#3C6E8F;margin-top:2px";
+        coordEl.textContent = "\ud83d\udccd " + loc.lat + ", " + loc.lng;
         info.appendChild(coordEl);
       } else {
         var noLocEl = document.createElement("div");
-        noLocEl.style.cssText = "font-size:11px;color:#B5402C";
-        noLocEl.textContent = "\u26a0\ufe0f لا يوجد رابط خريطة محفوظ";
+        noLocEl.style.cssText = "font-size:11px;color:#B5402C;margin-top:2px";
+        noLocEl.textContent = "\u26a0\ufe0f \u0644\u0627 \u064a\u0648\u062c\u062f \u0631\u0627\u0628\u0637 \u062e\u0631\u064a\u0637\u0629";
         info.appendChild(noLocEl);
       }
 
       var secEl = document.createElement("div");
-      secEl.style.cssText = "font-size:10px;color:#aaa";
+      secEl.style.cssText = "font-size:10px;color:#aaa;margin-top:2px";
       secEl.textContent = SECTION_LABELS[loc.section] || loc.section || "";
       info.appendChild(secEl);
 
-      card.appendChild(info);
+      topRow.appendChild(info);
 
       var btns = document.createElement("div");
       btns.style.cssText = "display:flex;flex-direction:column;gap:4px;flex-shrink:0";
@@ -845,7 +849,86 @@ function renderLocations(){
       (function(l){ delBtn.onclick = function(){ deleteSpotByName(l.nAr||"", !!l._isBuiltin); }; })(loc);
       btns.appendChild(delBtn);
 
-      card.appendChild(btns);
+      topRow.appendChild(btns);
+      card.appendChild(topRow);
+
+      // ── PHOTO SECTION — inline, no need to switch tabs ──────────────────
+      var photoSection = document.createElement("div");
+      photoSection.style.cssText = "margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;display:flex;gap:8px;align-items:center";
+
+      var currentPhotoUrl = placePhotos[loc.nAr] || "";
+
+      var previewBox = document.createElement("div");
+      previewBox.style.cssText = "width:54px;height:42px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0f0f0;display:flex;align-items:center;justify-content:center";
+      previewBox.id = "photo-preview-" + loc.nAr.replace(/[^a-zA-Z0-9]/g,"_");
+      if(currentPhotoUrl){
+        var pimg = document.createElement("img");
+        pimg.src = currentPhotoUrl;
+        pimg.style.cssText = "width:100%;height:100%;object-fit:cover";
+        pimg.onerror = function(){ this.parentElement.innerHTML = "\u26a0\ufe0f"; };
+        previewBox.appendChild(pimg);
+      } else {
+        previewBox.innerHTML = '<span style="font-size:18px">\ud83d\udcf7</span>';
+      }
+      photoSection.appendChild(previewBox);
+
+      var photoInput = document.createElement("input");
+      photoInput.value = currentPhotoUrl;
+      photoInput.placeholder = "\u0631\u0627\u0628\u0637 \u0627\u0644\u0635\u0648\u0631\u0629...";
+      photoInput.style.cssText = "flex:1;border:1.5px solid #ddd;border-radius:8px;padding:6px 10px;font-size:11px;font-family:Tajawal;direction:ltr;min-width:0";
+      photoSection.appendChild(photoInput);
+
+      var searchBtn = document.createElement("button");
+      searchBtn.textContent = "\ud83d\udd0d";
+      searchBtn.title = "\u0628\u062d\u062b \u0639\u0646 \u0635\u0648\u0631\u0629 \u0641\u064a Google";
+      searchBtn.style.cssText = "background:#3C6E8F15;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px;flex-shrink:0";
+      (function(l){
+        searchBtn.onclick = function(){
+          const q = encodeURIComponent(l.nAr + " \u0635\u0644\u0627\u0644\u0629 \u0638\u0641\u0627\u0631");
+          window.open("https://www.google.com/search?tbm=isch&q=" + q, "_blank");
+        };
+      })(loc);
+      photoSection.appendChild(searchBtn);
+
+      var savePhotoBtn = document.createElement("button");
+      savePhotoBtn.textContent = "\ud83d\udcbe";
+      savePhotoBtn.title = "\u062d\u0641\u0638 \u0627\u0644\u0635\u0648\u0631\u0629";
+      savePhotoBtn.style.cssText = "background:#2F5D45;color:#fff;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px;font-weight:700;flex-shrink:0";
+      (function(l, inp, prevBox){
+        savePhotoBtn.onclick = async function(){
+          const url = inp.value.trim();
+          if(!window._photosCache) window._photosCache = {_places:{}, _categories:{}};
+          if(!window._photosCache._places) window._photosCache._places = {};
+          if(url){ window._photosCache._places[l.nAr] = url; }
+          else { delete window._photosCache._places[l.nAr]; }
+          savePhotoBtn.textContent = "\u23f3";
+          savePhotoBtn.disabled = true;
+          try{
+            const res = await ghPut(PHOTOS_PATH, window._photosCache, window._photosSha, "photo: " + l.nAr);
+            window._photosSha = res.content.sha;
+            // Update preview immediately
+            if(url){
+              prevBox.innerHTML = "";
+              const img = document.createElement("img");
+              img.src = url;
+              img.style.cssText = "width:100%;height:100%;object-fit:cover";
+              img.onerror = function(){ prevBox.innerHTML = "\u26a0\ufe0f"; };
+              prevBox.appendChild(img);
+            } else {
+              prevBox.innerHTML = '<span style="font-size:18px">\ud83d\udcf7</span>';
+            }
+            savePhotoBtn.textContent = "\u2705";
+            setTimeout(function(){ savePhotoBtn.textContent = "\ud83d\udcbe"; savePhotoBtn.disabled = false; }, 1500);
+          }catch(e){
+            alert("\u062e\u0637\u0623: " + e.message);
+            savePhotoBtn.textContent = "\ud83d\udcbe";
+            savePhotoBtn.disabled = false;
+          }
+        };
+      })(loc, photoInput, previewBox);
+      photoSection.appendChild(savePhotoBtn);
+
+      card.appendChild(photoSection);
       list.appendChild(card);
     });
   } catch(err) {
@@ -853,6 +936,7 @@ function renderLocations(){
     document.getElementById("locs-list").innerHTML = '<div class="card" style="color:#B5402C;padding:14px">\u062e\u0637\u0623: ' + err.message + '</div>';
   }
 }
+
 function toggleLocForm(){const f=document.getElementById("loc-form");f.style.display=f.style.display==="none"?"block":"none";}
 function onGMapsUrlChange(){
   const url = document.getElementById("loc-gmaps-url")?.value?.trim() || "";
