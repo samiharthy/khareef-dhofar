@@ -2112,8 +2112,8 @@ function Home({ go, homeAds = [] }) {
                 : (lang==="ar"?`${daysToStart} يوم للخريف`:`${daysToStart} days to Khareef`)}
             </div>
           </div>
-          <button onClick={refetchWeather}
-            className="flex flex-col items-center rounded-2xl px-3 py-2 active:scale-95"
+          <button onClick={() => go("today")}
+            className="flex flex-col items-center rounded-2xl px-3 py-2 active:scale-95 relative"
             style={{ background:"rgba(255,255,255,0.15)", border:"none", cursor:"pointer" }}>
             <span style={{ fontSize:26 }}>{wxEmoji}</span>
             {temp !== null && (
@@ -2121,6 +2121,9 @@ function Home({ go, homeAds = [] }) {
                 {temp}°{lang==="ar"?"م":"C"}
               </span>
             )}
+            <span className="text-[10px] mt-0.5" style={{ color:"rgba(255,255,255,0.65)", fontFamily:"Tajawal" }}>
+              {lang==="ar"?"التفاصيل":"Details"}
+            </span>
           </button>
         </div>
 
@@ -3874,6 +3877,7 @@ function TodayTab() {
   return (
     <div className="space-y-4 pb-6">
       <SectionTitle eyebrow={lang==="ar"?"الحالة":"Status"} title={lang==="ar"?"حالة اليوم":"Today\'s Status"} icon={Calendar} />
+      <HomeWeatherForecast />
       <PrayerTimes />
       <DhofarRainMap />
     </div>
