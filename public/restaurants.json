@@ -15,21 +15,6 @@
     "phone": "+96823210000"
   },
   {
-    "nAr": "مطعم البيك",
-    "nEn": "Al Baik",
-    "type": "fast",
-    "priceAr": "اقتصادي",
-    "priceEn": "Budget",
-    "lat": 17.0144,
-    "lng": 54.0867,
-    "note": {
-      "ar": "وجبات سريعة شعبي",
-      "en": "Popular fast food"
-    },
-    "open": "10:00-02:00",
-    "phone": ""
-  },
-  {
     "nAr": "مطعم نزوى",
     "nEn": "Nizwa Restaurant",
     "type": "seafood",
