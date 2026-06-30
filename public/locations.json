@@ -8,5 +8,1645 @@
     "longitude": 53.7766,
     "lat": 16.8794,
     "lng": 53.7766
+  },
+  {
+    "id": "imp-متحف ارض اللبان",
+    "nAr": "متحف ارض اللبان",
+    "nEn": "Land of Frankincense Museum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AA%D8%AD%D9%81%20%D8%A7%D8%B1%D8%B6%20%D8%A7%D9%84%D9%84%D8%A8%D8%A7%D9%86%20Land%20of%20Frankincense%20Museum%20Dhofar%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-موقع السمهرم الأثري (خور روري)",
+    "nAr": "موقع السمهرم الأثري (خور روري)",
+    "nEn": "Samhuram Archaeological Site (Khor Rori)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%B3%D9%85%D9%87%D8%B1%D9%85%20%D8%A7%D9%84%D8%A3%D8%AB%D8%B1%D9%8A%20%28%D8%AE%D9%88%D8%B1%20%D8%B1%D9%88%D8%B1%D9%8A%29%20Samhuram%20Archaeological%20Site%20%28Khor%20Rori%29%20Dhofar%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جبل سمحان (فوق السحاب)",
+    "nAr": "جبل سمحان (فوق السحاب)",
+    "nEn": "Jebel Samhan",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%A8%D9%84%20%D8%B3%D9%85%D8%AD%D8%A7%D9%86%20%28%D9%81%D9%88%D9%82%20%D8%A7%D9%84%D8%B3%D8%AD%D8%A7%D8%A8%29%20Jebel%20Samhan%20Dhofar%20Oman",
+    "rating": null,
+    "section": "viewpoints",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة الوادي – عُمان أويل",
+    "nAr": "محطة الوادي – عُمان أويل",
+    "nEn": "Al Wadi – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D9%88%D8%A7%D8%AF%D9%8A%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Wadi%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة اتين – عُمان أويل",
+    "nAr": "محطة اتين – عُمان أويل",
+    "nEn": "Atin – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D8%AA%D9%8A%D9%86%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Atin%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة السلام – عُمان أويل",
+    "nAr": "محطة السلام – عُمان أويل",
+    "nEn": "Al Salam – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Salam%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة الدهاريز – عُمان أويل",
+    "nAr": "محطة الدهاريز – عُمان أويل",
+    "nEn": "Al Dahariz – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Dahariz%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سوق شاطيء الحافه",
+    "nAr": "سوق شاطيء الحافه",
+    "nEn": "Al Hafa Beach Market",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B3%D9%88%D9%82%20%D8%B4%D8%A7%D8%B7%D9%8A%D8%A1%20%D8%A7%D9%84%D8%AD%D8%A7%D9%81%D9%87%20Al%20Hafa%20Beach%20Market%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شاطئ المغسيل (النوافير)",
+    "nAr": "شاطئ المغسيل (النوافير)",
+    "nEn": "Mughsail Blowholes",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "beaches",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-كهف المرنيف",
+    "nAr": "كهف المرنيف",
+    "nEn": "Marneef Cave",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-وادي عدونب",
+    "nAr": "وادي عدونب",
+    "nEn": "Wadi Adonib",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عين دربات العليا",
+    "nAr": "عين دربات العليا",
+    "nEn": "Upper Darbat Falls",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جبل القمر",
+    "nAr": "جبل القمر",
+    "nEn": "Jabal Al Qamar",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سهل حمرير",
+    "nAr": "سهل حمرير",
+    "nEn": "Hamrir Plateau",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شاطئ ريسوت",
+    "nAr": "شاطئ ريسوت",
+    "nEn": "Raysut Beach",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "beaches",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شاطئ شعت",
+    "nAr": "شاطئ شعت",
+    "nEn": "Shaat Beach",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "beaches",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-حفرة طيق",
+    "nAr": "حفرة طيق",
+    "nEn": "Tayq Sinkhole",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جبل حاسك",
+    "nAr": "جبل حاسك",
+    "nEn": "Hasik Mountain View",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-متحف ظفار الخاص",
+    "nAr": "متحف ظفار الخاص",
+    "nEn": "Dhofar Private Museum",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-قرية طاقة القديمة",
+    "nAr": "قرية طاقة القديمة",
+    "nEn": "Old Taqah Village",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-بيت النعمان",
+    "nAr": "بيت النعمان",
+    "nEn": "Al Naaman House",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سوق الذهب صلالة",
+    "nAr": "سوق الذهب صلالة",
+    "nEn": "Salalah Gold Souq",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سوق اللبان",
+    "nAr": "سوق اللبان",
+    "nEn": "Frankincense Souq",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سيتي سنتر صلالة",
+    "nAr": "سيتي سنتر صلالة",
+    "nEn": "City Centre Salalah",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-ركوب الجمال – سهل اتين",
+    "nAr": "ركوب الجمال – سهل اتين",
+    "nEn": "Camel Riding – Ittin Plain",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جولات السفاري",
+    "nAr": "جولات السفاري",
+    "nEn": "Desert Safari Dhofar",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-ركوب القوارب – دربات",
+    "nAr": "ركوب القوارب – دربات",
+    "nEn": "Boating in Wadi Darbat",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-التخييم في جبل سمحان",
+    "nAr": "التخييم في جبل سمحان",
+    "nEn": "Camping Jabal Samhan",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "viewpoints",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-اب تاون (ممشى وفود ترك) - سهل اتين",
+    "nAr": "اب تاون (ممشى وفود ترك) - سهل اتين",
+    "nEn": "Uptown (Food Truck Walk) – Atin Plain",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D8%A8%20%D8%AA%D8%A7%D9%88%D9%86%20%28%D9%85%D9%85%D8%B4%D9%89%20%D9%88%D9%81%D9%88%D8%AF%20%D8%AA%D8%B1%D9%83%29%20-%20%D8%B3%D9%87%D9%84%20%D8%A7%D8%AA%D9%8A%D9%86%20Uptown%20%28Food%20Truck%20Walk%29%20%E2%80%93%20Atin%20Plain%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-اتين سكوير (المهرجان العام) - سهل اتين",
+    "nAr": "اتين سكوير (المهرجان العام) - سهل اتين",
+    "nEn": "Atin Square (Main Festival) – Atin Plain",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D8%AA%D9%8A%D9%86%20%D8%B3%D9%83%D9%88%D9%8A%D8%B1%20%28%D8%A7%D9%84%D9%85%D9%87%D8%B1%D8%AC%D8%A7%D9%86%20%D8%A7%D9%84%D8%B9%D8%A7%D9%85%29%20-%20%D8%B3%D9%87%D9%84%20%D8%A7%D8%AA%D9%8A%D9%86%20Atin%20Square%20%28Main%20Festival%29%20%E2%80%93%20Atin%20Plain%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-استراحات وفيلل النسيم صلالة",
+    "nAr": "استراحات وفيلل النسيم صلالة",
+    "nEn": "Al Naseem Villas & Rest Houses",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A7%D8%AA%20%D9%88%D9%81%D9%8A%D9%84%D9%84%20%D8%A7%D9%84%D9%86%D8%B3%D9%8A%D9%85%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Al%20Naseem%20Villas%20%26%20Rest%20Houses%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-استراحة طاقة الساحلية",
+    "nAr": "استراحة طاقة الساحلية",
+    "nEn": "Taqah Coastal Rest House",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9%20%D8%B7%D8%A7%D9%82%D8%A9%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AD%D9%84%D9%8A%D8%A9%20Taqah%20Coastal%20Rest%20House%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-استراحة ظفار الخضراء",
+    "nAr": "استراحة ظفار الخضراء",
+    "nEn": "Dhofar Al Khadra Rest House",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D8%B3%D8%AA%D8%B1%D8%A7%D8%AD%D8%A9%20%D8%B8%D9%81%D8%A7%D8%B1%20%D8%A7%D9%84%D8%AE%D8%B6%D8%B1%D8%A7%D8%A1%20Dhofar%20Al%20Khadra%20Rest%20House%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-افتلقوت",
+    "nAr": "افتلقوت",
+    "nEn": "Aftalqut",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%81%D8%AA%D9%84%D9%82%D9%88%D8%AA%20Aftalqut%20Dhofar%20Oman",
+    "rating": null,
+    "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-اكشاك جوز الهند",
+    "nAr": "اكشاك جوز الهند",
+    "nEn": "Coconut Stalls",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%83%D8%B4%D8%A7%D9%83%20%D8%AC%D9%88%D8%B2%20%D8%A7%D9%84%D9%87%D9%86%D8%AF%20Coconut%20Stalls%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الحارة التراثية بمرباط",
+    "nAr": "الحارة التراثية بمرباط",
+    "nEn": "Mirbat Heritage Quarter",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D8%AD%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%D9%8A%D8%A9%20%D8%A8%D9%85%D8%B1%D8%A8%D8%A7%D8%B7%20Mirbat%20Heritage%20Quarter%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الحديقة الصحية",
+    "nAr": "الحديقة الصحية",
+    "nEn": "Health Park",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%A7%D9%84%D8%B5%D8%AD%D9%8A%D8%A9%20Health%20Park%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "events",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-السوق المركزي",
+    "nAr": "السوق المركزي",
+    "nEn": "Salalah Central Market",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Salalah%20Central%20Market%2C%20Municipal%20Market%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.1,
+    "section": "heritage",
+    "noteAr": "سوق مفتوح حيوي للخضروات والفواكه والأسماك واللحوم الطازجة في وسط المدينة",
+    "noteEn": "Vibrant open market for fresh produce, fish, and meat in the city center"
+  },
+  {
+    "id": "imp-الغارف",
+    "nAr": "الغارف",
+    "nEn": "Al Gharef",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D8%BA%D8%A7%D8%B1%D9%81%20Al%20Gharef%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الغارف (مقاهي في بيئة زراعية) - صلالة",
+    "nAr": "الغارف (مقاهي في بيئة زراعية) - صلالة",
+    "nEn": "Al Gharef (Cafés in a Farm Setting) – Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D8%BA%D8%A7%D8%B1%D9%81%20%28%D9%85%D9%82%D8%A7%D9%87%D9%8A%20%D9%81%D9%8A%20%D8%A8%D9%8A%D8%A6%D8%A9%20%D8%B2%D8%B1%D8%A7%D8%B9%D9%8A%D8%A9%29%20-%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Al%20Gharef%20%28Caf%C3%A9s%20in%20a%20Farm%20Setting%29%20%E2%80%93%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-المحمية الوطنية لأشجار اللبان",
+    "nAr": "المحمية الوطنية لأشجار اللبان",
+    "nEn": "Ancient Frankincense Trees",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D9%85%D8%AD%D9%85%D9%8A%D8%A9%20%D8%A7%D9%84%D9%88%D8%B7%D9%86%D9%8A%D8%A9%20%D9%84%D8%A3%D8%B4%D8%AC%D8%A7%D8%B1%20%D8%A7%D9%84%D9%84%D8%A8%D8%A7%D9%86%20Ancient%20Frankincense%20Trees%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الواجهة العصرية (أب تاون)",
+    "nAr": "الواجهة العصرية (أب تاون)",
+    "nEn": "Modern Frontage (Uptown)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D9%88%D8%A7%D8%AC%D9%87%D8%A9%20%D8%A7%D9%84%D8%B9%D8%B5%D8%B1%D9%8A%D8%A9%20%28%D8%A3%D8%A8%20%D8%AA%D8%A7%D9%88%D9%86%29%20Modern%20Frontage%20%28Uptown%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "events",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الواحة مول (الصناعية)",
+    "nAr": "الواحة مول (الصناعية)",
+    "nEn": "Al Waha Mall (Al Sinaiya)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D9%88%D8%A7%D8%AD%D8%A9%20%D9%85%D9%88%D9%84%20%28%D8%A7%D9%84%D8%B5%D9%86%D8%A7%D8%B9%D9%8A%D8%A9%29%20Al%20Waha%20Mall%20%28Al%20Sinaiya%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-الوفاء ووك (الدهاريز)",
+    "nAr": "الوفاء ووك (الدهاريز)",
+    "nEn": "Al Wafa Walk (Al Dahariz)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%84%D9%88%D9%81%D8%A7%D8%A1%20%D9%88%D9%88%D9%83%20%28%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%29%20Al%20Wafa%20Walk%20%28Al%20Dahariz%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-اوسارا",
+    "nAr": "اوسارا",
+    "nEn": "Ausara",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%88%D8%B3%D8%A7%D8%B1%D8%A7%20Ausara%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-اوسارا (شاطيء ريسوت)",
+    "nAr": "اوسارا (شاطيء ريسوت)",
+    "nEn": "Ausara (Raysut Beach)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A7%D9%88%D8%B3%D8%A7%D8%B1%D8%A7%20%28%D8%B4%D8%A7%D8%B7%D9%8A%D8%A1%20%D8%B1%D9%8A%D8%B3%D9%88%D8%AA%29%20Ausara%20%28Raysut%20Beach%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة حمرير",
+    "nAr": "إطلالة حمرير",
+    "nEn": "Hamrir Viewpoint",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%AD%D9%85%D8%B1%D9%8A%D8%B1%20Hamrir%20Viewpoint%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة رخيوت",
+    "nAr": "إطلالة رخيوت",
+    "nEn": "Rakhyut",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B1%D8%AE%D9%8A%D9%88%D8%AA%20Rakhyut%20Dhofar%20Oman",
+    "rating": null,
+    "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة شير",
+    "nAr": "إطلالة شير",
+    "nEn": "Jabal Shir",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B4%D9%8A%D8%B1%20Jabal%20Shir%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
+    "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
+    "nEn": "Sarfait (Oman–Yemen border)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B5%D8%B1%D9%81%D9%8A%D8%AA%20%28%D8%A8%D8%A7%D9%84%D9%82%D8%B1%D8%A8%20%D9%85%D9%86%20%D8%A7%D9%84%D8%AD%D8%AF%D9%88%D8%AF%20%D8%A7%D9%84%D8%B9%D9%85%D8%A7%D9%86%D9%8A%D8%A9%20%D8%A7%D9%84%D9%8A%D9%85%D9%86%D9%8A%D8%A9%29%20Sarfait%20%28Oman%E2%80%93Yemen%20border%29%20Dhofar%20Oman",
+    "rating": null,
+    "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة ضلكوت",
+    "nAr": "إطلالة ضلكوت",
+    "nEn": "Dalkut",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B6%D9%84%D9%83%D9%88%D8%AA%20Dalkut%20Dhofar%20Oman",
+    "rating": null,
+    "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-أشجار التبلدي",
+    "nAr": "أشجار التبلدي",
+    "nEn": "Baobab Trees",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A3%D8%B4%D8%AC%D8%A7%D8%B1%20%D8%A7%D9%84%D8%AA%D8%A8%D9%84%D8%AF%D9%8A%20Baobab%20Trees%20Dhofar%20Oman",
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-برج العسكر",
+    "nAr": "برج العسكر",
+    "nEn": "Burj Al Askar",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Burj%20Al%20Askar%20Salalah%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "برج مراقبة تاريخي يطل على بلدة طاقة الساحلية، يمنح مناظر بانورامية لشاطئ طاقة والبحر والجبال المحيطة",
+    "noteEn": "Historic watchtower overlooking Taqa, offering panoramic views of Taqa Beach and surrounding mountains"
+  },
+  {
+    "id": "imp-جاردنز مول (الوادي)",
+    "nAr": "جاردنز مول (الوادي)",
+    "nEn": "Gardens Mall (Al Wadi)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%A7%D8%B1%D8%AF%D9%86%D8%B2%20%D9%85%D9%88%D9%84%20%28%D8%A7%D9%84%D9%88%D8%A7%D8%AF%D9%8A%29%20Gardens%20Mall%20%28Al%20Wadi%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جامع السلطان قابوس بصلالة",
+    "nAr": "جامع السلطان قابوس بصلالة",
+    "nEn": "Sultan Qaboos Mosque Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sultan%20Qaboos%20Mosque%20Salalah%2C%20An%20Nahdah%20St%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.7,
+    "section": "religious",
+    "noteAr": "أكبر مسجد في صلالة، معلم إسلامي بارز بتصميم معماري رائع وثريات ضخمة",
+    "noteEn": "Largest mosque in Salalah, prominent Islamic landmark with stunning architecture"
+  },
+  {
+    "id": "imp-جبل سمحان",
+    "nAr": "جبل سمحان",
+    "nEn": "Jabal Samhan",
+    "googleMapsUrl": "https://maps.app.goo.gl/dATzLucPoHroiPRK6",
+    "rating": null,
+    "section": "viewpoints",
+    "noteAr": "يرتفع أكثر من 1700م، يطل على أحد أكبر الأودية في الجزيرة العربية، موطن النمر العربي النادر",
+    "noteEn": "Over 1,700m elevation, overlooks one of the largest canyons in Arabia, home to the rare Arabian Leopard"
+  },
+  {
+    "id": "imp-جبل طوي اعتير",
+    "nAr": "جبل طوي اعتير",
+    "nEn": "Jabal Tawi Atair",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%A8%D9%84%20%D8%B7%D9%88%D9%8A%20%D8%A7%D8%B9%D8%AA%D9%8A%D8%B1%20Jabal%20Tawi%20Atair%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جبل ناشب",
+    "nAr": "جبل ناشب",
+    "nEn": "Jabal Nashib",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%A8%D9%84%20%D9%86%D8%A7%D8%B4%D8%A8%20Jabal%20Nashib%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جراند مول (الدهاريز)",
+    "nAr": "جراند مول (الدهاريز)",
+    "nEn": "Grand Mall (Al Dahariz)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%B1%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D9%84%20%28%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%29%20Grand%20Mall%20%28Al%20Dahariz%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-حديقة صلالة (للرياضة)",
+    "nAr": "حديقة صلالة (للرياضة)",
+    "nEn": "Salalah Park (Sports)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%28%D9%84%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9%29%20Salalah%20Park%20%28Sports%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-حديقة وقت الطفل",
+    "nAr": "حديقة وقت الطفل",
+    "nEn": "Kid's Time",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D9%88%D9%82%D8%AA%20%D8%A7%D9%84%D8%B7%D9%81%D9%84%20Kid%27s%20Time%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "events",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-حصن طاقة",
+    "nAr": "حصن طاقة",
+    "nEn": "Taqa Castle",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Taqa%20Castle%20Salalah%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "بُني في القرن التاسع عشر، يمنح لمحة أصيلة عن الحياة العمانية التقليدية بغرفه وأبراج مراقبته المحفوظة",
+    "noteEn": "Built in the 19th century, offers authentic glimpse into traditional Omani life with preserved rooms and watchtowers"
+  },
+  {
+    "id": "imp-حفرة طوي عتير",
+    "nAr": "حفرة طوي عتير",
+    "nEn": "Tawi Attair Sinkhole",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tawi%20Attair%20Sinkhole%20Salalah%20Oman",
+    "rating": null,
+    "section": "nature",
+    "noteAr": "يُعرف بـ'بئر الطيور'، من أكبر الحفر الطبيعية في العالم بعمق 211 متراً، منصة مشاهدة وسط نباتات خضراء كثيفة",
+    "noteEn": "Known as the 'Well of Birds', among the world's largest sinkholes at 211m deep, viewing platform amid greenery"
+  },
+  {
+    "id": "imp-حنجة القوارب - دربات",
+    "nAr": "حنجة القوارب - دربات",
+    "nEn": "Wadi Darbat",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AD%D9%86%D8%AC%D8%A9%20%D8%A7%D9%84%D9%82%D9%88%D8%A7%D8%B1%D8%A8%20-%20%D8%AF%D8%B1%D8%A8%D8%A7%D8%AA%20Wadi%20Darbat%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-خور الدهاريز",
+    "nAr": "خور الدهاريز",
+    "nEn": "Dahariz Lagoon",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AE%D9%88%D8%B1%20%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%20Dahariz%20Lagoon%20Dhofar%20Oman",
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-ساحة أتين (أتين سكوير)",
+    "nAr": "ساحة أتين (أتين سكوير)",
+    "nEn": "Atin Square",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B3%D8%A7%D8%AD%D8%A9%20%D8%A3%D8%AA%D9%8A%D9%86%20%28%D8%A3%D8%AA%D9%8A%D9%86%20%D8%B3%D9%83%D9%88%D9%8A%D8%B1%29%20Atin%20Square%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "events",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سلالة جاردنز مول",
+    "nAr": "سلالة جاردنز مول",
+    "nEn": "Salalah Gardens Mall",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Salalah%20Gardens%20Mall%20Salalah%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "أكبر مركز تسوق في المدينة، يضم علامات عالمية وهايبرماركت كارفور ومطاعم ومقاهي وسوق أسواق صلالة التراثي",
+    "noteEn": "City's largest shopping mall with international brands, Carrefour Hypermarket, and traditional-style Aswaq Salalah"
+  },
+  {
+    "id": "imp-سهل أتين",
+    "nAr": "سهل أتين",
+    "nEn": "Jabal Ittin",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B3%D9%87%D9%84%20%D8%A3%D8%AA%D9%8A%D9%86%20Jabal%20Ittin%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شاطئ الحافة",
+    "nAr": "شاطئ الحافة",
+    "nEn": "Haffa Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Haffa%20Beach%20Salalah%20Oman",
+    "rating": null,
+    "section": "beaches",
+    "noteAr": "شاطئ في قلب المدينة بنخيل جوز الهند ورمال بيضاء ناعمة، قريب من سوق الحافة ومزارع الموز",
+    "noteEn": "Beach in the heart of the city with coconut palms and soft white sand, near Haffa Souq and banana plantations"
+  },
+  {
+    "id": "imp-شاطئ أفتلقوت",
+    "nAr": "شاطئ أفتلقوت",
+    "nEn": "Eftalqout Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Eftalqout%20Beach%20Salalah%20Oman",
+    "rating": null,
+    "section": "viewpoints",
+    "noteAr": "يشتهر بمطل صخري درامي ودرج جديد يؤدي للشاطئ، يجمع بين المناظر الساحلية الخلابة وأحد أحدث معالم صلالة",
+    "noteEn": "Famous for dramatic cliff-top viewpoint and a new staircase leading to the beach"
+  },
+  {
+    "id": "imp-شاليهات الواحة صلالة",
+    "nAr": "شاليهات الواحة صلالة",
+    "nEn": "Al Waha Chalets Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%A7%D9%84%D9%8A%D9%87%D8%A7%D8%AA%20%D8%A7%D9%84%D9%88%D8%A7%D8%AD%D8%A9%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Al%20Waha%20Chalets%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شجرة التبلدي (البولاب) – ضلكوت",
+    "nAr": "شجرة التبلدي (البولاب) – ضلكوت",
+    "nEn": "Dalkut Baobab Tree",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%AC%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AA%D8%A8%D9%84%D8%AF%D9%8A%20%28%D8%A7%D9%84%D8%A8%D9%88%D9%84%D8%A7%D8%A8%29%20%E2%80%93%20%D8%B6%D9%84%D9%83%D9%88%D8%AA%20Dalkut%20Baobab%20Tree%20Dhofar%20Oman",
+    "rating": null,
+    "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شقق العقيدة الفندقية",
+    "nAr": "شقق العقيدة الفندقية",
+    "nEn": "Al Aqeedah Hotel Apartments",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D8%B9%D9%82%D9%8A%D8%AF%D8%A9%20%D8%A7%D9%84%D9%81%D9%86%D8%AF%D9%82%D9%8A%D8%A9%20Al%20Aqeedah%20Hotel%20Apartments%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شقق الياسمين الفندقية",
+    "nAr": "شقق الياسمين الفندقية",
+    "nEn": "Al Yasmin Hotel Apartments",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D9%8A%D8%A7%D8%B3%D9%85%D9%8A%D9%86%20%D8%A7%D9%84%D9%81%D9%86%D8%AF%D9%82%D9%8A%D8%A9%20Al%20Yasmin%20Hotel%20Apartments%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شقق أريج السعادة",
+    "nAr": "شقق أريج السعادة",
+    "nEn": "Areej Al Saada Apartments",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%82%D9%82%20%D8%A3%D8%B1%D9%8A%D8%AC%20%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%AF%D8%A9%20Areej%20Al%20Saada%20Apartments%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شقق سدر السعادة الفندقية",
+    "nAr": "شقق سدر السعادة الفندقية",
+    "nEn": "Sidr Al Saada Hotel Apartments",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%82%D9%82%20%D8%B3%D8%AF%D8%B1%20%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%AF%D8%A9%20%D8%A7%D9%84%D9%81%D9%86%D8%AF%D9%82%D9%8A%D8%A9%20Sidr%20Al%20Saada%20Hotel%20Apartments%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شقق وادي دربات الفندقية",
+    "nAr": "شقق وادي دربات الفندقية",
+    "nEn": "Wadi Darbat Hotel Apartments",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%82%D9%82%20%D9%88%D8%A7%D8%AF%D9%8A%20%D8%AF%D8%B1%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D9%81%D9%86%D8%AF%D9%82%D9%8A%D8%A9%20Wadi%20Darbat%20Hotel%20Apartments%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شلال عين أثوم",
+    "nAr": "شلال عين أثوم",
+    "nEn": "Ayn Athum Waterfall",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ayn%20Athum%20Waterfall%20Salalah%20Oman",
+    "rating": null,
+    "section": "valleys",
+    "noteAr": "يصبح من أروع الشلالات في صلالة خلال موسم الخريف، محاط بجبال خضراء ويُصل إليه بطريق ومسار مشي قصير",
+    "noteEn": "Becomes one of Salalah's most spectacular waterfalls during Khareef, surrounded by lush green mountains"
+  },
+  {
+    "id": "imp-شلالات جبوجب",
+    "nAr": "شلالات جبوجب",
+    "nEn": "Ayn Gogob",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%84%D8%A7%D9%84%D8%A7%D8%AA%20%D8%AC%D8%A8%D9%88%D8%AC%D8%A8%20Ayn%20Gogob%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-شلالات عين 1",
+    "nAr": "شلالات عين 1",
+    "nEn": "Ayn Waterfalls 1",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ayn%20Waterfalls%201%2C%20Fairaq%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4,
+    "section": "valleys",
+    "noteAr": "شلال موسمي يتدفق خلال موسم الخريف وسط وادٍ خلاب، يُعرف أيضاً بشلال ستارة الترافرتين",
+    "noteEn": "Seasonal waterfall flowing during Khareef season in a scenic valley"
+  },
+  {
+    "id": "imp-طريق انعدام الجاذبية",
+    "nAr": "طريق انعدام الجاذبية",
+    "nEn": "Anti Gravity Point Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B7%D8%B1%D9%8A%D9%82%20%D8%A7%D9%86%D8%B9%D8%AF%D8%A7%D9%85%20%D8%A7%D9%84%D8%AC%D8%A7%D8%B0%D8%A8%D9%8A%D8%A9%20Anti%20Gravity%20Point%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عودة الماضي (مهرجان شعبي تراثي) - السعادة",
+    "nAr": "عودة الماضي (مهرجان شعبي تراثي) - السعادة",
+    "nEn": "Return of the Past (Folk Heritage Festival) – Al Saada",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%88%D8%AF%D8%A9%20%D8%A7%D9%84%D9%85%D8%A7%D8%B6%D9%8A%20%28%D9%85%D9%87%D8%B1%D8%AC%D8%A7%D9%86%20%D8%B4%D8%B9%D8%A8%D9%8A%20%D8%AA%D8%B1%D8%A7%D8%AB%D9%8A%29%20-%20%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%AF%D8%A9%20Return%20of%20the%20Past%20%28Folk%20Heritage%20Festival%29%20%E2%80%93%20Al%20Saada%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عيادات النهضة الطبية",
+    "nAr": "عيادات النهضة الطبية",
+    "nEn": "Al Nahda Medical Clinics",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D8%A7%D8%AF%D8%A7%D8%AA%20%D8%A7%D9%84%D9%86%D9%87%D8%B6%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%D8%A9%20Al%20Nahda%20Medical%20Clinics%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عين سحلنوت",
+    "nAr": "عين سحلنوت",
+    "nEn": "Ayn Sahalnoot",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ayn%20Sahalnoot%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.8,
+    "section": "springs",
+    "noteAr": "وجهة طبيعية هادئة بمسارات مشي تؤدي إلى ينابيع مياه صافية، مناسبة للعائلات والأطفال",
+    "noteEn": "Tranquil natural spot with walking trails leading to clear blue springs, great for families"
+  },
+  {
+    "id": "imp-عين وشلالات أثوم",
+    "nAr": "عين وشلالات أثوم",
+    "nEn": "Ayn Athum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D9%88%D8%B4%D9%84%D8%A7%D9%84%D8%A7%D8%AA%20%D8%A3%D8%AB%D9%88%D9%85%20Ayn%20Athum%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عين وشلالات طبرق",
+    "nAr": "عين وشلالات طبرق",
+    "nEn": "Ayn Tabruk",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D9%88%D8%B4%D9%84%D8%A7%D9%84%D8%A7%D8%AA%20%D8%B7%D8%A8%D8%B1%D9%82%20Ayn%20Tabruk%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فعاليات عودة الماضي",
+    "nAr": "فعاليات عودة الماضي",
+    "nEn": "Return of the Past",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D8%B9%D8%A7%D9%84%D9%8A%D8%A7%D8%AA%20%D8%B9%D9%88%D8%AF%D8%A9%20%D8%A7%D9%84%D9%85%D8%A7%D8%B6%D9%8A%20Return%20of%20the%20Past%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "events",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق الحارة التراثي",
+    "nAr": "فندق الحارة التراثي",
+    "nEn": "Al Hara Heritage Hotel",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%A7%D9%84%D8%AD%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%AB%D9%8A%20Al%20Hara%20Heritage%20Hotel%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق إيتاب صلالة",
+    "nAr": "فندق إيتاب صلالة",
+    "nEn": "Itaab Salalah Hotel",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%A5%D9%8A%D8%AA%D8%A7%D8%A8%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Itaab%20Salalah%20Hotel%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق جاز صلالة (سابقاً ماريوت)",
+    "nAr": "فندق جاز صلالة (سابقاً ماريوت)",
+    "nEn": "Jaz Salalah Hotel (formerly Marriott)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%AC%D8%A7%D8%B2%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%28%D8%B3%D8%A7%D8%A8%D9%82%D8%A7%D9%8B%20%D9%85%D8%A7%D8%B1%D9%8A%D9%88%D8%AA%29%20Jaz%20Salalah%20Hotel%20%28formerly%20Marriott%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق رمادا صلالة",
+    "nAr": "فندق رمادا صلالة",
+    "nEn": "Ramada Salalah Hotel",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%B1%D9%85%D8%A7%D8%AF%D8%A7%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Ramada%20Salalah%20Hotel%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق سفاري صلالة",
+    "nAr": "فندق سفاري صلالة",
+    "nEn": "Safari Hotel Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%B3%D9%81%D8%A7%D8%B1%D9%8A%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Safari%20Hotel%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق صلالة روتانا",
+    "nAr": "فندق صلالة روتانا",
+    "nEn": "Salalah Rotana Hotel",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%D8%B1%D9%88%D8%AA%D8%A7%D9%86%D8%A7%20Salalah%20Rotana%20Hotel%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق كراون بلازا صلالة",
+    "nAr": "فندق كراون بلازا صلالة",
+    "nEn": "Crowne Plaza Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D9%83%D8%B1%D8%A7%D9%88%D9%86%20%D8%A8%D9%84%D8%A7%D8%B2%D8%A7%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Crowne%20Plaza%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق ميناء مرباط",
+    "nAr": "فندق ميناء مرباط",
+    "nEn": "Mirbat Port Hotel",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D9%85%D9%8A%D9%86%D8%A7%D8%A1%20%D9%85%D8%B1%D8%A8%D8%A7%D8%B7%20Mirbat%20Port%20Hotel%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق هوليداي إن صلالة",
+    "nAr": "فندق هوليداي إن صلالة",
+    "nEn": "Holiday Inn Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D9%87%D9%88%D9%84%D9%8A%D8%AF%D8%A7%D9%8A%20%D8%A5%D9%86%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Holiday%20Inn%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فندق هيلتون صلالة",
+    "nAr": "فندق هيلتون صلالة",
+    "nEn": "Hilton Salalah Resort",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%86%D8%AF%D9%82%20%D9%87%D9%8A%D9%84%D8%AA%D9%88%D9%86%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Hilton%20Salalah%20Resort%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-فيلل الشرفة الخريف",
+    "nAr": "فيلل الشرفة الخريف",
+    "nEn": "Al Shurfa Khareef Villas",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%81%D9%8A%D9%84%D9%84%20%D8%A7%D9%84%D8%B4%D8%B1%D9%81%D8%A9%20%D8%A7%D9%84%D8%AE%D8%B1%D9%8A%D9%81%20Al%20Shurfa%20Khareef%20Villas%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-قرية السمهرم",
+    "nAr": "قرية السمهرم",
+    "nEn": "Samhuram Village",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%82%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B3%D9%85%D9%87%D8%B1%D9%85%20Samhuram%20Village%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-قيرون حريتي",
+    "nAr": "قيرون حريتي",
+    "nEn": "Qayroon Hairiti",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Qayroon%20Hairiti%20Salalah%20Oman",
+    "rating": null,
+    "section": "viewpoints",
+    "noteAr": "يُعرف بأنه من أبرد الأماكن في ظفار، محاط بجبال خضراء متموجة خلال الخريف بمناخ منعش وطرق جبلية خلابة",
+    "noteEn": "Known as one of the coldest places in Dhofar, surrounded by rolling green mountains with a refreshing cool climate"
+  },
+  {
+    "id": "imp-كهف المرنيف والنوافير",
+    "nAr": "كهف المرنيف والنوافير",
+    "nEn": "Marneef Cave & Blowholes",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%83%D9%87%D9%81%20%D8%A7%D9%84%D9%85%D8%B1%D9%86%D9%8A%D9%81%20%D9%88%D8%A7%D9%84%D9%86%D9%88%D8%A7%D9%81%D9%8A%D8%B1%20Marneef%20Cave%20%26%20Blowholes%20Dhofar%20Oman",
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-كورنيش الحافة",
+    "nAr": "كورنيش الحافة",
+    "nEn": "Haffa Waterfront",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Haffa%20Waterfront%20Salalah%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "من أحدث معالم صلالة، يوفر ترفيهاً عائلياً ومطاعم ومقاهي وممرات منسقة وعجلة فيريس كبيرة تطل على البحر",
+    "noteEn": "One of Salalah's newest attractions; family entertainment, restaurants, promenades, and a large Ferris Wheel"
+  },
+  {
+    "id": "imp-كورنيش الدهاريز",
+    "nAr": "كورنيش الدهاريز",
+    "nEn": "Ad Dahariz Waterfront",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ad%20Dahariz%20Waterfront%20Salalah%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "واجهة بحرية حديثة على طول شاطئ الدهاريز بممرات مشي وحدائق ومناطق ألعاب أطفال ومقاهي ومناظر غروب جميلة",
+    "noteEn": "Modern waterfront along Ad Dahariz Beach with walking paths, gardens, kids' play areas, cafés"
+  },
+  {
+    "id": "imp-كورنيش طاقة",
+    "nAr": "كورنيش طاقة",
+    "nEn": "Taqah Corniche",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%83%D9%88%D8%B1%D9%86%D9%8A%D8%B4%20%D8%B7%D8%A7%D9%82%D8%A9%20Taqah%20Corniche%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-كيدي تايم (العاب الاطفال) - حديقة عوقد",
+    "nAr": "كيدي تايم (العاب الاطفال) - حديقة عوقد",
+    "nEn": "Kiddy Time (Kids' Rides) – Auqad Park",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%83%D9%8A%D8%AF%D9%8A%20%D8%AA%D8%A7%D9%8A%D9%85%20%28%D8%A7%D9%84%D8%B9%D8%A7%D8%A8%20%D8%A7%D9%84%D8%A7%D8%B7%D9%81%D8%A7%D9%84%29%20-%20%D8%AD%D8%AF%D9%8A%D9%82%D8%A9%20%D8%B9%D9%88%D9%82%D8%AF%20Kiddy%20Time%20%28Kids%27%20Rides%29%20%E2%80%93%20Auqad%20Park%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-لامير المغسيل",
+    "nAr": "لامير المغسيل",
+    "nEn": "La Mer",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%84%D8%A7%D9%85%D9%8A%D8%B1%20%D8%A7%D9%84%D9%85%D8%BA%D8%B3%D9%8A%D9%84%20La%20Mer%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-متنزه البليد الأثري",
+    "nAr": "متنزه البليد الأثري",
+    "nEn": "Al Baleed Archaeological Park",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Baleed%20Archaeological%20Park%20Salalah%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "موقع تراث عالمي لليونسكو يحفظ أطلال مدينة ميناء قديمة هيمنت على تجارة اللبان، يضم أسواراً ومساجد ومستنقعات",
+    "noteEn": "UNESCO World Heritage Site preserving ruins of an ancient frankincense-trade port city"
+  },
+  {
+    "id": "imp-مجمع صلالة الصحي",
+    "nAr": "مجمع صلالة الصحي",
+    "nEn": "Salalah Health Complex",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AC%D9%85%D8%B9%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%B5%D8%AD%D9%8A%20Salalah%20Health%20Complex%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة اتين – نفط عمان",
+    "nAr": "محطة اتين – نفط عمان",
+    "nEn": "Atin – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D8%AA%D9%8A%D9%86%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Atin%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة الحافلات الرئيسية صلالة",
+    "nAr": "محطة الحافلات الرئيسية صلالة",
+    "nEn": "Salalah Main Bus Station",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%AD%D8%A7%D9%81%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Salalah%20Main%20Bus%20Station%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "access",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة الدهاريز – نفط عمان",
+    "nAr": "محطة الدهاريز – نفط عمان",
+    "nEn": "Al Dahariz – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Dahariz%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة السعادة – شل",
+    "nAr": "محطة السعادة – شل",
+    "nEn": "Al Saada – Shell",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%AF%D8%A9%20%E2%80%93%20%D8%B4%D9%84%20Al%20Saada%20%E2%80%93%20Shell%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة السلام – نفط عمان",
+    "nAr": "محطة السلام – نفط عمان",
+    "nEn": "Al Salam – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Salam%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة المها – ثمريت",
+    "nAr": "محطة المها – ثمريت",
+    "nEn": "Al Maha – Thumrait",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D9%85%D9%87%D8%A7%20%E2%80%93%20%D8%AB%D9%85%D8%B1%D9%8A%D8%AA%20Al%20Maha%20%E2%80%93%20Thumrait%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة الوادي – نفط عمان",
+    "nAr": "محطة الوادي – نفط عمان",
+    "nEn": "Al Wadi – Oman Oil",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D9%88%D8%A7%D8%AF%D9%8A%20%E2%80%93%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20Al%20Wadi%20%E2%80%93%20Oman%20Oil%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة حسن – المزيونة",
+    "nAr": "محطة حسن – المزيونة",
+    "nEn": "Hassan Station – Al Mazyounah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%AD%D8%B3%D9%86%20%E2%80%93%20%D8%A7%D9%84%D9%85%D8%B2%D9%8A%D9%88%D9%86%D8%A9%20Hassan%20Station%20%E2%80%93%20Al%20Mazyounah%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة ريسوت – شل",
+    "nAr": "محطة ريسوت – شل",
+    "nEn": "Raysut – Shell",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B1%D9%8A%D8%B3%D9%88%D8%AA%20%E2%80%93%20%D8%B4%D9%84%20Raysut%20%E2%80%93%20Shell%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة شل – ثمريت",
+    "nAr": "محطة شل – ثمريت",
+    "nEn": "Shell – Thumrait",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B4%D9%84%20%E2%80%93%20%D8%AB%D9%85%D8%B1%D9%8A%D8%AA%20Shell%20%E2%80%93%20Thumrait%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة شل – طاقة",
+    "nAr": "محطة شل – طاقة",
+    "nEn": "Shell – Taqah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B4%D9%84%20%E2%80%93%20%D8%B7%D8%A7%D9%82%D8%A9%20Shell%20%E2%80%93%20Taqah%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة صحلنوت – طاقة الغربية",
+    "nAr": "محطة صحلنوت – طاقة الغربية",
+    "nEn": "Sahalnout – West Taqah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B5%D8%AD%D9%84%D9%86%D9%88%D8%AA%20%E2%80%93%20%D8%B7%D8%A7%D9%82%D8%A9%20%D8%A7%D9%84%D8%BA%D8%B1%D8%A8%D9%8A%D8%A9%20Sahalnout%20%E2%80%93%20West%20Taqah%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة ظفار – عوقد",
+    "nAr": "محطة ظفار – عوقد",
+    "nEn": "Dhofar Station – Auqad",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B8%D9%81%D8%A7%D8%B1%20%E2%80%93%20%D8%B9%D9%88%D9%82%D8%AF%20Dhofar%20Station%20%E2%80%93%20Auqad%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة عُمان أويل – ثمريت",
+    "nAr": "محطة عُمان أويل – ثمريت",
+    "nEn": "Oman Oil – Thumrait",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20%E2%80%93%20%D8%AB%D9%85%D8%B1%D9%8A%D8%AA%20Oman%20Oil%20%E2%80%93%20Thumrait%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة عُمان أويل – طاقة",
+    "nAr": "محطة عُمان أويل – طاقة",
+    "nEn": "Oman Oil – Taqah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20%E2%80%93%20%D8%B7%D8%A7%D9%82%D8%A9%20Oman%20Oil%20%E2%80%93%20Taqah%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-محطة عُمان أويل – مرباط",
+    "nAr": "محطة عُمان أويل – مرباط",
+    "nEn": "Oman Oil – Mirbat",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AD%D8%B7%D8%A9%20%D8%B9%D9%8F%D9%85%D8%A7%D9%86%20%D8%A3%D9%88%D9%8A%D9%84%20%E2%80%93%20%D9%85%D8%B1%D8%A8%D8%A7%D8%B7%20Oman%20Oil%20%E2%80%93%20Mirbat%20Dhofar%20Oman%20fuel%20station",
+    "rating": null,
+    "section": "fuel",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مدينة الحق",
+    "nAr": "مدينة الحق",
+    "nEn": "City of Al Haq (Mountain)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AF%D9%8A%D9%86%D8%A9%20%D8%A7%D9%84%D8%AD%D9%82%20City%20of%20Al%20Haq%20%28Mountain%29%20Dhofar%20Oman",
+    "rating": null,
+    "section": "east",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مرتفعات ألسان",
+    "nAr": "مرتفعات ألسان",
+    "nEn": "Jabal Al San",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B1%D8%AA%D9%81%D8%B9%D8%A7%D8%AA%20%D8%A3%D9%84%D8%B3%D8%A7%D9%86%20Jabal%20Al%20San%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مرسى هوانا",
+    "nAr": "مرسى هوانا",
+    "nEn": "Hawana Marina",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hawana%20Marina%20Salalah%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "يجمع فنادق فاخرة ومطاعم على الواجهة البحرية ومقاهي وأرصفة لليخوت ونزهات مسائية جميلة",
+    "noteEn": "Combines luxury hotels, waterfront restaurants, cafés, yacht berths, and beautiful evening walks"
+  },
+  {
+    "id": "imp-مرسى هوانا صلالة (فندق جويرة)",
+    "nAr": "مرسى هوانا صلالة (فندق جويرة)",
+    "nEn": "Salalah Marina (Juweira Hotel)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B1%D8%B3%D9%89%20%D9%87%D9%88%D8%A7%D9%86%D8%A7%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%28%D9%81%D9%86%D8%AF%D9%82%20%D8%AC%D9%88%D9%8A%D8%B1%D8%A9%29%20Salalah%20Marina%20%28Juweira%20Hotel%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مركز اليسر الطبي",
+    "nAr": "مركز اليسر الطبي",
+    "nEn": "Al Yusr Medical Center",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B1%D9%83%D8%B2%20%D8%A7%D9%84%D9%8A%D8%B3%D8%B1%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A%20Al%20Yusr%20Medical%20Center%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار المغسيل",
+    "nAr": "مسار المغسيل",
+    "nEn": "Al Mughsayl Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%A7%D9%84%D9%85%D8%BA%D8%B3%D9%8A%D9%84%20Al%20Mughsayl%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار جبل الحصن – طاقة",
+    "nAr": "مسار جبل الحصن – طاقة",
+    "nEn": "Jabal Al Husn Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%AC%D8%A8%D9%84%20%D8%A7%D9%84%D8%AD%D8%B5%D9%86%20%E2%80%93%20%D8%B7%D8%A7%D9%82%D8%A9%20Jabal%20Al%20Husn%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار جبل القمر",
+    "nAr": "مسار جبل القمر",
+    "nEn": "Jabal Qamar Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%AC%D8%A8%D9%84%20%D8%A7%D9%84%D9%82%D9%85%D8%B1%20Jabal%20Qamar%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار جبل سمحان",
+    "nAr": "مسار جبل سمحان",
+    "nEn": "Jabal Samhan Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%AC%D8%A8%D9%84%20%D8%B3%D9%85%D8%AD%D8%A7%D9%86%20Jabal%20Samhan%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار جوجب",
+    "nAr": "مسار جوجب",
+    "nEn": "Jowja Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%AC%D9%88%D8%AC%D8%A8%20Jowja%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار حفرة طيق وطوي أعتير",
+    "nAr": "مسار حفرة طيق وطوي أعتير",
+    "nEn": "Tawi Atair Sinkhole Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%AD%D9%81%D8%B1%D8%A9%20%D8%B7%D9%8A%D9%82%20%D9%88%D8%B7%D9%88%D9%8A%20%D8%A3%D8%B9%D8%AA%D9%8A%D8%B1%20Tawi%20Atair%20Sinkhole%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار شعت",
+    "nAr": "مسار شعت",
+    "nEn": "Shaat Viewpoint Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B4%D8%B9%D8%AA%20Shaat%20Viewpoint%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار شلالات عين نكبت",
+    "nAr": "مسار شلالات عين نكبت",
+    "nEn": "Ayn Nakbat Waterfalls",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B4%D9%84%D8%A7%D9%84%D8%A7%D8%AA%20%D8%B9%D9%8A%D9%86%20%D9%86%D9%83%D8%A8%D8%AA%20Ayn%20Nakbat%20Waterfalls%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار ضلكوت وديم",
+    "nAr": "مسار ضلكوت وديم",
+    "nEn": "Dhalkut & Deim Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B6%D9%84%D9%83%D9%88%D8%AA%20%D9%88%D8%AF%D9%8A%D9%85%20Dhalkut%20%26%20Deim%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين أثوم",
+    "nAr": "مسار عين أثوم",
+    "nEn": "Ayn Athum Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%A3%D8%AB%D9%88%D9%85%20Ayn%20Athum%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين جرزيز",
+    "nAr": "مسار عين جرزيز",
+    "nEn": "Ayn Jarziz Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%AC%D8%B1%D8%B2%D9%8A%D8%B2%20Ayn%20Jarziz%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين حشير وأشجار التبلدي",
+    "nAr": "مسار عين حشير وأشجار التبلدي",
+    "nEn": "Ayn Ishat / Baobab Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%AD%D8%B4%D9%8A%D8%B1%20%D9%88%D8%A3%D8%B4%D8%AC%D8%A7%D8%B1%20%D8%A7%D9%84%D8%AA%D8%A8%D9%84%D8%AF%D9%8A%20Ayn%20Ishat%20%2F%20Baobab%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين حمران",
+    "nAr": "مسار عين حمران",
+    "nEn": "Ayn Hamran Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%AD%D9%85%D8%B1%D8%A7%D9%86%20Ayn%20Hamran%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين رزات",
+    "nAr": "مسار عين رزات",
+    "nEn": "Ayn Razat Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%B1%D8%B2%D8%A7%D8%AA%20Ayn%20Razat%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين روب – رخيوت",
+    "nAr": "مسار عين روب – رخيوت",
+    "nEn": "Ayn Rub – Rakhyut",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%B1%D9%88%D8%A8%20%E2%80%93%20%D8%B1%D8%AE%D9%8A%D9%88%D8%AA%20Ayn%20Rub%20%E2%80%93%20Rakhyut%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين صحلنوت",
+    "nAr": "مسار عين صحلنوت",
+    "nEn": "Ayn Sahalnot Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%B5%D8%AD%D9%84%D9%86%D9%88%D8%AA%20Ayn%20Sahalnot%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار عين طبيرق",
+    "nAr": "مسار عين طبيرق",
+    "nEn": "Ayn Tubruq Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%8A%D9%86%20%D8%B7%D8%A8%D9%8A%D8%B1%D9%82%20Ayn%20Tubruq%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار كهف طيق",
+    "nAr": "مسار كهف طيق",
+    "nEn": "Tayq Cave Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D9%83%D9%87%D9%81%20%D8%B7%D9%8A%D9%82%20Tayq%20Cave%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار وادي دربات",
+    "nAr": "مسار وادي دربات",
+    "nEn": "Wadi Darbat Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D9%88%D8%A7%D8%AF%D9%8A%20%D8%AF%D8%B1%D8%A8%D8%A7%D8%AA%20Wadi%20Darbat%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسار وادي نحيز",
+    "nAr": "مسار وادي نحيز",
+    "nEn": "Wadi Nahiz Trail",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%A7%D8%B1%20%D9%88%D8%A7%D8%AF%D9%8A%20%D9%86%D8%AD%D9%8A%D8%B2%20Wadi%20Nahiz%20Trail%20Dhofar%20Oman",
+    "rating": null,
+    "section": "hike",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى الرفاه",
+    "nAr": "مستشفى الرفاه",
+    "nEn": "Al Raffah Hospital",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B1%D9%81%D8%A7%D9%87%20Al%20Raffah%20Hospital%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى السلطان قابوس",
+    "nAr": "مستشفى السلطان قابوس",
+    "nEn": "Sultan Qaboos Hospital",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B3%D9%84%D8%B7%D8%A7%D9%86%20%D9%82%D8%A7%D8%A8%D9%88%D8%B3%20Sultan%20Qaboos%20Hospital%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى القوات المسلحة بصلالة",
+    "nAr": "مستشفى القوات المسلحة بصلالة",
+    "nEn": "Armed Forces Hospital Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D9%82%D9%88%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D8%B3%D9%84%D8%AD%D8%A9%20%D8%A8%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Armed%20Forces%20Hospital%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى بدر السماء",
+    "nAr": "مستشفى بدر السماء",
+    "nEn": "Badr Al Samaa Hospital",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A8%D8%AF%D8%B1%20%D8%A7%D9%84%D8%B3%D9%85%D8%A7%D8%A1%20Badr%20Al%20Samaa%20Hospital%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى دار الشفاء",
+    "nAr": "مستشفى دار الشفاء",
+    "nEn": "Dar Al Shifa Hospital",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%AF%D8%A7%D8%B1%20%D8%A7%D9%84%D8%B4%D9%81%D8%A7%D8%A1%20Dar%20Al%20Shifa%20Hospital%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مستشفى ضحار",
+    "nAr": "مستشفى ضحار",
+    "nEn": "Dahar Hospital",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%B6%D8%AD%D8%A7%D8%B1%20Dahar%20Hospital%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "health",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مسرح المروج",
+    "nAr": "مسرح المروج",
+    "nEn": "Al Muruj Theatre",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B3%D8%B1%D8%AD%20%D8%A7%D9%84%D9%85%D8%B1%D9%88%D8%AC%20Al%20Muruj%20Theatre%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-مطار صلالة الدولي",
+    "nAr": "مطار صلالة الدولي",
+    "nEn": "Salalah International Airport",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D8%A7%D8%B1%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%AF%D9%88%D9%84%D9%8A%20Salalah%20International%20Airport%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "access",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-منتجع البلازا صلالة",
+    "nAr": "منتجع البلازا صلالة",
+    "nEn": "Plaza Salalah Resort",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%86%D8%AA%D8%AC%D8%B9%20%D8%A7%D9%84%D8%A8%D9%84%D8%A7%D8%B2%D8%A7%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Plaza%20Salalah%20Resort%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-منتجع جويرة (مرسى هوانا)",
+    "nAr": "منتجع جويرة (مرسى هوانا)",
+    "nEn": "Juweira Resort (Howana Marina)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%86%D8%AA%D8%AC%D8%B9%20%D8%AC%D9%88%D9%8A%D8%B1%D8%A9%20%28%D9%85%D8%B1%D8%B3%D9%89%20%D9%87%D9%88%D8%A7%D9%86%D8%A7%29%20Juweira%20Resort%20%28Howana%20Marina%29%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "stays",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-موقع خور روري الأثري (سمهرم)",
+    "nAr": "موقع خور روري الأثري (سمهرم)",
+    "nEn": "Sumhuram Archaeological Site",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sumhuram%20Archaeological%20Site%20Salalah%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "موقع تراث عالمي آخر لليونسكو، كان من أهم موانئ اللبان في الجزيرة العربية، يطل على بحيرة خور روري الجميلة",
+    "noteEn": "Another UNESCO site, once one of Arabia's most important frankincense ports, overlooks Khor Rori lagoon"
+  },
+  {
+    "id": "imp-ميناء صلالة",
+    "nAr": "ميناء صلالة",
+    "nEn": "Port of Salalah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%8A%D9%86%D8%A7%D8%A1%20%D8%B5%D9%84%D8%A7%D9%84%D8%A9%20Port%20of%20Salalah%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "access",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-نوافير المغسيل",
+    "nAr": "نوافير المغسيل",
+    "nEn": "Mughsail Blowholes",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mughsail%20Blowholes%20Salalah%20Oman",
+    "rating": null,
+    "section": "nature",
+    "noteAr": "نوافير مياه طبيعية تنطلق عالياً عند اصطدام الأمواج بالمنحدرات الجيرية، من أكثر الظواهر إثارة في ظفار",
+    "noteEn": "Natural water jets shoot high when waves crash beneath limestone cliffs; one of Dhofar's most exciting sights"
+  },
+  {
+    "id": "imp-نوفا",
+    "nAr": "نوفا",
+    "nEn": "Nova",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%86%D9%88%D9%81%D8%A7%20Nova%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-واجهة شاطيء ريسوت",
+    "nAr": "واجهة شاطيء ريسوت",
+    "nEn": "Raysut Beach Front",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%88%D8%A7%D8%AC%D9%87%D8%A9%20%D8%B4%D8%A7%D8%B7%D9%8A%D8%A1%20%D8%B1%D9%8A%D8%B3%D9%88%D8%AA%20Raysut%20Beach%20Front%20Salalah%20Dhofar%20Oman",
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
   }
 ]
