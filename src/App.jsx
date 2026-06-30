@@ -3417,6 +3417,7 @@ function FoodGuide({ adsForSection = [] }) {
                     {lang==="ar" ? FOOD_TYPES[r.type]?.ar : FOOD_TYPES[r.type]?.en}
                     {" · "}{lang==="ar" ? r.priceAr : r.priceEn}
                     {r.open ? " · 🕐 " + r.open : ""}
+                    {r.rating && <span style={{color:"#C98A2E"}}>{" · ⭐ "}{r.rating}</span>}
                   </div>
                   {r.note && (
                     <div className="text-xs mt-1 leading-relaxed" style={{ color: th.subColor, fontFamily:"Tajawal" }}>
