@@ -1,16 +1,202 @@
 [
   {
+    "id": "عين صحلنوت",
+    "ar": "عين صحلنوت",
+    "en": "Ayn Sahalnoot",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D8%B5%D8%AD%D9%84%D9%86%D9%88%D8%AA%20Ayn%20Sahalnoot%20Dhofar%20Oman"
+  },
+  {
+    "id": "حفرة طوي أعتير",
+    "ar": "حفرة طوي أعتير",
+    "en": "Tawi Atair Sinkhole",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AD%D9%81%D8%B1%D8%A9%20%D8%B7%D9%88%D9%8A%20%D8%A3%D8%B9%D8%AA%D9%8A%D8%B1%20Tawi%20Atair%20Sinkhole%20Dhofar%20Oman"
+  },
+  {
+    "id": "جامع السلطان قابوس",
+    "ar": "جامع السلطان قابوس",
+    "en": "Sultan Qaboos Mosque",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AC%D8%A7%D9%85%D8%B9%20%D8%A7%D9%84%D8%B3%D9%84%D8%B7%D8%A7%D9%86%20%D9%82%D8%A7%D8%A8%D9%88%D8%B3%20Sultan%20Qaboos%20Mosque%20Dhofar%20Oman"
+  },
+  {
+    "id": "حصن مرباط",
+    "ar": "حصن مرباط",
+    "en": "Mirbat Castle",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AD%D8%B5%D9%86%20%D9%85%D8%B1%D8%A8%D8%A7%D8%B7%20Mirbat%20Castle%20Dhofar%20Oman"
+  },
+  {
+    "id": "خور روري / سمهرم",
+    "ar": "خور روري / سمهرم",
+    "en": "Khor Rori / Sumhuram",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%AE%D9%88%D8%B1%20%D8%B1%D9%88%D8%B1%D9%8A%20%2F%20%D8%B3%D9%85%D9%87%D8%B1%D9%85%20Khor%20Rori%20%2F%20Sumhuram%20Dhofar%20Oman"
+  },
+  {
+    "id": "سوق الحافة",
+    "ar": "سوق الحافة",
+    "en": "Haffa Souq",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Haffa%20Souq%20Salalah%20Oman"
+  },
+  {
+    "id": "شاطئ الدهاريز",
+    "ar": "شاطئ الدهاريز",
+    "en": "Dahariz Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%A7%D8%B7%D8%A6%20%D8%A7%D9%84%D8%AF%D9%87%D8%A7%D8%B1%D9%8A%D8%B2%20Dahariz%20Beach%20Dhofar%20Oman"
+  },
+  {
+    "id": "شاطئ الفزايح",
+    "ar": "شاطئ الفزايح",
+    "en": "Fazayah Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Fazayah%20Beach%20Salalah%20Oman"
+  },
+  {
     "id": "شاطئ المغسيل",
     "ar": "شاطئ المغسيل",
     "en": "Mughsail Beach",
-    "googleMapsUrl": "https://maps.app.goo.gl/GdciwcXrmrYisPpi8?g_st=ac",
-    "lat": 16.8794,
-    "lng": 53.7766
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mughsail%20Beach%20Salalah%20Oman"
   },
   {
-    "id": "إطلالة حمرير",
-    "ar": "إطلالة حمرير",
-    "en": "Hamrir Viewpoint",
-    "googleMapsUrl": "https://maps.app.goo.gl/W9WPvsQa4jS9WpCo6?g_st=ac"
+    "id": "شاطئ طاقة",
+    "ar": "شاطئ طاقة",
+    "en": "Taqah Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%A7%D8%B7%D8%A6%20%D8%B7%D8%A7%D9%82%D8%A9%20Taqah%20Beach%20Dhofar%20Oman"
+  },
+  {
+    "id": "شاطئ مرباط",
+    "ar": "شاطئ مرباط",
+    "en": "Mirbat Beach",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D8%A7%D8%B7%D8%A6%20%D9%85%D8%B1%D8%A8%D8%A7%D8%B7%20Mirbat%20Beach%20Dhofar%20Oman"
+  },
+  {
+    "id": "شلال وادي دربات",
+    "ar": "شلال وادي دربات",
+    "en": "Darbat Waterfall",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B4%D9%84%D8%A7%D9%84%20%D9%88%D8%A7%D8%AF%D9%8A%20%D8%AF%D8%B1%D8%A8%D8%A7%D8%AA%20Darbat%20Waterfall%20Dhofar%20Oman"
+  },
+  {
+    "id": "ضريح النبي أيوب",
+    "ar": "ضريح النبي أيوب",
+    "en": "Nabi Ayub Tomb",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Nabi%20Ayub%20Tomb%20Salalah%20Oman"
+  },
+  {
+    "id": "ضريح النبي عمران",
+    "ar": "ضريح النبي عمران",
+    "en": "Nabi Imran Tomb",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Nabi%20Imran%20Tomb%2C%2023rd%20July%20St%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.5
+  },
+  {
+    "id": "ضريح بن علي",
+    "ar": "ضريح بن علي",
+    "en": "Bin Ali Tomb",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B6%D8%B1%D9%8A%D8%AD%20%D8%A8%D9%86%20%D8%B9%D9%84%D9%8A%20Bin%20Ali%20Tomb%20Dhofar%20Oman"
+  },
+  {
+    "id": "عين أثوم",
+    "ar": "عين أثوم",
+    "en": "Ain Athum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D8%A3%D8%AB%D9%88%D9%85%20Ain%20Athum%20Dhofar%20Oman"
+  },
+  {
+    "id": "عين جرزيز",
+    "ar": "عين جرزيز",
+    "en": "Ayn Gharziz",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D8%AC%D8%B1%D8%B2%D9%8A%D8%B2%20Ayn%20Gharziz%20Dhofar%20Oman"
+  },
+  {
+    "id": "عين حمران",
+    "ar": "عين حمران",
+    "en": "Ayn Hamran",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D8%AD%D9%85%D8%B1%D8%A7%D9%86%20Ayn%20Hamran%20Dhofar%20Oman"
+  },
+  {
+    "id": "عين طبرق",
+    "ar": "عين طبرق",
+    "en": "Ain Tabrok",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D8%B7%D8%A8%D8%B1%D9%82%20Ain%20Tabrok%20Dhofar%20Oman"
+  },
+  {
+    "id": "عين كور",
+    "ar": "عين كور",
+    "en": "Ain Khor",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%B9%D9%8A%D9%86%20%D9%83%D9%88%D8%B1%20Ain%20Khor%20Dhofar%20Oman"
+  },
+  {
+    "id": "متحف أرض اللبان",
+    "ar": "متحف أرض اللبان",
+    "en": "Museum of the Frankincense Land",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Museum%20of%20the%20Frankincense%20Land%2C%20Al%20Baleed%20Archaeological%20Park%2C%20Salalah%20Salalah%20Oman",
+    "rating": 4.4
+  },
+  {
+    "id": "مرباط",
+    "ar": "مرباط",
+    "en": "Mirbat",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mirbat%20Salalah%20Oman"
+  },
+  {
+    "id": "مطل ثيتام",
+    "ar": "مطل ثيتام",
+    "en": "Theetham View",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D9%84%20%D8%AB%D9%8A%D8%AA%D8%A7%D9%85%20Theetham%20View%20Dhofar%20Oman"
+  },
+  {
+    "id": "مطل جبل سمحان",
+    "ar": "مطل جبل سمحان",
+    "en": "Jabal Samhan View",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D9%84%20%D8%AC%D8%A8%D9%84%20%D8%B3%D9%85%D8%AD%D8%A7%D9%86%20Jabal%20Samhan%20View%20Dhofar%20Oman"
+  },
+  {
+    "id": "مطل طاقة",
+    "ar": "مطل طاقة",
+    "en": "Taqah Viewpoint",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%B7%D9%84%20%D8%B7%D8%A7%D9%82%D8%A9%20Taqah%20Viewpoint%20Dhofar%20Oman"
+  },
+  {
+    "id": "نقطة الجاذبية العكسية",
+    "ar": "نقطة الجاذبية العكسية",
+    "en": "Anti-Gravity Point",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%86%D9%82%D8%B7%D8%A9%20%D8%A7%D9%84%D8%AC%D8%A7%D8%B0%D8%A8%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B9%D9%83%D8%B3%D9%8A%D8%A9%20Anti-Gravity%20Point%20Dhofar%20Oman"
+  },
+  {
+    "id": "وادي دربات",
+    "ar": "وادي دربات",
+    "en": "Wadi Darbat",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Wadi%20Darbat%20Salalah%20Oman"
+  },
+  {
+    "id": "وادي دوكة",
+    "ar": "وادي دوكة",
+    "en": "Wadi Dawkah",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Wadi%20Dawkah%20Salalah%20Oman"
+  },
+  {
+    "id": "وادي نحيز",
+    "ar": "وادي نحيز",
+    "en": "Wadi Nuheiz",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%88%D8%A7%D8%AF%D9%8A%20%D9%86%D8%AD%D9%8A%D8%B2%20Wadi%20Nuheiz%20Dhofar%20Oman"
+  },
+  {
+    "id": "حديقة وقت الطفل",
+    "ar": "حديقة وقت الطفل",
+    "en": "Kid's Time Park",
+    "googleMapsUrl": "https://maps.app.goo.gl/38GMd3sLXKXBFCnF6"
+  },
+  {
+    "id": "الواجهة العصرية (أب تاون)",
+    "ar": "الواجهة العصرية (أب تاون)",
+    "en": "Modern Frontage (Uptown)",
+    "googleMapsUrl": "https://maps.app.goo.gl/ghiKdXVqSVex5z9z9"
+  },
+  {
+    "id": "ساحة أتين (أتين سكوير)",
+    "ar": "ساحة أتين (أتين سكوير)",
+    "en": "Atin Square",
+    "googleMapsUrl": "https://maps.app.goo.gl/cg3y14t9BiwjqP64A"
+  },
+  {
+    "id": "عين رزات",
+    "ar": "عين رزات",
+    "en": "Ayn Razat",
+    "googleMapsUrl": "https://maps.app.goo.gl/fC8wbsf1gMTBaQVTA"
   }
 ]
