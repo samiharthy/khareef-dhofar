@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.63";
+const APP_VERSION = "1.64";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -4963,6 +4963,8 @@ function KhareefCalendar() {
               )}
             </div>
           );
+        })}
+      </div>
 
       {/* Companion activities — things to do around events */}
       {COMPANION_SITES.length > 0 && (
@@ -4990,9 +4992,6 @@ function KhareefCalendar() {
           </div>
         </div>
       )}
-
-        })}
-      </div>
     </div>
   );
 }
@@ -5578,9 +5577,150 @@ const SECTION_META = {
   fuel:{emoji:"⛽",ar:"محطات الوقود",en:"Fuel Stations"},
 };
 
+
+function GlobalSearch({ onClose, lang, th, goTab }) {
+  const [query, setQuery] = useState("");
+  const [allData, setAllData] = useState({ places: [], restaurants: [], custom: [], fuel: [] });
+  const [loaded, setLoaded] = useState(false);
+  const haptic = useHaptic();
+
+  useEffect(() => {
+    Promise.all([
+      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/locations.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+    ]).then(([rests, locs, overridesArr]) => {
+      const ovMap = {};
+      (overridesArr||[]).forEach(o => { ovMap[o.id] = o; });
+
+      const guidePlaces = GUIDE_CATS.flatMap(cat =>
+        cat.places.map(p => ({
+          ar: p.ar, en: p.en, lat: p.lat, lng: p.lng,
+          googleMapsUrl: ovMap[p.ar]?.googleMapsUrl || null,
+          catEmoji: cat.emoji, catAr: cat.ar, catEn: cat.en,
+          source: "explore"
+        }))
+      );
+
+      const customPlaces = (locs||[]).filter(l => !l._override).map(l => {
+        const meta = SECTION_META[l.section] || { emoji:"📍", ar:l.section, en:l.section };
+        return {
+          ar: l.nAr, en: l.nEn, lat: l.lat||null, lng: l.lng||null,
+          googleMapsUrl: l.googleMapsUrl || null,
+          catEmoji: meta.emoji, catAr: meta.ar, catEn: meta.en,
+          source: "explore"
+        };
+      });
+
+      const restPlaces = (rests||[]).map(r => ({
+        ar: r.nAr, en: r.nEn, lat: r.lat||null, lng: r.lng||null,
+        googleMapsUrl: r.googleMapsUrl || null,
+        catEmoji: "🍽️", catAr: "مطعم", catEn: "Restaurant",
+        source: "food"
+      }));
+
+      const fuelPlaces = (locs||[]).filter(l => l.section === "fuel").map(l => ({
+        ar: l.nAr, en: l.nEn, lat: null, lng: null,
+        googleMapsUrl: l.googleMapsUrl || null,
+        catEmoji: "⛽", catAr: "وقود", catEn: "Fuel",
+        source: "explore"
+      }));
+
+      setAllData({ places: guidePlaces, restaurants: restPlaces, custom: customPlaces, fuel: fuelPlaces });
+      setLoaded(true);
+    });
+  }, []);
+
+  const allItems = [...allData.places, ...allData.custom, ...allData.restaurants];
+  const q = query.trim().toLowerCase();
+  const results = q.length < 2 ? [] : allItems.filter(item =>
+    (item.ar && item.ar.includes(query)) ||
+    (item.en && item.en.toLowerCase().includes(q))
+  ).slice(0, 30);
+
+  return (
+    <div style={{ position:"fixed", inset:0, zIndex:300, background:th.page, display:"flex", flexDirection:"column" }}>
+      {/* Search header */}
+      <div style={{ padding:"14px 16px", borderBottom:`1px solid ${th.border}`, display:"flex", gap:10, alignItems:"center" }}>
+        <button onClick={onClose}
+          style={{ background:"none", border:"none", cursor:"pointer", color:th.subColor, fontSize:20, flexShrink:0 }}>
+          ✕
+        </button>
+        <div style={{ position:"relative", flex:1 }}>
+          <input
+            autoFocus
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={lang==="ar" ? "🔍 ابحث في كل التطبيق..." : "🔍 Search everything..."}
+            style={{ width:"100%", padding:"10px 14px", borderRadius:14,
+              border:`1.5px solid ${query?"#2F5D45":th.border}`, fontSize:14,
+              fontFamily:"Tajawal", background:th.cardBg, color:th.titleColor, outline:"none",
+              boxSizing:"border-box" }} />
+        </div>
+      </div>
+
+      {/* Results */}
+      <div style={{ flex:1, overflowY:"auto", padding:16 }}>
+        {!loaded && (
+          <div style={{ textAlign:"center", padding:"40px 0", color:th.subColor, fontFamily:"Tajawal", fontSize:13 }}>
+            ⏳ {lang==="ar" ? "جاري التحميل..." : "Loading..."}
+          </div>
+        )}
+        {loaded && q.length < 2 && (
+          <div style={{ textAlign:"center", padding:"40px 20px" }}>
+            <div style={{ fontSize:42, marginBottom:10 }}>🔍</div>
+            <div style={{ fontSize:13, color:th.subColor, fontFamily:"Tajawal" }}>
+              {lang==="ar"
+                ? "ابحث عن أي موقع، مطعم، شاطئ، أو محطة وقود"
+                : "Search for any place, restaurant, beach, or fuel station"}
+            </div>
+          </div>
+        )}
+        {loaded && q.length >= 2 && results.length === 0 && (
+          <EmptyState emoji="🔍"
+            titleAr={"لا نتائج لـ: " + query} titleEn={"No results: " + query}
+            descAr="جرّب كلمة أخرى" descEn="Try another word"
+            lang={lang} th={th} />
+        )}
+        {results.length > 0 && (
+          <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+            {results.map((item, i) => {
+              const mapsUrl = item.googleMapsUrl || (item.lat ? "https://maps.google.com/?q="+item.lat+","+item.lng : null);
+              return (
+                <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 12px",
+                  borderRadius:14, background:th.cardBg, border:`1px solid ${th.border}` }}>
+                  <span style={{ fontSize:22, flexShrink:0 }}>{item.catEmoji}</span>
+                  <div style={{ flex:1, minWidth:0 }}>
+                    <div style={{ fontSize:13, fontWeight:700, color:th.titleColor, fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? item.ar : (item.en||item.ar)}
+                    </div>
+                    <div style={{ fontSize:11, color:th.subColor, fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? item.catAr : item.catEn}
+                    </div>
+                  </div>
+                  {mapsUrl && (
+                    <a href={mapsUrl} target="_blank" rel="noopener noreferrer"
+                      onClick={() => haptic.light()}
+                      style={{ display:"flex", alignItems:"center", justifyContent:"center",
+                        width:32, height:32, borderRadius:10, background:"#2F5D4515",
+                        textDecoration:"none", flexShrink:0 }}>
+                      <MapPin size={15} color="#2F5D45" />
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
 
   const haptic = useHaptic();
+  const [showGlobalSearch, setShowGlobalSearch] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(
     () => localStorage.getItem("kh_onboarded") !== "1"
   );
@@ -5677,6 +5817,9 @@ export default function App() {
 
   return (
     <>
+      {showGlobalSearch && (
+        <GlobalSearch onClose={() => setShowGlobalSearch(false)} lang={lang} th={th} goTab={openTab} />
+      )}
       {showOnboarding && (
         <Onboarding lang={lang} onDone={() => setShowOnboarding(false)} />
       )}
@@ -5699,7 +5842,15 @@ export default function App() {
                   <span className="text-xl font-bold leading-tight" style={{ color: th.titleColor, fontFamily: isRTL ? "Aref Ruqaa" : "inherit" }}>{t.appTitle}</span>
                 </div>
               </div>
-              <WeatherBadge />
+              <div className="flex items-center gap-1.5">
+                <button onClick={() => { haptic.light(); setShowGlobalSearch(true); }}
+                  style={{ display:"flex", alignItems:"center", justifyContent:"center",
+                    width:36, height:36, borderRadius:"50%", background:th.navBg,
+                    border:`1px solid ${th.border}`, cursor:"pointer" }}>
+                  <Search size={16} color={th.subColor} />
+                </button>
+                <WeatherBadge />
+              </div>
             </div>
 
             <div className="mt-2.5 flex items-center justify-between gap-2">
