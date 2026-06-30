@@ -67,7 +67,6 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     <button class="tab" onclick="showTab('locs')">📍 المواقع</button>
     <button class="tab" onclick="showTab('stats')">📊 الإحصائيات</button>
     <button class="tab" onclick="showTab('ads')">📢 الإعلانات</button>
-    <button class="tab" onclick="showTab('photos')">🖼️ الصور</button>
     <button class="tab" onclick="showTab('bulk')">📤 استيراد جماعي</button>
   </div>
 
@@ -425,53 +424,6 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     </div>
 
 
-    <!-- PHOTOS TAB -->
-    <div id="tab-photos" style="display:none">
-      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:12px 16px;margin-bottom:10px">
-        <div style="font-size:12px;font-weight:700;color:#2F5D45;margin-bottom:4px">🖼️ إدارة صور المواقع</div>
-        <div style="font-size:11px;color:#555;line-height:1.7">
-          أضف رابط صورة لكل موقع — تظهر <b>في كارد الموقع</b> عند التصفح في استكشف.<br>
-          يمكن استخدام روابط من: <b>Google Photos · iCloud · Unsplash · أي رابط مباشر</b>
-        </div>
-      </div>
-
-      <!-- How photos appear explanation -->
-      <div class="card" style="padding:12px">
-        <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:8px">📱 أين تظهر الصور؟</div>
-        <div style="display:flex;gap:8px;font-size:11px;color:#666">
-          <div style="flex:1;background:#f5f5f5;border-radius:10px;padding:10px">
-            <div style="font-size:16px;margin-bottom:4px">📸</div>
-            <div style="font-weight:700;margin-bottom:2px">بدون صورة</div>
-            <div>يظهر إيموجي التصنيف</div>
-          </div>
-          <div style="flex:1;background:#2F5D4510;border-radius:10px;padding:10px;border:1px solid #2F5D4530">
-            <div style="font-size:16px;margin-bottom:4px">🌟</div>
-            <div style="font-weight:700;margin-bottom:2px;color:#2F5D45">مع صورة</div>
-            <div>صورة 140px + اسم + أزرار</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Category filter -->
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-        <button class="sec-filter-btn" style="background:#2F5D45;color:#fff;border-color:#2F5D45"
-          onclick="filterPhotoCat('all')">الكل</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('beaches')">🏖️ الشواطئ</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('springs')">💧 العيون</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('valleys')">🏞️ الأودية</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('viewpoints')">🔭 المطلات</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('heritage')">🏛️ التراث</button>
-        <button class="sec-filter-btn" onclick="filterPhotoCat('religious')">🕌 الديني</button>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <div id="photos-count" style="font-size:13px;font-weight:700">...</div>
-        <button onclick="loadPhotos()" class="btn btn-outline btn-sm">🔄 تحديث</button>
-      </div>
-      <div id="photos-list"></div>
-    </div>
-
-
     <!-- BULK IMPORT/EXPORT TAB -->
     <div id="tab-bulk" style="display:none">
       <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:14px 16px;margin-bottom:14px">
@@ -614,7 +566,7 @@ async function ghPut(path,content,sha,msg){
 }
 
 function showTab(tab){
-  ["notif","posts","locs","stats","ads","photos","bulk"].forEach(t=>{
+  ["notif","posts","locs","stats","ads","bulk"].forEach(t=>{
     const el=document.getElementById("tab-"+t);
     if(el) el.style.display=t===tab?"block":"none";
   });
@@ -625,7 +577,6 @@ function showTab(tab){
   if(tab==="locs"){ renderLocations(); loadLocations(); }
   if(tab==="stats") loadVercelStats();
   if(tab==="ads") loadAds();
-  if(tab==="photos") loadPhotos();
 }
 
 function showSubTab(sub){
