@@ -4444,8 +4444,8 @@ function ExploreTab({ globalAds = [] }) {
               </div>
               <div className="space-y-2">
                 {cat.places.slice(0, 4).map((p, i) => (
-                  <PlaceCard key={i} place={p} catEmoji={cat.emoji} lang={lang} th={th}
-                    isFav={favorites.has(p.id || p.ar)} onFavToggle={toggleFav} />
+                  <PhotoPlaceCard key={i} place={p} catKey={cat.key} catEmoji={cat.emoji} lang={lang} th={th}
+                    isFav={favorites.has(p.id || p.ar)} onFavToggle={toggleFav} photos={photos} />
                 ))}
                 {cat.places.length > 4 && (
                   <button onClick={() => setActiveCat(cat.key)}
@@ -4487,8 +4487,8 @@ function ExploreTab({ globalAds = [] }) {
       {!grouped && (
         <div className="space-y-2">
           {filtered.map((p, i) => (
-            <PlaceCard key={i} place={p} catEmoji={p.catEmoji} lang={lang} th={th}
-              isFav={favorites.has(p.id)} onFavToggle={toggleFav} />
+            <PhotoPlaceCard key={i} place={p} catKey={p.catKey||""} catEmoji={p.catEmoji} lang={lang} th={th}
+              isFav={favorites.has(p.id)} onFavToggle={toggleFav} photos={photos} />
           ))}
           {filtered.length === 0 && viewMode !== "favs" && (
             <EmptyState emoji="🔍"
