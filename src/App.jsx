@@ -256,7 +256,7 @@ const LEVEL_LABELS = {
 =================================================================== */
 
 const APP_DOWNLOAD_URL = "https://khareef-dhofar.vercel.app";
-const APP_VERSION = "1.64";
+const APP_VERSION = "1.65";
 
 // Salalah coordinates for Open-Meteo live weather (no API key needed)
 const SALALAH_LAT = 17.0151;
@@ -491,6 +491,115 @@ const FUEL_STATIONS = [
   { nAr: "محطة عُمان أويل – ثمريت", nEn: "Oman Oil – Thumrait", locAr: "ثمريت", locEn: "Thumrait", lat: 17.6554, lng: 54.0597, h24: true, company: "عُمان أويل" },
   // ── الغرب البعيد ────────────────────────────────────────────────
   { nAr: "محطة حسن – المزيونة", nEn: "Hassan Station – Al Mazyounah", locAr: "المزيونة", locEn: "Al Mazyounah", lat: 17.8437, lng: 52.6636, h24: true, company: "محلية" },
+];
+
+
+const HIKING_TRAILS_DETAILED = [
+  {
+    nAr: "مسار وادي دربات", nEn: "Wadi Darbat Trail",
+    lat: 17.10769, lng: 54.452799,
+    level: "easy",
+    footKm: 4, footDurAr: "ساعتان", footDurEn: "2 hours",
+    fourByFourKm: 0, fourByFourNote: { ar: "لا حاجة لدفع رباعي — يمكن الوصول لنقطة البداية بسيارة عادية", en: "No 4WD needed — accessible by regular car to the trailhead" },
+    descAr: "أشهر وأسهل مسار في ظفار، يمتد بمحاذاة بحيرات وادي دربات الموسمية وسط مساحات خضراء كثيفة. يمر المسار قرب شلالات صغيرة وبرك مياه عذبة تتجمع فيها الجمال للشرب، مع إمكانية ركوب القوارب الكهربائية في موسم الخريف. مناسب جداً للعائلات والمبتدئين.",
+    descEn: "Dhofar's most famous and easiest trail, running alongside Wadi Darbat's seasonal lakes amid lush greenery. Passes small waterfalls and freshwater pools where camels gather to drink, with electric boat rides available during Khareef. Excellent for families and beginners.",
+    notSuitableAr: ["ذوو الإعاقة الحركية الشديدة", "كبار السن بدون مرافق"],
+    notSuitableEn: ["People with severe mobility impairments", "Elderly without a companion"],
+    importantInfoAr: "الأرض رطبة وزلقة خلال الخريف (يوليو-سبتمبر). تتوفر قوارب كهربائية للإيجار في الموسم. لا توجد رسوم دخول.",
+    importantInfoEn: "Ground is wet and slippery during Khareef (July-Sept). Electric boats available for rent in season. No entrance fee.",
+    imageUrl: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Wadi+Darbat+Salalah+Oman"
+  },
+  {
+    nAr: "مسار شلال عين غيث الخفي", nEn: "Hidden Ayn Ghedh Waterfall Trail",
+    lat: 17.0312, lng: 54.0156,
+    level: "moderate",
+    footKm: 4, footDurAr: "4 ساعات (ذهاباً وإياباً)", footDurEn: "4 hours (round trip)",
+    fourByFourKm: 6, fourByFourNote: { ar: "يلزم دفع رباعي للوصول لنقطة بداية المسار عبر طريق ترابي وعر", en: "4WD required to reach the trailhead via a rough dirt track" },
+    descAr: "رحلة مشي صعبة وغير مُعبَّدة بطول 4 كم عبر قاع وادٍ صخري، تتضمن صعوداً وهبوطاً ومروراً بمياه ضحلة. تنتهي عند شلال خفي ساحر بحوض صخري صافٍ مناسب للسباحة، وهي مكافأة مثالية بعد المشي الشاق.",
+    descEn: "A challenging, unmarked 4km hike through a rocky wadi bed, involving ascents, descents, and shallow water crossings. Ends at a magical hidden waterfall with a clear rock pool perfect for swimming — an ideal reward after the strenuous walk.",
+    notSuitableAr: ["الأطفال دون 10 سنوات", "من يعاني من مشاكل في الركبة أو الكاحل", "غير المعتادين على المشي الصخري الوعر"],
+    notSuitableEn: ["Children under 10", "Those with knee or ankle issues", "Those unaccustomed to rough rocky terrain"],
+    importantInfoAr: "يُفضّل الذهاب مع مرشد محلي. احضر أحذية مقاومة للماء وملابس سباحة. لا توجد إشارات واضحة على المسار.",
+    importantInfoEn: "A local guide is recommended. Bring waterproof shoes and swimwear. Trail has no clear markers.",
+    imageUrl: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ayn+Ghedh+Waterfall+Dhofar+Oman"
+  },
+  {
+    nAr: "مسار جبل سمحان", nEn: "Jabal Samhan Trail",
+    lat: 17.1213, lng: 54.6892,
+    level: "hard",
+    footKm: 8, footDurAr: "نصف يوم", footDurEn: "Half day",
+    fourByFourKm: 25, fourByFourNote: { ar: "يلزم دفع رباعي للوصول إلى هضبة الجبل عبر طرق جبلية وعرة", en: "4WD required to reach the plateau via rugged mountain roads" },
+    descAr: "أعلى قمة في ظفار (أكثر من 1700م)، ومحمية طبيعية تضم آخر مكان يتجوّل فيه النمر العربي بحرية في البرية. يطل المسار على أحد أكبر الأودية في الجزيرة العربية. الطقس بارد ومُغطى بالضباب خلال الخريف، مما يخلق مشهداً سريالياً.",
+    descEn: "Dhofar's highest peak (over 1,700m), a nature reserve and the last place the Arabian leopard roams freely in the wild. Overlooks one of Arabia's largest canyons. Cold, fog-draped weather during Khareef creates a surreal landscape.",
+    notSuitableAr: ["المبتدئين تماماً", "كبار السن", "من يعاني من أمراض القلب أو التنفس", "بدون مرشد محلي"],
+    notSuitableEn: ["Complete beginners", "Elderly visitors", "Those with heart or respiratory conditions", "Without a local guide"],
+    importantInfoAr: "انطلق مبكراً جداً. احضر ملابس دافئة (البرودة شديدة فوق الهضبة). تصريح دخول المحمية قد يكون مطلوباً — تحقق مسبقاً. لا تخرج عن المسارات المحددة لحماية النمر العربي.",
+    importantInfoEn: "Start very early. Bring warm clothing (it gets cold at altitude). Reserve entry permit may be required — check in advance. Stay on marked trails to protect the Arabian leopard.",
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Jabal+Samhan+Nature+Reserve+Dhofar+Oman"
+  },
+  {
+    nAr: "مسار حفرة طوي عتير", nEn: "Tawi Atair Sinkhole Trail",
+    lat: 17.1305, lng: 54.5781,
+    level: "moderate",
+    footKm: 2, footDurAr: "3-4 ساعات", footDurEn: "3-4 hours",
+    fourByFourKm: 0, fourByFourNote: { ar: "يمكن الوصول لمنصة المشاهدة بسيارة عادية، الدفع الرباعي مفيد فقط للنزول العميق", en: "Regular car reaches the viewing platform; 4WD only helps for deep descent" },
+    descAr: "يُعرف بـ'بئر الطيور'، من أكبر الحفر الطبيعية في العالم بقطر يصل 100م وعمق 211م. يمكن المشي حول حافة الحفرة لمنصة مشاهدة آمنة، أو القيام بنزول صعب عبر شق صخري لمن يملك خبرة تسلق. أصداء أصوات الطيور تتردد عبر الكهف بشكل مذهل.",
+    descEn: "Known as the 'Well of Birds', one of the world's largest sinkholes at 100m diameter and 211m deep. Walk around the rim to a safe viewing platform, or attempt a challenging descent through a rock crevice for experienced climbers. Bird calls echo dramatically through the cavern.",
+    notSuitableAr: ["من يخاف المرتفعات (عند الاقتراب من الحافة)", "النزول الداخلي غير مناسب لغير المتمرسين"],
+    notSuitableEn: ["Those with fear of heights (near the rim)", "Interior descent unsuitable for inexperienced climbers"],
+    importantInfoAr: "منصة المشاهدة آمنة لجميع الزوار. النزول الداخلي يتطلب معدات تسلق ومرشداً متخصصاً. لا توجد حواجز حماية كاملة حول الحافة، توخَّ الحذر.",
+    importantInfoEn: "Viewing platform is safe for all visitors. Interior descent requires climbing gear and a specialized guide. No complete safety barriers around the rim — exercise caution.",
+    imageUrl: "https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Tawi+Atair+Sinkhole+Dhofar+Oman"
+  },
+  {
+    nAr: "مسار عين رزات", nEn: "Ayn Razat Trail",
+    lat: 17.126588, lng: 54.269093,
+    level: "easy",
+    footKm: 2, footDurAr: "ساعة واحدة", footDurEn: "1 hour",
+    fourByFourKm: 0, fourByFourNote: { ar: "لا حاجة لدفع رباعي — موقف سيارات مباشر عند المدخل", en: "No 4WD needed — direct parking at the entrance" },
+    descAr: "عين طبيعية هادئة ومُهيّأة جيداً للعائلات، بمسارات مشي مُعبَّدة وسط حدائق خضراء ومياه متدفقة. مناسبة جداً للأطفال وكبار السن وذوي الاحتياجات الخاصة بسبب سهولة الوصول.",
+    descEn: "A tranquil, well-developed natural spring perfect for families, with paved walking paths through green gardens and flowing water. Very suitable for children, elderly visitors, and those with special needs due to easy accessibility.",
+    notSuitableAr: [],
+    notSuitableEn: [],
+    importantInfoAr: "مناسب لجميع الفئات العمرية. توجد مناطق جلوس ومرافق عامة. مزدحم في عطلات نهاية الأسبوع وموسم الخريف.",
+    importantInfoEn: "Suitable for all age groups. Seating areas and public facilities available. Crowded on weekends and during Khareef season.",
+    imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Ayn+Razat+Salalah+Oman"
+  },
+  {
+    nAr: "مسار منحدرات شعت الساحلية", nEn: "Shaat Coastal Cliffs Trail",
+    lat: 16.7423, lng: 53.3156,
+    level: "moderate",
+    footKm: 3, footDurAr: "ساعتان", footDurEn: "2 hours",
+    fourByFourKm: 15, fourByFourNote: { ar: "يلزم دفع رباعي للوصول للمنطقة الساحلية الغربية البعيدة", en: "4WD required to reach the remote western coastal area" },
+    descAr: "مسار يمتد على طول منحدرات جيرية مرتفعة فوق بحر العرب، يمر بمنطقة مارنيف الساحلية ونوافيرها الطبيعية، وينتهي عند إطلالة شعت المطلة على إحدى أعمق الحفر الطبيعية في عُمان. مناظر بانورامية ساحلية مذهلة طوال المسار.",
+    descEn: "A trail running along high limestone cliffs above the Arabian Sea, passing through the Marneef coastal area and its natural blowholes, ending at the Shaat viewpoint overlooking one of Oman's deepest natural sinkholes. Stunning panoramic coastal views throughout.",
+    notSuitableAr: ["من يخاف المرتفعات", "الأطفال الصغار بدون إشراف مباشر"],
+    notSuitableEn: ["Those with fear of heights", "Young children without direct supervision"],
+    importantInfoAr: "ابقَ بعيداً عن حواف المنحدرات. ظاهرة النوافير تعتمد على حالة المد والجزر. الرياح قوية أحياناً على الإطلالات المرتفعة.",
+    importantInfoEn: "Stay away from cliff edges. Blowhole activity depends on tide conditions. Winds can be strong at elevated viewpoints.",
+    imageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Shaat+Viewpoint+Dhofar+Oman"
+  },
+  {
+    nAr: "مسار جبل القمر الغربي", nEn: "Western Jabal Al Qamar Trail",
+    lat: 17.0856, lng: 53.5234,
+    level: "hard",
+    footKm: 18, footDurAr: "يوم كامل", footDurEn: "Full day",
+    fourByFourKm: 0, fourByFourNote: { ar: "المسار بالكامل سيراً على الأقدام، الوصول لنقطة البداية يتطلب دفعاً رباعياً", en: "Entire trail is on foot; reaching the trailhead requires 4WD" },
+    descAr: "مسار طويل وتحدٍّ حقيقي بطول 18 كم لمحبي المشي لمسافات طويلة، يمر عبر جبال القمر الغربية بمناظر طبيعية بكر بعيدة عن الزحام السياحي. يستغرق يوماً كاملاً ويتطلب لياقة بدنية عالية وتخطيطاً دقيقاً.",
+    descEn: "A long 18km trail for serious hikers, traversing the Western Jabal Al Qamar mountains through pristine, off-the-beaten-path scenery far from tourist crowds. Takes a full day and requires high fitness levels and careful planning.",
+    notSuitableAr: ["المبتدئين", "الأطفال", "من ليس لديه خبرة مشي طويلة سابقة", "بدون مرشد متخصص"],
+    notSuitableEn: ["Beginners", "Children", "Those without prior long-distance hiking experience", "Without a specialized guide"],
+    importantInfoAr: "يُفضّل بشدة الذهاب مع مرشد محلي متمرس. احضر مياهاً ووجبات كافية ليوم كامل، ومعدات اتصال طوارئ. لا توجد خدمات أو مرافق على طول المسار.",
+    importantInfoEn: "A local experienced guide is strongly recommended. Bring sufficient water and food for a full day, plus emergency communication gear. No services or facilities along the route.",
+    imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=700&q=80&auto=format&fit=crop",
+    googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Jabal+Al+Qamar+West+Dhofar+Oman"
+  },
 ];
 
 const HIKING_TRAILS = [
@@ -1730,6 +1839,7 @@ const PRIMARY_TABS = [
 const MORE_TABS = [
   { key: "food",     labelAr:"دليل المطاعم",      labelEn:"Restaurants",    icon: Coffee },
   { key: "stays",    labelAr:"الإقامة",            labelEn:"Stays",          icon: Building2 },
+  { key: "hiking",   labelAr:"مسارات الهايكنج",    labelEn:"Hiking Trails",  icon: Navigation },
   { key: "nearby",   labelAr:"أقرب الأماكن",      labelEn:"Nearby",         icon: Navigation },
   { key: "calendar", labelAr:"تقويم الخريف",      labelEn:"Calendar",       icon: Calendar },
   { key: "access",   labelAr:"الوصول إلى ظفار",   labelEn:"Getting Here",   icon: Route },
@@ -5717,6 +5827,150 @@ function GlobalSearch({ onClose, lang, th, goTab }) {
   );
 }
 
+
+function HikingTrails() {
+  const { lang, theme } = useLang();
+  const th = THEMES[theme];
+  const [expanded, setExpanded] = useState(null);
+  const haptic = useHaptic();
+
+  const LEVEL_META = {
+    easy:     { ar:"سهل",   en:"Easy",     color:"#2B8A6A" },
+    moderate: { ar:"متوسط", en:"Moderate", color:"#C98A2E" },
+    hard:     { ar:"صعب",   en:"Hard",     color:"#B5402C" },
+  };
+
+  return (
+    <div className="space-y-4 pb-6">
+      <SectionTitle eyebrow={lang==="ar"?"دليل":"Guide"} title={lang==="ar"?"مسارات الهايكنج":"Hiking Trails"} icon={Navigation} />
+
+      <div className="rounded-2xl p-3" style={{ background:"#2F5D4510", border:"1px solid #2F5D4530" }}>
+        <div className="text-xs leading-relaxed" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+          {lang==="ar"
+            ? "📍 جميع المسارات تتطلب حذراً إضافياً خلال موسم الخريف (يوليو-سبتمبر) بسبب الضباب والأرض الزلقة"
+            : "📍 All trails require extra caution during Khareef season (July-Sept) due to fog and slippery ground"}
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {HIKING_TRAILS_DETAILED.map((trail, i) => {
+          const isOpen = expanded === i;
+          const meta = LEVEL_META[trail.level] || LEVEL_META.moderate;
+          const notSuitable = lang==="ar" ? trail.notSuitableAr : trail.notSuitableEn;
+
+          return (
+            <div key={i} className="overflow-hidden rounded-2xl"
+              style={{ background:th.cardBg, border:`1.5px solid ${th.border}` }}>
+
+              {/* Image */}
+              <div style={{ position:"relative", height:150, overflow:"hidden" }}>
+                <img src={trail.imageUrl} alt={trail.nAr} loading="lazy"
+                  style={{ width:"100%", height:150, objectFit:"cover", display:"block" }}
+                  onError={e => e.target.style.display="none"} />
+                <div style={{ position:"absolute", top:8, right:8, borderRadius:20,
+                  padding:"3px 10px", background:meta.color, fontSize:11, fontWeight:700,
+                  color:"#fff", fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? meta.ar : meta.en}
+                </div>
+              </div>
+
+              <div className="p-3.5">
+                <div className="text-sm font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? trail.nAr : trail.nEn}
+                </div>
+
+                {/* Distance badges */}
+                <div className="flex gap-2 mt-2 flex-wrap">
+                  <div className="flex items-center gap-1 rounded-lg px-2.5 py-1" style={{ background:th.border }}>
+                    <span style={{ fontSize:13 }}>🚶</span>
+                    <span className="text-xs font-bold" style={{ color:th.titleColor, fontFamily:"Tajawal" }}>
+                      {trail.footKm} {lang==="ar"?"كم":"km"} · {lang==="ar"?trail.footDurAr:trail.footDurEn}
+                    </span>
+                  </div>
+                  {trail.fourByFourKm > 0 && (
+                    <div className="flex items-center gap-1 rounded-lg px-2.5 py-1" style={{ background:"#C98A2E15" }}>
+                      <span style={{ fontSize:13 }}>🚙</span>
+                      <span className="text-xs font-bold" style={{ color:"#C98A2E", fontFamily:"Tajawal" }}>
+                        {trail.fourByFourKm} {lang==="ar"?"كم دفع رباعي":"km 4WD"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-xs mt-2.5 leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                  {lang==="ar" ? trail.descAr : trail.descEn}
+                </p>
+
+                {/* Expand button */}
+                <button onClick={() => { haptic.light(); setExpanded(isOpen ? null : i); }}
+                  className="flex items-center gap-1 mt-2.5 text-xs font-bold"
+                  style={{ background:"none", border:"none", cursor:"pointer", color:"#2F5D45", fontFamily:"Tajawal" }}>
+                  {isOpen ? (lang==="ar"?"إخفاء التفاصيل ▲":"Hide details ▲") : (lang==="ar"?"تفاصيل أكثر ▼":"More details ▼")}
+                </button>
+
+                {isOpen && (
+                  <div className="mt-3 space-y-3">
+                    {notSuitable && notSuitable.length > 0 && (
+                      <div className="rounded-xl p-3" style={{ background:"#B5402C10", border:"1px solid #B5402C25" }}>
+                        <div className="text-xs font-bold mb-1.5" style={{ color:"#B5402C", fontFamily:"Tajawal" }}>
+                          {lang==="ar" ? "⚠️ غير مناسب لـ:" : "⚠️ Not suitable for:"}
+                        </div>
+                        <ul className="space-y-1">
+                          {notSuitable.map((n, ni) => (
+                            <li key={ni} className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>• {n}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {trail.fourByFourNote && trail.fourByFourKm > 0 && (
+                      <div className="text-xs" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                        🚙 {lang==="ar" ? trail.fourByFourNote.ar : trail.fourByFourNote.en}
+                      </div>
+                    )}
+
+                    <div className="rounded-xl p-3" style={{ background:"#2F5D4510" }}>
+                      <div className="text-xs font-bold mb-1" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                        {lang==="ar" ? "ℹ️ معلومات مهمة" : "ℹ️ Important Info"}
+                      </div>
+                      <div className="text-xs leading-relaxed" style={{ color:th.subColor, fontFamily:"Tajawal" }}>
+                        {lang==="ar" ? trail.importantInfoAr : trail.importantInfoEn}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex gap-2 mt-3">
+                  <a href={trail.googleMapsUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5"
+                    style={{ background:"#2F5D4515", textDecoration:"none" }}>
+                    <MapPin size={13} color="#2F5D45" />
+                    <span className="text-xs font-bold" style={{ color:"#2F5D45", fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? "افتح الخريطة" : "Open Map"}
+                    </span>
+                  </a>
+                  <a href={"https://api.whatsapp.com/send?text=" + encodeURIComponent(
+                      (lang==="ar"?trail.nAr:trail.nEn) + " | " + trail.googleMapsUrl
+                    )}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5"
+                    style={{ background:"#25D36615", textDecoration:"none" }}>
+                    <span style={{ fontSize:13 }}>💬</span>
+                    <span className="text-xs font-bold" style={{ color:"#25D366", fontFamily:"Tajawal" }}>
+                      {lang==="ar" ? "مشاركة" : "Share"}
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
 
   const haptic = useHaptic();
@@ -5887,6 +6141,7 @@ export default function App() {
             {tab === "health" && <Health />}
             {tab === "tips" && <Tips />}
             {tab === "stays" && <Stays />}
+          {tab === "hiking" && <HikingTrails />}
             {tab === "about" && <About />}
           {tab === "food" && <FoodGuide adsForSection={getAdsForSection("food")} />}
           {tab === "today" && <TodayTab />}
