@@ -256,7 +256,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
           <button class="btn btn-green btn-sm" onclick="toggleRestForm()">+ مطعم جديد</button>
         </div>
         <div id="rest-form" style="display:none" class="card">
-          <div style="font-weight:700;font-size:14px;margin-bottom:12px">🍽️ مطعم جديد</div>
+          <div id="rest-form-title" style="font-weight:700;font-size:14px;margin-bottom:12px">🍽️ مطعم جديد</div>
           <label>الاسم العربي *</label><input id="rest-nar" placeholder="اسم المطعم" />
           <label>الاسم الإنجليزي *</label><input id="rest-nen" placeholder="Restaurant name" />
           <label>التصنيف</label>
@@ -273,16 +273,15 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
             <option value="متوسط|Mid-range">متوسط</option>
             <option value="مرتفع|High-end">مرتفع</option>
           </select>
-          <label>الإحداثيات (lat, lng)</label>
-          <input id="rest-coords" placeholder="17.0151, 54.0924" oninput="parseRestCoords()" />
-          <div id="rest-coords-prev" style="display:none;font-size:11px;color:#2F5D45;font-weight:700;margin-top:3px"></div>
+          <label>🔗 رابط Google Maps</label>
+          <input id="rest-gmaps-url" placeholder="https://maps.app.goo.gl/..." style="direction:ltr" />
           <input type="hidden" id="rest-lat" /><input type="hidden" id="rest-lng" />
           <label>أوقات الدوام</label><input id="rest-open" placeholder="12:00-23:00" />
           <label>رقم الهاتف</label><input id="rest-phone" placeholder="+968..." />
           <label>وصف عربي</label><textarea id="rest-note-ar" rows="2"></textarea>
           <label>وصف إنجليزي</label><textarea id="rest-note-en" rows="2"></textarea>
           <div style="display:flex;gap:10px;margin-top:12px">
-            <button class="btn btn-green" onclick="addRestaurant()">✅ إضافة</button>
+            <button id="rest-submit-btn" class="btn btn-green" onclick="addRestaurant()">✅ إضافة</button>
             <button class="btn btn-outline" onclick="toggleRestForm()">إلغاء</button>
           </div>
           <div id="rest-msg" style="font-size:12px;margin-top:6px;display:none"></div>
@@ -1000,13 +999,44 @@ function renderRestaurants(){
         <div style="flex:1;min-width:0">
           <div style="font-size:13px;font-weight:700">${r.nAr}</div>
           <div style="font-size:11px;color:#888">${r.nEn} · ${r.priceAr||""} ${r.open?"· 🕐 "+r.open:""}</div>
-          ${r.lat?`<div style="font-size:10px;color:#3C6E8F">📍 ${r.lat}, ${r.lng}</div>`:""}
+          ${r.googleMapsUrl?`<a href="${r.googleMapsUrl}" target="_blank" style="font-size:10px;color:#25D366;text-decoration:none">🔗 رابط Maps</a>`:
+            (r.lat?`<div style="font-size:10px;color:#3C6E8F">📍 ${r.lat}, ${r.lng}</div>`:`<div style="font-size:10px;color:#B5402C">⚠️ بلا موقع</div>`)}
         </div>
-        <button onclick="deleteRestaurant(${i})" style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700;flex-shrink:0">حذف</button>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+          <button onclick="openEditRest(${i})" style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
+          <button onclick="deleteRestaurant(${i})" style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+        </div>
       </div>
     </div>`).join("");
 }
-function toggleRestForm(){const f=document.getElementById("rest-form");f.style.display=f.style.display==="none"?"block":"none";}
+
+let editingRestIdx = null;
+function openEditRest(i){
+  editingRestIdx = i;
+  const r = restData[i];
+  document.getElementById("rest-nar").value = r.nAr||"";
+  document.getElementById("rest-nen").value = r.nEn||"";
+  document.getElementById("rest-type").value = r.type||"arabic";
+  document.getElementById("rest-gmaps-url").value = r.googleMapsUrl||"";
+  document.getElementById("rest-open").value = r.open||"";
+  document.getElementById("rest-phone").value = r.phone||"";
+  document.getElementById("rest-note-ar").value = r.note?.ar||"";
+  document.getElementById("rest-note-en").value = r.note?.en||"";
+  document.getElementById("rest-form-title").textContent = "✏️ تعديل مطعم";
+  document.getElementById("rest-submit-btn").textContent = "💾 حفظ التعديل";
+  document.getElementById("rest-form").style.display = "block";
+  document.getElementById("rest-form").scrollIntoView({behavior:"smooth"});
+}
+function toggleRestForm(){
+  const f=document.getElementById("rest-form");
+  const opening = f.style.display==="none";
+  f.style.display = opening?"block":"none";
+  if(!opening){
+    editingRestIdx = null;
+    document.getElementById("rest-form-title").textContent = "🍽️ مطعم جديد";
+    document.getElementById("rest-submit-btn").textContent = "✅ إضافة";
+  }
+}
 function parseRestCoords(){
   const m=document.getElementById("rest-coords").value.match(/(-?\d+\.?\d*)[,\s]+(-?\d+\.?\d*)/);
   if(m){document.getElementById("rest-lat").value=m[1];document.getElementById("rest-lng").value=m[2];const p=document.getElementById("rest-coords-prev");p.textContent=`📍 ${m[1]}, ${m[2]} ✅`;p.style.display="block";}
@@ -1017,13 +1047,31 @@ async function addRestaurant(){
   if(!nAr||!nEn){alert("أدخل الاسم");return;}
   const pp=document.getElementById("rest-price").value.split("|");
   const r={nAr,nEn,type:document.getElementById("rest-type").value,priceAr:pp[0],priceEn:pp[1]||pp[0],
-    lat:parseFloat(document.getElementById("rest-lat").value)||null,
-    lng:parseFloat(document.getElementById("rest-lng").value)||null,
+    googleMapsUrl:document.getElementById("rest-gmaps-url").value.trim()||null,
     open:document.getElementById("rest-open").value,
     phone:document.getElementById("rest-phone").value,
     note:{ar:document.getElementById("rest-note-ar").value,en:document.getElementById("rest-note-en").value}};
-  const updated=[...restData,r];
-  try{const res=await ghPut(REST_PATH,updated,restSha,"add restaurant: "+nAr);restSha=res.content.sha;restData=updated;renderRestaurants();toggleRestForm();showMsg("rest-msg","✅ تمت الإضافة!",true);}
+
+  let updated;
+  let msg;
+  if(editingRestIdx !== null){
+    updated = [...restData];
+    updated[editingRestIdx] = r;
+    msg = "✅ تم تعديل المطعم!";
+  } else {
+    updated = [...restData, r];
+    msg = "✅ تمت الإضافة!";
+  }
+
+  try{
+    const res=await ghPut(REST_PATH,updated,restSha,(editingRestIdx!==null?"edit":"add")+" restaurant: "+nAr);
+    restSha=res.content.sha;restData=updated;renderRestaurants();toggleRestForm();
+    showMsg("rest-msg",msg,true);
+    editingRestIdx = null;
+    document.getElementById("rest-form-title").textContent = "🍽️ مطعم جديد";
+    document.getElementById("rest-submit-btn").textContent = "✅ إضافة";
+    ["rest-nar","rest-nen","rest-gmaps-url","rest-open","rest-phone","rest-note-ar","rest-note-en"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  }
   catch(e){alert("خطأ: "+e.message);}
 }
 async function deleteRestaurant(i){
