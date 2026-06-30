@@ -1723,21 +1723,21 @@ async function importBulkCSV(){
   progressText.textContent = `⏳ معالجة ${rows.length} صف...`;
   progressBar.style.width = "15%";
 
-  // Separate place rows vs restaurant rows
   const placeRows = rows.filter(r => (r.type||"").toLowerCase() === "place");
   const restRows = rows.filter(r => (r.type||"").toLowerCase() === "restaurant");
 
   let updatedCount = 0;
+  const VALID_SECTIONS = ["beaches","springs","valleys","viewpoints","heritage","religious","nature","hike","evening","companion","west","mid","east","health","access","events","stays","fuel"];
 
-  // ── Update places: write to places_overrides.json + place-photos.json ──────
+  // ── Update places: write to locations.json (custom, with section) + place-photos.json ──
   try{
     progressText.textContent = "⏳ تحديث المواقع...";
     progressBar.style.width = "30%";
 
-    const or = await fetch(`https://api.github.com/repos/${REPO}/contents/${OVERRIDES_PATH}`,
+    const lr = await fetch(`https://api.github.com/repos/${REPO}/contents/${LOCS_PATH}`,
       {headers:{Authorization:`token ${GH_TOKEN}`}});
-    let overridesArr = []; let overridesSha = null;
-    if(or.ok){ const od=await or.json(); overridesSha=od.sha; const b=Uint8Array.from(atob(od.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); overridesArr=JSON.parse(new TextDecoder().decode(b))||[]; }
+    let locsArr = []; let locsSha2 = null;
+    if(lr.ok){ const ld=await lr.json(); locsSha2=ld.sha; const b=Uint8Array.from(atob(ld.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); locsArr=JSON.parse(new TextDecoder().decode(b))||[]; }
 
     const pr = await fetch(`https://api.github.com/repos/${REPO}/contents/${PHOTOS_PATH}`,
       {headers:{Authorization:`token ${GH_TOKEN}`}});
@@ -1747,17 +1747,27 @@ async function importBulkCSV(){
 
     placeRows.forEach(row => {
       if(!row.nameAr) return;
-      overridesArr = overridesArr.filter(o => o.id !== row.nameAr);
-      const override = { id: row.nameAr, ar: row.nameAr, en: row.nameEn||"" };
-      if(row.googleMapsUrl) override.googleMapsUrl = row.googleMapsUrl;
-      if(row.rating) override.rating = parseFloat(row.rating)||row.rating;
-      overridesArr.push(override);
+      const section = VALID_SECTIONS.includes(row.section) ? row.section : "nature";
+      // Remove any existing custom entry with the same name (avoid duplicates on re-import)
+      locsArr = locsArr.filter(l => !(l.nAr === row.nameAr && !l._override));
+      const entry = {
+        id: "imp-" + row.nameAr,
+        nAr: row.nameAr,
+        nEn: row.nameEn || "",
+        section: section,
+        googleMapsUrl: row.googleMapsUrl || null,
+        rating: row.rating ? (parseFloat(row.rating)||row.rating) : null,
+        noteAr: row.noteAr || "",
+        noteEn: row.noteEn || ""
+      };
+      locsArr.push(entry);
       if(row.photoUrl) photosCache._places[row.nameAr] = row.photoUrl;
       updatedCount++;
     });
 
     progressBar.style.width = "55%";
-    await ghPut(OVERRIDES_PATH, overridesArr, overridesSha, "bulk import: " + placeRows.length + " places");
+    const res1 = await ghPut(LOCS_PATH, locsArr, locsSha2, "bulk import: " + placeRows.length + " places");
+    locsSha = res1.content.sha; locsData = locsArr;
     progressBar.style.width = "70%";
     await ghPut(PHOTOS_PATH, photosCache, photosSha2, "bulk import: photos");
   }catch(e){
@@ -1793,16 +1803,18 @@ async function importBulkCSV(){
     });
 
     progressBar.style.width = "95%";
-    await ghPut(REST_PATH, restArr, restSha2, "bulk import: " + restRows.length + " restaurants");
+    const res2 = await ghPut(REST_PATH, restArr, restSha2, "bulk import: " + restRows.length + " restaurants");
+    restSha = res2.content.sha; restData = restArr;
   }catch(e){
     showMsg("bulk-msg","❌ خطأ في تحديث المطاعم: "+e.message,false);
   }
 
   progressBar.style.width = "100%";
   progressText.textContent = "✅ تم!";
-  showMsg("bulk-msg", `✅ تم تحديث ${updatedCount} عنصر بنجاح! (${placeRows.length} موقع + ${restRows.length} مطعم)`, true);
-  setTimeout(() => { progress.style.display = "none"; }, 2000);
+  showMsg("bulk-msg", `✅ تم تحديث ${updatedCount} عنصر بنجاح! (${placeRows.length} موقع + ${restRows.length} مطعم) — جميعها ستظهر في التطبيق فوراً مصنّفة حسب القسم`, true);
+  setTimeout(() => { progress.style.display = "none"; }, 2500);
   fileInput.value = "";
+  renderLocations();
 }
 
 function showMsg(id,text,ok){
