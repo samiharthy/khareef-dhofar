@@ -1234,9 +1234,11 @@ function renderPhotos() {
     previewWrap.style.cssText = "width:70px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f0f0f0;display:flex;align-items:center;justify-content:center";
     if (currentUrl) {
       const img = document.createElement("img");
-      img.src = currentUrl + (currentUrl.includes("?")?"&":"?") + "w=70&h=52&fit=crop&q=60";
+      img.src = currentUrl;
       img.style.cssText = "width:100%;height:100%;object-fit:cover";
-      img.onerror = function() { this.parentElement.innerHTML = "<span style=\"font-size:24px\">" + place.emoji + "</span>"; };
+      img.onerror = function() {
+        this.parentElement.innerHTML = "<span style=\"font-size:20px\" title=\"رابط الصورة غير صالح\">⚠️</span>";
+      };
       previewWrap.appendChild(img);
     } else {
       previewWrap.innerHTML = `<span style="font-size:24px">${place.emoji}</span>`;
