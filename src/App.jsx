@@ -4626,6 +4626,16 @@ function NearbyPlaces() {
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
   const [places, setPlaces] = useState([]);
   const [userPos, setUserPos] = useState(null);
+  const [overrides, setOverrides] = useState({});
+
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now())
+      .then(r => r.json()).then(d => {
+        const map = {};
+        (d||[]).forEach(o => { map[o.id] = o; });
+        setOverrides(map);
+      }).catch(() => {});
+  }, []);
 
   // Haversine distance in km
   function haversine(lat1, lng1, lat2, lng2) {
@@ -4643,11 +4653,17 @@ function NearbyPlaces() {
         const { latitude: ulat, longitude: ulng } = pos.coords;
         setUserPos({ lat: ulat, lng: ulng });
         const allPlaces = GUIDE_CATS.flatMap(cat =>
-          cat.places.map(p => ({
-            ar: p.ar, en: p.en, lat: p.lat, lng: p.lng,
-            tag: p.tag, catEmoji: cat.emoji, catKey: cat.key,
-            dist: haversine(ulat, ulng, p.lat, p.lng)
-          }))
+          cat.places.map(p => {
+            const ov = overrides[p.ar] || {};
+            const lat = ov.lat ?? p.lat;
+            const lng = ov.lng ?? p.lng;
+            return {
+              ar: ov.ar || p.ar, en: ov.en || p.en, lat, lng,
+              googleMapsUrl: ov.googleMapsUrl || null,
+              tag: p.tag, catEmoji: cat.emoji, catKey: cat.key,
+              dist: haversine(ulat, ulng, lat, lng)
+            };
+          })
         ).sort((a, b) => a.dist - b.dist);
         setPlaces(allPlaces.slice(0, 10));
         setStatus("done");
@@ -4731,7 +4747,7 @@ function NearbyPlaces() {
           <div className="space-y-2">
             {places.map((p, i) => (
               <a key={i}
-                href={"https://maps.google.com/?q=" + p.lat + "," + p.lng}
+                href={p.googleMapsUrl || ("https://maps.google.com/?q=" + p.lat + "," + p.lng)}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 rounded-2xl p-3 transition active:scale-[0.98]"
                 style={{ background:th.cardBg, border:`1px solid ${th.border}`, textDecoration:"none" }}>
