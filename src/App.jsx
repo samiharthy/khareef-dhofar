@@ -4278,9 +4278,9 @@ function ExploreTab({ globalAds = [] }) {
 
   // Restaurant places
   const restPlaces = restaurants
-    .filter(r => r.lat && r.lng)
+    .filter(r => (r.lat && r.lng) || r.googleMapsUrl)
     .map(r => ({
-      ar: r.nAr, en: r.nEn, lat: r.lat, lng: r.lng,
+      ar: r.nAr, en: r.nEn, lat: r.lat, lng: r.lng, googleMapsUrl: r.googleMapsUrl,
       tag: { ar: "مطعم · " + (r.priceAr||""), en: "Restaurant · " + (r.priceEn||"") },
       desc: r.note ? { ar: r.note.ar, en: r.note.en } : null,
       catKey: "food", catEmoji: "🍽️", catAr: "المطاعم", catEn: "Restaurants",
