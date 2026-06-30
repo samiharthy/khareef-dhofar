@@ -68,6 +68,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     <button class="tab" onclick="showTab('stats')">📊 الإحصائيات</button>
     <button class="tab" onclick="showTab('ads')">📢 الإعلانات</button>
     <button class="tab" onclick="showTab('photos')">🖼️ الصور</button>
+    <button class="tab" onclick="showTab('bulk')">📤 استيراد جماعي</button>
   </div>
 
   <div style="max-width:600px;margin:0 auto;padding:18px">
@@ -471,6 +472,59 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
     </div>
 
 
+    <!-- BULK IMPORT/EXPORT TAB -->
+    <div id="tab-bulk" style="display:none">
+      <div class="card" style="background:#EBF4EE;border:1px solid #2F5D4530;padding:14px 16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:#2F5D45;margin-bottom:6px">📤 استيراد وتصدير جماعي</div>
+        <div style="font-size:12px;color:#555;line-height:1.8">
+          ١. اضغط <b>"تصدير ملف Excel"</b> لتحميل جميع المواقع والمطاعم الحالية (151+ موقع)<br>
+          ٢. افتح الملف في Excel أو Google Sheets وأضف: التقييم · الصورة · ساعات العمل · الهاتف<br>
+          ٣. احفظ الملف بصيغة <b>CSV</b> وأعد رفعه — سيُحدّث كل البيانات دفعة واحدة
+        </div>
+      </div>
+
+      <!-- Export -->
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px">1️⃣ تصدير البيانات الحالية</div>
+        <button class="btn btn-green" style="width:100%" onclick="exportBulkCSV()">
+          ⬇️ تصدير ملف Excel (CSV) — كل المواقع والمطاعم
+        </button>
+        <div style="font-size:11px;color:#888;margin-top:8px;font-family:Tajawal">
+          يشمل: الاسم · النوع · القسم · رابط الخريطة الحالي · الصورة الحالية (إن وُجدت)
+        </div>
+      </div>
+
+      <!-- Import -->
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px">2️⃣ استيراد ملف معبّأ</div>
+        <input type="file" id="bulk-file-input" accept=".csv" style="margin-bottom:10px;font-size:13px;width:100%" />
+        <button class="btn btn-blue" style="width:100%" onclick="importBulkCSV()">
+          ⬆️ استيراد ورفع التحديثات
+        </button>
+        <div id="bulk-import-progress" style="display:none;margin-top:12px">
+          <div style="font-size:12px;color:#888;margin-bottom:6px" id="bulk-progress-text">جاري المعالجة...</div>
+          <div style="height:6px;background:#eee;border-radius:3px;overflow:hidden">
+            <div id="bulk-progress-bar" style="height:6px;background:#2F5D45;width:0%;transition:width .3s"></div>
+          </div>
+        </div>
+        <div id="bulk-msg" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+
+      <!-- Column reference -->
+      <div class="card" style="background:#FAFAF8">
+        <div style="font-weight:700;font-size:13px;margin-bottom:8px">📋 أعمدة الملف</div>
+        <div style="font-size:11px;color:#666;line-height:1.9;font-family:monospace;direction:ltr;text-align:left">
+          type, nameAr, nameEn, section, googleMapsUrl,<br>
+          rating, photoUrl, openHours, phone,<br>
+          priceAr, priceEn, noteAr, noteEn
+        </div>
+        <div style="font-size:11px;color:#888;margin-top:8px;font-family:Tajawal">
+          type = "place" أو "restaurant" · باقي الحقول اختيارية إلا الاسم
+        </div>
+      </div>
+    </div>
+
+
 <script>
 const REPO = "samiharthy/khareef-dhofar";
 const ALERT_PATH = "public/alert.json";
@@ -560,7 +614,7 @@ async function ghPut(path,content,sha,msg){
 }
 
 function showTab(tab){
-  ["notif","posts","locs","stats","ads","photos"].forEach(t=>{
+  ["notif","posts","locs","stats","ads","photos","bulk"].forEach(t=>{
     const el=document.getElementById("tab-"+t);
     if(el) el.style.display=t===tab?"block":"none";
   });
