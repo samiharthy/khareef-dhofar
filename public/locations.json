@@ -100,6 +100,36 @@
     "noteEn": ""
   },
   {
+    "id": "imp-كهف المرنيف",
+    "nAr": "كهف المرنيف",
+    "nEn": "Marneef Cave",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-وادي عدونب",
+    "nAr": "وادي عدونب",
+    "nEn": "Wadi Adonib",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-عين دربات العليا",
+    "nAr": "عين دربات العليا",
+    "nEn": "Upper Darbat Falls",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
     "id": "imp-جبل القمر",
     "nAr": "جبل القمر",
     "nEn": "Jabal Al Qamar",
@@ -113,7 +143,7 @@
     "id": "imp-سهل حمرير",
     "nAr": "سهل حمرير",
     "nEn": "Hamrir Plateau",
-    "googleMapsUrl": "https://maps.app.goo.gl/boWYNnKHbZqCcyi28",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "nature",
     "noteAr": "",
@@ -150,10 +180,40 @@
     "noteEn": ""
   },
   {
+    "id": "imp-جبل حاسك",
+    "nAr": "جبل حاسك",
+    "nEn": "Hasik Mountain View",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
     "id": "imp-متحف ظفار الخاص",
     "nAr": "متحف ظفار الخاص",
     "nEn": "Dhofar Private Museum",
-    "googleMapsUrl": "https://maps.app.goo.gl/J1JYDKe3J13k72hB7",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-قرية طاقة القديمة",
+    "nAr": "قرية طاقة القديمة",
+    "nEn": "Old Taqah Village",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-بيت النعمان",
+    "nAr": "بيت النعمان",
+    "nEn": "Al Naaman House",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "heritage",
     "noteAr": "",
@@ -190,10 +250,30 @@
     "noteEn": ""
   },
   {
+    "id": "imp-ركوب الجمال – سهل اتين",
+    "nAr": "ركوب الجمال – سهل اتين",
+    "nEn": "Camel Riding – Ittin Plain",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جولات السفاري",
+    "nAr": "جولات السفاري",
+    "nEn": "Desert Safari Dhofar",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "companion",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
     "id": "imp-ركوب القوارب – دربات",
     "nAr": "ركوب القوارب – دربات",
     "nEn": "Boating in Wadi Darbat",
-    "googleMapsUrl": "https://maps.app.goo.gl/PTqzZGTXLMJ19rha6",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "companion",
     "noteAr": "",
@@ -303,7 +383,7 @@
     "id": "imp-السوق المركزي",
     "nAr": "السوق المركزي",
     "nEn": "Salalah Central Market",
-    "googleMapsUrl": "https://maps.app.goo.gl/xnQDpLGHX3tGvTWC9",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Salalah%20Central%20Market%2C%20Municipal%20Market%2C%20Salalah%20Salalah%20Oman",
     "rating": 4.1,
     "section": "heritage",
     "noteAr": "سوق مفتوح حيوي للخضروات والفواكه والأسماك واللحوم الطازجة في وسط المدينة",
@@ -443,7 +523,7 @@
     "id": "imp-برج العسكر",
     "nAr": "برج العسكر",
     "nEn": "Burj Al Askar",
-    "googleMapsUrl": "https://maps.app.goo.gl/t4iqiBkKqtt4uFym7",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Burj%20Al%20Askar%20Salalah%20Oman",
     "rating": null,
     "section": "heritage",
     "noteAr": "برج مراقبة تاريخي يطل على بلدة طاقة الساحلية، يمنح مناظر بانورامية لشاطئ طاقة والبحر والجبال المحيطة",
@@ -533,7 +613,7 @@
     "id": "imp-حصن طاقة",
     "nAr": "حصن طاقة",
     "nEn": "Taqa Castle",
-    "googleMapsUrl": "https://maps.app.goo.gl/UZBRq68R4HEpWc4z6",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Taqa%20Castle%20Salalah%20Oman",
     "rating": null,
     "section": "heritage",
     "noteAr": "بُني في القرن التاسع عشر، يمنح لمحة أصيلة عن الحياة العمانية التقليدية بغرفه وأبراج مراقبته المحفوظة",
@@ -973,7 +1053,7 @@
     "id": "imp-متنزه البليد الأثري",
     "nAr": "متنزه البليد الأثري",
     "nEn": "Al Baleed Archaeological Park",
-    "googleMapsUrl": "https://maps.app.goo.gl/DLdXePd3P7xqhbo79",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Al%20Baleed%20Archaeological%20Park%20Salalah%20Oman",
     "rating": null,
     "section": "heritage",
     "noteAr": "موقع تراث عالمي لليونسكو يحفظ أطلال مدينة ميناء قديمة هيمنت على تجارة اللبان، يضم أسواراً ومساجد ومستنقعات",
@@ -1500,6 +1580,16 @@
     "noteEn": ""
   },
   {
+    "id": "imp-موقع خور روري الأثري (سمهرم)",
+    "nAr": "موقع خور روري الأثري (سمهرم)",
+    "nEn": "Sumhuram Archaeological Site",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sumhuram%20Archaeological%20Site%20Salalah%20Oman",
+    "rating": null,
+    "section": "heritage",
+    "noteAr": "موقع تراث عالمي آخر لليونسكو، كان من أهم موانئ اللبان في الجزيرة العربية، يطل على بحيرة خور روري الجميلة",
+    "noteEn": "Another UNESCO site, once one of Arabia's most important frankincense ports, overlooks Khor Rori lagoon"
+  },
+  {
     "id": "imp-ميناء صلالة",
     "nAr": "ميناء صلالة",
     "nEn": "Port of Salalah",
@@ -1554,182 +1644,13 @@
     "_deleted": true
   },
   {
-    "nAr": "افتلقوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "سهل أتين",
-    "_deleted": true
-  },
-  {
-    "nAr": "إطلالة رخيوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "إطلالة ضلكوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "أشجار التبلدي",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار وادي دربات",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار وادي نحيز",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين طبيرق",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين صحلنوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين جرزيز",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين أثوم",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين رزات",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين حمران",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار جبل سمحان",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار شلالات عين نكبت",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار المغسيل",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار عين روب – رخيوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار كهف طيق",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار جبل القمر",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار جوجب",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار جبل الحصن – طاقة",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار شعت",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار ضلكوت وديم",
-    "_deleted": true
-  },
-  {
-    "nAr": "الغارف (مقاهي في بيئة زراعية) - صلالة",
-    "_deleted": true
-  },
-  {
-    "nAr": "الغارف",
-    "_deleted": true
-  },
-  {
-    "nAr": "نوفا",
-    "_deleted": true
-  },
-  {
-    "nAr": "اوسارا (شاطيء ريسوت)",
-    "_deleted": true
-  },
-  {
-    "nAr": "اوسارا",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسار حفرة طيق وطوي أعتير",
-    "_deleted": true
-  },
-  {
-    "nAr": "واجهة شاطيء ريسوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "خور روري / سمهرم",
-    "_deleted": true
-  },
-  {
-    "nAr": "موقع السمهرم الأثري (خور روري)",
+    "nAr": "جراند مول (الدهاريز)",
     "_override": true,
-    "nEn": "Samhuram Archaeological Site (Khor Rori)",
-    "googleMapsUrl": "https://maps.app.goo.gl/iWXu6Jj8aKyA3bxB7"
+    "nEn": "Grand Mall (Al Dahariz)",
+    "googleMapsUrl": "https://maps.app.goo.gl/t7z8xPqzwVYUpe98A?g_st=ac"
   },
   {
-    "nAr": "متحف أرض اللبان",
-    "_deleted": true
-  },
-  {
-    "nAr": "شجرة التبلدي (البولاب) – ضلكوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
-    "_deleted": true
-  },
-  {
-    "nAr": "عين رزات",
-    "_override": true,
-    "nEn": "Ayn Razat",
-    "googleMapsUrl": "https://maps.app.goo.gl/G7oqZbRcMo9Mr1Y4A"
-  },
-  {
-    "nAr": "مسار عين حشير وأشجار التبلدي",
-    "_deleted": true
-  },
-  {
-    "id": "loc-1782908426961",
-    "nAr": "مزرعة أرزات السلطانية",
-    "nEn": "Royal Razat Farm",
-    "googleMapsUrl": "https://maps.app.goo.gl/FULZTPsZ1Nbn3kP17",
-    "section": "nature"
-  },
-  {
-    "nAr": "خور الدهاريز",
-    "_deleted": true
-  },
-  {
-    "nAr": "كهف المرنيف والنوافير",
-    "_deleted": true
-  },
-  {
-    "nAr": "جامع السلطان قابوس",
-    "_deleted": true
-  },
-  {
-    "nAr": "لامير المغسيل",
-    "_deleted": true
-  },
-  {
-    "nAr": "مسرح المروج",
+    "nAr": "جاردنز مول (الوادي)",
     "_deleted": true
   }
 ]
