@@ -1756,5 +1756,15 @@
   {
     "nAr": "متحف أرض اللبان",
     "_deleted": true
+  },
+  {
+    "nAr": "متحف ارض اللبان",
+    "_override": true,
+    "nEn": "Land of Frankincense Museum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AA%D8%AD%D9%81%20%D8%A7%D8%B1%D8%B6%20%D8%A7%D9%84%D9%84%D8%A8%D8%A7%D9%86%20Land%20of%20Frankincense%20Museum%20Dhofar%20Oman"
+  },
+  {
+    "nAr": "شلالات جبوجب",
+    "_deleted": true
   }
 ]
