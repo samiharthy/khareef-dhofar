@@ -1,4 +1,17 @@
 {
   "enabled": false,
-  "ads": []
+  "ads": [
+    {
+      "titleAr": "🌿 فعاليات ‎#خريف_ظفار 2026",
+      "titleEn": "Khareef, Dhofar Events 🌿",
+      "descAr": "الاطلاع على مواعيد الفعاليات ومواقعها، لتجربة موسمية استثنائية.",
+      "descEn": "View event dates and locations for an exceptional seasonal experience.",
+      "url": "https://m.dhofar.gov.om/khareef-dhofar-events-guide-2026.pdf",
+      "emoji": "🌟",
+      "color": "#2F5D45",
+      "section": "all",
+      "imageUrl": "https://www.omandaily.om/omandaily/uploads/images/2026/06/29/3434090.jpg",
+      "expiry": "2026-07-05"
+    }
+  ]
 }
