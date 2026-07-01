@@ -1764,5 +1764,12 @@
   {
     "nAr": "مسار عين حشير وأشجار التبلدي",
     "_deleted": true
+  },
+  {
+    "id": "loc-1782908426961",
+    "nAr": "مزرعة أرزات السلطانية",
+    "nEn": "Royal Razat Farm",
+    "googleMapsUrl": "https://maps.app.goo.gl/FULZTPsZ1Nbn3kP17",
+    "section": "nature"
   }
 ]
