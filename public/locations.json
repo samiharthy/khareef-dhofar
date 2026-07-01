@@ -193,7 +193,7 @@
     "id": "imp-متحف ظفار الخاص",
     "nAr": "متحف ظفار الخاص",
     "nEn": "Dhofar Private Museum",
-    "googleMapsUrl": null,
+    "googleMapsUrl": "https://maps.app.goo.gl/J1JYDKe3J13k72hB7",
     "rating": null,
     "section": "heritage",
     "noteAr": "",
@@ -233,9 +233,39 @@
     "id": "imp-سوق اللبان",
     "nAr": "سوق اللبان",
     "nEn": "Frankincense Souq",
-    "googleMapsUrl": "https://maps.app.goo.gl/qcDnWhHvSB23qteeA",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-سيتي سنتر صلالة",
+    "nAr": "سيتي سنتر صلالة",
+    "nEn": "City Centre Salalah",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "evening",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-ركوب الجمال – سهل اتين",
+    "nAr": "ركوب الجمال – سهل اتين",
+    "nEn": "Camel Riding – Ittin Plain",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "nature",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-جولات السفاري",
+    "nAr": "جولات السفاري",
+    "nEn": "Desert Safari Dhofar",
+    "googleMapsUrl": null,
+    "rating": null,
+    "section": "companion",
     "noteAr": "",
     "noteEn": ""
   },
@@ -243,7 +273,7 @@
     "id": "imp-ركوب القوارب – دربات",
     "nAr": "ركوب القوارب – دربات",
     "nEn": "Boating in Wadi Darbat",
-    "googleMapsUrl": "https://maps.app.goo.gl/m4zEEmCBypUnqe9QA",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "companion",
     "noteAr": "",
@@ -251,9 +281,9 @@
   },
   {
     "id": "imp-التخييم في جبل سمحان",
-    "nAr": "إطلالة جبل سمحان",
-    "nEn": "Jabal Samhan Viewpoint",
-    "googleMapsUrl": "https://maps.app.goo.gl/oDFVK43tz8TYuPXX9",
+    "nAr": "التخييم في جبل سمحان",
+    "nEn": "Camping Jabal Samhan",
+    "googleMapsUrl": null,
     "rating": null,
     "section": "viewpoints",
     "noteAr": "",
@@ -446,6 +476,16 @@
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B1%D8%AE%D9%8A%D9%88%D8%AA%20Rakhyut%20Dhofar%20Oman",
     "rating": null,
     "section": "west",
+    "noteAr": "",
+    "noteEn": ""
+  },
+  {
+    "id": "imp-إطلالة شير",
+    "nAr": "إطلالة شير",
+    "nEn": "Jabal Shir",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B4%D9%8A%D8%B1%20Jabal%20Shir%20Dhofar%20Oman",
+    "rating": null,
+    "section": "mid",
     "noteAr": "",
     "noteEn": ""
   },
@@ -753,7 +793,7 @@
     "id": "imp-شلالات عين 1",
     "nAr": "شلالات عين 1",
     "nEn": "Ayn Waterfalls 1",
-    "googleMapsUrl": "https://maps.app.goo.gl/F83vRtDcqdo4wez99",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ayn%20Waterfalls%201%2C%20Fairaq%2C%20Salalah%20Salalah%20Oman",
     "rating": 4,
     "section": "valleys",
     "noteAr": "شلال موسمي يتدفق خلال موسم الخريف وسط وادٍ خلاب، يُعرف أيضاً بشلال ستارة الترافرتين",
@@ -1724,61 +1764,9 @@
     "_deleted": true
   },
   {
-    "nAr": "شجرة التبلدي (البولاب) – ضلكوت",
-    "_deleted": true
-  },
-  {
-    "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
-    "_deleted": true
-  },
-  {
-    "nAr": "عين رزات",
+    "nAr": "موقع السمهرم الأثري (خور روري)",
     "_override": true,
-    "nEn": "Ayn Razat",
-    "googleMapsUrl": "https://maps.app.goo.gl/fBDDP4RupU8YFqD68"
-  },
-  {
-    "nAr": "مرتفعات ألسان",
-    "_deleted": true
-  },
-  {
-    "nAr": "عين صحلنوت",
-    "_override": true,
-    "nEn": "Ayn Sahalnoot",
-    "googleMapsUrl": "https://maps.app.goo.gl/ce1QYfqjfH72mxVJ8"
-  },
-  {
-    "nAr": "إطلالة شير",
-    "_override": true,
-    "nEn": "Jabal Shir",
-    "googleMapsUrl": "https://maps.app.goo.gl/73ntJtBiNqBFPMxZ6"
-  },
-  {
-    "nAr": "متحف أرض اللبان",
-    "_deleted": true
-  },
-  {
-    "nAr": "متحف ارض اللبان",
-    "_override": true,
-    "nEn": "Land of Frankincense Museum",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AA%D8%AD%D9%81%20%D8%A7%D8%B1%D8%B6%20%D8%A7%D9%84%D9%84%D8%A8%D8%A7%D9%86%20Land%20of%20Frankincense%20Museum%20Dhofar%20Oman"
-  },
-  {
-    "nAr": "شلالات جبوجب",
-    "_deleted": true
-  },
-  {
-    "nAr": "طريق انعدام الجاذبية",
-    "_deleted": true
-  },
-  {
-    "nAr": "طريق انعدام الجاذبية",
-    "_override": true,
-    "nEn": "Anti Gravity Point Salalah",
-    "googleMapsUrl": "https://maps.app.goo.gl/Gix2oofGNVEdTkuZ8"
-  },
-  {
-    "nAr": "عودة الماضي (مهرجان شعبي تراثي) - السعادة",
-    "_deleted": true
+    "nEn": "Samhuram Archaeological Site (Khor Rori)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%B3%D9%85%D9%87%D8%B1%D9%85%20%D8%A7%D9%84%D8%A3%D8%AB%D8%B1%D9%8A%20%28%D8%AE%D9%88%D8%B1%20%D8%B1%D9%88%D8%B1%D9%8A%29%20Samhuram%20Archaeological%20Site%20%28Khor%20Rori%29%20Dhofar%20Oman"
   }
 ]
