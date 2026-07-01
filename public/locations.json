@@ -450,16 +450,6 @@
     "noteEn": ""
   },
   {
-    "id": "imp-إطلالة شير",
-    "nAr": "إطلالة شير",
-    "nEn": "Jabal Shir",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D8%A5%D8%B7%D9%84%D8%A7%D9%84%D8%A9%20%D8%B4%D9%8A%D8%B1%20Jabal%20Shir%20Dhofar%20Oman",
-    "rating": null,
-    "section": "mid",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
     "id": "imp-إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
     "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
     "nEn": "Sarfait (Oman–Yemen border)",
@@ -1750,5 +1740,11 @@
   {
     "nAr": "مرتفعات ألسان",
     "_deleted": true
+  },
+  {
+    "nAr": "عين صحلنوت",
+    "_override": true,
+    "nEn": "Ayn Sahalnoot",
+    "googleMapsUrl": "https://maps.app.goo.gl/ce1QYfqjfH72mxVJ8"
   }
 ]
