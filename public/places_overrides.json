@@ -20,10 +20,10 @@
     "googleMapsUrl": "https://maps.app.goo.gl/FzFfc5YECEg8Czxz6"
   },
   {
-    "id": "عين صحلنوت",
-    "ar": "عين صحلنوت",
-    "en": "Ayn Sahalnoot",
-    "googleMapsUrl": "https://maps.app.goo.gl/ce1QYfqjfH72mxVJ8"
+    "id": "عين رزات",
+    "ar": "عين رزات",
+    "en": "Ayn Razat",
+    "googleMapsUrl": "https://maps.app.goo.gl/fBDDP4RupU8YFqD68"
   },
   {
     "id": "إطلالة شير",
@@ -32,9 +32,15 @@
     "googleMapsUrl": "https://maps.app.goo.gl/73ntJtBiNqBFPMxZ6"
   },
   {
-    "id": "طريق انعدام الجاذبية",
-    "ar": "طريق انعدام الجاذبية",
-    "en": "Anti Gravity Point Salalah",
-    "googleMapsUrl": "https://maps.app.goo.gl/Gix2oofGNVEdTkuZ8"
+    "id": "متحف ارض اللبان",
+    "ar": "متحف ارض اللبان",
+    "en": "Land of Frankincense Museum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D8%AA%D8%AD%D9%81%20%D8%A7%D8%B1%D8%B6%20%D8%A7%D9%84%D9%84%D8%A8%D8%A7%D9%86%20Land%20of%20Frankincense%20Museum%20Dhofar%20Oman"
+  },
+  {
+    "id": "موقع السمهرم الأثري (خور روري)",
+    "ar": "موقع السمهرم الأثري (خور روري)",
+    "en": "Samhuram Archaeological Site (Khor Rori)",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D9%84%D8%B3%D9%85%D9%87%D8%B1%D9%85%20%D8%A7%D9%84%D8%A3%D8%AB%D8%B1%D9%8A%20%28%D8%AE%D9%88%D8%B1%20%D8%B1%D9%88%D8%B1%D9%8A%29%20Samhuram%20Archaeological%20Site%20%28Khor%20Rori%29%20Dhofar%20Oman"
   }
 ]
