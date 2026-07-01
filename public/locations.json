@@ -1754,5 +1754,15 @@
   {
     "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
     "_deleted": true
+  },
+  {
+    "nAr": "عين رزات",
+    "_override": true,
+    "nEn": "Ayn Razat",
+    "googleMapsUrl": "https://maps.app.goo.gl/G7oqZbRcMo9Mr1Y4A"
+  },
+  {
+    "nAr": "مسار عين حشير وأشجار التبلدي",
+    "_deleted": true
   }
 ]
