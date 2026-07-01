@@ -1770,5 +1770,15 @@
   {
     "nAr": "إطلالة صرفيت (بالقرب من الحدود العمانية اليمنية)",
     "_deleted": true
+  },
+  {
+    "nAr": "عين رزات",
+    "_override": true,
+    "nEn": "Ayn Razat",
+    "googleMapsUrl": "https://maps.app.goo.gl/fBDDP4RupU8YFqD68"
+  },
+  {
+    "nAr": "مرتفعات ألسان",
+    "_deleted": true
   }
 ]
