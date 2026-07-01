@@ -100,36 +100,6 @@
     "noteEn": ""
   },
   {
-    "id": "imp-كهف المرنيف",
-    "nAr": "كهف المرنيف",
-    "nEn": "Marneef Cave",
-    "googleMapsUrl": null,
-    "rating": null,
-    "section": "nature",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
-    "id": "imp-وادي عدونب",
-    "nAr": "وادي عدونب",
-    "nEn": "Wadi Adonib",
-    "googleMapsUrl": null,
-    "rating": null,
-    "section": "nature",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
-    "id": "imp-عين دربات العليا",
-    "nAr": "عين دربات العليا",
-    "nEn": "Upper Darbat Falls",
-    "googleMapsUrl": null,
-    "rating": null,
-    "section": "nature",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
     "id": "imp-جبل القمر",
     "nAr": "جبل القمر",
     "nEn": "Jabal Al Qamar",
@@ -143,7 +113,7 @@
     "id": "imp-سهل حمرير",
     "nAr": "سهل حمرير",
     "nEn": "Hamrir Plateau",
-    "googleMapsUrl": null,
+    "googleMapsUrl": "https://maps.app.goo.gl/boWYNnKHbZqCcyi28",
     "rating": null,
     "section": "nature",
     "noteAr": "",
@@ -176,16 +146,6 @@
     "googleMapsUrl": null,
     "rating": null,
     "section": "hike",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
-    "id": "imp-جبل حاسك",
-    "nAr": "جبل حاسك",
-    "nEn": "Hasik Mountain View",
-    "googleMapsUrl": null,
-    "rating": null,
-    "section": "nature",
     "noteAr": "",
     "noteEn": ""
   },
@@ -226,16 +186,6 @@
     "googleMapsUrl": null,
     "rating": null,
     "section": "evening",
-    "noteAr": "",
-    "noteEn": ""
-  },
-  {
-    "id": "imp-ركوب الجمال – سهل اتين",
-    "nAr": "ركوب الجمال – سهل اتين",
-    "nEn": "Camel Riding – Ittin Plain",
-    "googleMapsUrl": null,
-    "rating": null,
-    "section": "nature",
     "noteAr": "",
     "noteEn": ""
   },
@@ -1756,7 +1706,30 @@
     "_deleted": true
   },
   {
+    "id": "loc-1782908426961",
+    "nAr": "مزرعة أرزات السلطانية",
+    "nEn": "Royal Razat Farm",
+    "googleMapsUrl": "https://maps.app.goo.gl/FULZTPsZ1Nbn3kP17",
+    "section": "nature"
+  },
+  {
+    "nAr": "خور الدهاريز",
+    "_deleted": true
+  },
+  {
+    "nAr": "كهف المرنيف والنوافير",
+    "_deleted": true
+  },
+  {
+    "nAr": "جامع السلطان قابوس",
+    "_deleted": true
+  },
+  {
     "nAr": "لامير المغسيل",
+    "_deleted": true
+  },
+  {
+    "nAr": "مسرح المروج",
     "_deleted": true
   }
 ]
