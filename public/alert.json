@@ -1,13 +1,13 @@
 {
-  "id": "notif-1782625375013",
-  "active": false,
-  "type": "urgent",
-  "priority": "urgent",
+  "id": "notif-1782876055451",
+  "active": true,
+  "type": "weather",
+  "priority": "normal",
   "message": {
-    "ar": "عبدالله احذر",
-    "en": "Abdullah, be careful.",
-    "hi": "अब्दुल्ला, सावधान रहना.",
-    "fr": "Abdullah, fais attention."
+    "ar": "زانت اجواء ظفار في خريف 2026 😍🌧️",
+    "en": "The atmosphere of Dhofar in the fall of 2026 😍🌧️",
+    "hi": "2026 के पतन में धोफर का वातावरण 😍🌧️",
+    "fr": "L'ambiance du Dhofar à l'automne 2026 😍🌧️"
   },
-  "updatedAt": "2026-06-28T05:42:55.013Z"
+  "updatedAt": "2026-07-01T03:20:55.451Z"
 }
