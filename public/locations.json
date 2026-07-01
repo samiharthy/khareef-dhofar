@@ -1770,5 +1770,15 @@
   {
     "nAr": "طريق انعدام الجاذبية",
     "_deleted": true
+  },
+  {
+    "nAr": "طريق انعدام الجاذبية",
+    "_override": true,
+    "nEn": "Anti Gravity Point Salalah",
+    "googleMapsUrl": "https://maps.app.goo.gl/Gix2oofGNVEdTkuZ8"
+  },
+  {
+    "nAr": "عودة الماضي (مهرجان شعبي تراثي) - السعادة",
+    "_deleted": true
   }
 ]
