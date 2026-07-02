@@ -442,7 +442,7 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
 
       <!-- Add ad form -->
       <div class="card">
-        <div style="font-weight:700;font-size:14px;margin-bottom:12px">➕ إضافة إعلان جديد</div>
+        <div id="ad-form-title" style="font-weight:700;font-size:14px;margin-bottom:12px">➕ إضافة إعلان جديد</div>
         <label>عنوان عربي *</label><input id="ad-title-ar" placeholder="مثال: فندق الخريف الفاخر" />
         <label>عنوان إنجليزي</label><input id="ad-title-en" placeholder="e.g. Khareef Luxury Hotel" />
         <label>وصف عربي</label><input id="ad-desc-ar" placeholder="وصف قصير..." />
@@ -472,7 +472,8 @@ label{font-size:12px;font-weight:700;color:#666;display:block;margin-bottom:4px;
         </select>
         <label>اللون (hex)</label><input id="ad-color" placeholder="#2F5D45" style="width:120px" />
         <div style="display:flex;gap:10px;margin-top:12px">
-          <button class="btn btn-green" onclick="addAd()">✅ إضافة إعلان</button>
+          <button id="ad-submit-btn" class="btn btn-green" onclick="addAd()">✅ إضافة إعلان</button>
+          <button id="ad-cancel-btn" class="btn btn-outline" onclick="cancelEditAd()" style="display:none">إلغاء</button>
         </div>
         <div id="ad-msg" style="font-size:12px;margin-top:6px;display:none"></div>
       </div>
@@ -621,6 +622,13 @@ async function ghPut(path,content,sha,msg){
   }
   return tryPut(sha);
 }
+// The app reads live data (ads/posts/notifications/locations/etc.) from jsDelivr's CDN,
+// which caches aggressively (up to ~7 days) unless explicitly purged. Call this after
+// every save so changes (including deletions) reflect in the app within seconds instead
+// of waiting for the cache to expire naturally.
+function purgeJsdelivr(path){
+  fetch(`https://purge.jsdelivr.net/gh/${REPO}@main/${path}`).catch(()=>{});
+}
 
 function showTab(tab){
   ["notif","posts","locs","stats","ads","bulk"].forEach(t=>{
@@ -726,7 +734,7 @@ async function saveNotif(){
 async function toggleNotif(){if(!alertData)return;alertData.active=!alertData.active;if(alertData.active)alertData.id="notif-"+Date.now();await saveAlertData(alertData,"toggle");}
 async function deactivateNotif(){if(!alertData)return;alertData.active=false;await saveAlertData(alertData,"deactivate");}
 async function saveAlertData(data,msg){
-  try{const res=await ghPut(ALERT_PATH,data,alertSha,msg);alertSha=res.content.sha;alertData=data;renderNotif();showMsg("notif-msg","✅ تم الحفظ! يظهر في التطبيق فوراً",true);}
+  try{const res=await ghPut(ALERT_PATH,data,alertSha,msg);alertSha=res.content.sha;alertData=data;renderNotif();purgeJsdelivr(ALERT_PATH);showMsg("notif-msg","✅ تم الحفظ! يظهر في التطبيق فوراً",true);}
   catch(e){showMsg("notif-msg","❌ "+e.message,false);}
 }
 
@@ -772,7 +780,7 @@ async function addPost(){
   const updated=[post,...postsData];
   try{
     const res=await ghPut(FEATURED_PATH,updated,postsSha,"add post");
-    postsSha=res.content.sha;postsData=updated;renderPosts();togglePostForm();
+    postsSha=res.content.sha;postsData=updated;renderPosts();togglePostForm();purgeJsdelivr(FEATURED_PATH);
     ["new-post-url","new-post-img","new-post-ar","new-post-en","new-post-hi","new-post-fr"].forEach(id=>document.getElementById(id).value="");
     document.getElementById("post-img-preview").style.display="none";
     showMsg("post-add-msg","✅ نُشر!",true);
@@ -781,7 +789,7 @@ async function addPost(){
 async function deletePost(i){
   if(!confirm("حذف هذه التغريدة؟")) return;
   const updated=postsData.filter((_,idx)=>idx!==i);
-  try{const res=await ghPut(FEATURED_PATH,updated,postsSha,"delete post");postsSha=res.content.sha;postsData=updated;renderPosts();}
+  try{const res=await ghPut(FEATURED_PATH,updated,postsSha,"delete post");postsSha=res.content.sha;postsData=updated;renderPosts();purgeJsdelivr(FEATURED_PATH);}
   catch(e){alert("خطأ: "+e.message);}
 }
 
@@ -1045,7 +1053,7 @@ async function addLocation(){
 
   const updated=[...locsData,newLoc];
   try{
-    const res=await ghPut(LOCS_PATH,updated,locsSha,"add location: "+nAr);
+    const res=await ghPut(LOCS_PATH,updated,locsSha,"add location: "+nAr);purgeJsdelivr(LOCS_PATH);
     locsSha=res.content.sha;locsData=updated;renderLocations();toggleLocForm();
     showMsg("loc-msg","✅ تمت الإضافة بنجاح",true);
     document.getElementById("loc-gmaps-url").value="";
@@ -1097,7 +1105,7 @@ async function saveEdit(){
         en: nEn,
         googleMapsUrl: gmapsUrl
       });
-      const res = await ghPut(OVERRIDES_PATH, overridesArr, overridesSha, "override: "+origNar);
+      const res = await ghPut(OVERRIDES_PATH, overridesArr, overridesSha, "override: "+origNar);purgeJsdelivr(OVERRIDES_PATH);
       // Also update local view in locsData for admin display
       const filtered = locsData.filter(l=>!(l._override && l.nAr===origNar));
       filtered.push({nAr: origNar, _override:true, nEn, googleMapsUrl: gmapsUrl});
@@ -1112,7 +1120,7 @@ async function saveEdit(){
     const updated=[...locsData];
     updated[idx]={...updated[idx],nAr,nEn,googleMapsUrl:gmapsUrl};
     try{
-      const res=await ghPut(LOCS_PATH,updated,locsSha,"edit: "+nAr);
+      const res=await ghPut(LOCS_PATH,updated,locsSha,"edit: "+nAr);purgeJsdelivr(LOCS_PATH);
       locsSha=res.content.sha;locsData=updated;
       document.getElementById("edit-form").style.display="none";renderLocations();
       showMsg("edit-msg","✅ تم التعديل!",true);
@@ -1128,13 +1136,13 @@ async function deleteSpotByName(nAr, isBuiltin) {
   } else {
     updated = locsData.filter(l=>l.nAr!==nAr&&!l._isCustom);
   }
-  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"delete: "+nAr);locsSha=res.content.sha;locsData=updated;renderLocations();}
+  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"delete: "+nAr);locsSha=res.content.sha;locsData=updated;renderLocations();purgeJsdelivr(LOCS_PATH);}
   catch(e){alert("خطأ: "+e.message);}
 }
 async function deleteLoc(i){
   if(!confirm("حذف هذا الموقع؟")) return;
   const updated=locsData.filter((_,idx)=>idx!==i);
-  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"delete location");locsSha=res.content.sha;locsData=updated;renderLocations();}
+  try{const res=await ghPut(LOCS_PATH,updated,locsSha,"delete location");locsSha=res.content.sha;locsData=updated;renderLocations();purgeJsdelivr(LOCS_PATH);}
   catch(e){alert("خطأ: "+e.message);}
 }
 
@@ -1222,7 +1230,7 @@ async function addRestaurant(){
   }
 
   try{
-    const res=await ghPut(REST_PATH,updated,restSha,(editingRestIdx!==null?"edit":"add")+" restaurant: "+nAr);
+    const res=await ghPut(REST_PATH,updated,restSha,(editingRestIdx!==null?"edit":"add")+" restaurant: "+nAr);purgeJsdelivr(REST_PATH);
     restSha=res.content.sha;restData=updated;renderRestaurants();toggleRestForm();
     showMsg("rest-msg",msg,true);
     editingRestIdx = null;
@@ -1235,7 +1243,7 @@ async function addRestaurant(){
 async function deleteRestaurant(i){
   if(!confirm("حذف هذا المطعم؟")) return;
   const updated=restData.filter((_,idx)=>idx!==i);
-  try{const res=await ghPut(REST_PATH,updated,restSha,"delete restaurant");restSha=res.content.sha;restData=updated;renderRestaurants();}
+  try{const res=await ghPut(REST_PATH,updated,restSha,"delete restaurant");restSha=res.content.sha;restData=updated;renderRestaurants();purgeJsdelivr(REST_PATH);}
   catch(e){alert("خطأ: "+e.message);}
 }
 
@@ -1383,8 +1391,12 @@ function renderAds() {
             <span style="font-size:10px;color:#2F5D45">📍 ${ad.section==="all"?"كل الأقسام":ad.section||"كل"}</span>
           </div>
         </div>
-        <button onclick="deleteAd(${i})"
-          style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700;flex-shrink:0;margin-right:4px">حذف</button>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+          <button onclick="openEditAd(${i})"
+            style="background:#3C6E8F15;border:none;border-radius:8px;padding:4px 10px;color:#3C6E8F;cursor:pointer;font-size:11px;font-weight:700">تعديل</button>
+          <button onclick="deleteAd(${i})"
+            style="background:#B5402C15;border:none;border-radius:8px;padding:4px 10px;color:#B5402C;cursor:pointer;font-size:11px;font-weight:700">حذف</button>
+        </div>
       </div>`;
     list.appendChild(card);
   });
@@ -1396,10 +1408,40 @@ async function toggleAdsEnabled() {
     const res = await ghPut(ADS_PATH, adsData, adsSha, adsData.enabled?"enable ads":"disable ads");
     adsSha = res.content.sha;
     renderAds();
+    purgeJsdelivr(ADS_PATH);
     showMsg("ad-msg", adsData.enabled?"✅ الإعلانات مفعّلة في التطبيق":"✅ الإعلانات موقوفة", true);
   } catch(e) { showMsg("ad-msg","❌ "+e.message,false); }
 }
 
+let editingAdIdx = null;
+function openEditAd(i){
+  editingAdIdx = i;
+  const ad = adsData.ads[i];
+  document.getElementById("ad-title-ar").value = ad.titleAr||"";
+  document.getElementById("ad-title-en").value = ad.titleEn||"";
+  document.getElementById("ad-desc-ar").value = ad.descAr||"";
+  document.getElementById("ad-desc-en").value = ad.descEn||"";
+  document.getElementById("ad-url").value = ad.url||"";
+  document.getElementById("ad-emoji").value = ad.emoji||"";
+  document.getElementById("ad-image").value = ad.imageUrl||"";
+  document.getElementById("ad-expiry").value = ad.expiry||"";
+  document.getElementById("ad-section").value = ad.section||"all";
+  document.getElementById("ad-color").value = ad.color||"";
+  document.getElementById("ad-form-title").textContent = "✏️ تعديل الإعلان";
+  document.getElementById("ad-submit-btn").textContent = "💾 حفظ التعديل";
+  document.getElementById("ad-cancel-btn").style.display = "inline-block";
+  previewAdImg();
+  document.getElementById("ad-form-title").scrollIntoView({behavior:"smooth"});
+}
+function cancelEditAd(){
+  editingAdIdx = null;
+  ["ad-title-ar","ad-title-en","ad-desc-ar","ad-desc-en","ad-url","ad-emoji","ad-color","ad-image","ad-expiry"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  document.getElementById("ad-section").value = "all";
+  document.getElementById("ad-img-preview").style.display="none";
+  document.getElementById("ad-form-title").textContent = "➕ إضافة إعلان جديد";
+  document.getElementById("ad-submit-btn").textContent = "✅ إضافة إعلان";
+  document.getElementById("ad-cancel-btn").style.display = "none";
+}
 async function addAd() {
   const titleAr = document.getElementById("ad-title-ar").value.trim();
   if(!titleAr) { alert("أدخل العنوان العربي"); return; }
@@ -1414,14 +1456,20 @@ async function addAd() {
     imageUrl: document.getElementById("ad-image").value.trim() || null,
     expiry:   document.getElementById("ad-expiry").value || null,
   };
-  adsData.ads = [...(adsData.ads||[]), ad];
+  const isEdit = editingAdIdx !== null;
+  if(isEdit){
+    adsData.ads = [...adsData.ads];
+    adsData.ads[editingAdIdx] = ad;
+  } else {
+    adsData.ads = [...(adsData.ads||[]), ad];
+  }
   try {
-    const res = await ghPut(ADS_PATH, adsData, adsSha, "add ad: "+titleAr);
+    const res = await ghPut(ADS_PATH, adsData, adsSha, (isEdit?"edit ad: ":"add ad: ")+titleAr);
     adsSha = res.content.sha;
     renderAds();
-    ["ad-title-ar","ad-title-en","ad-desc-ar","ad-desc-en","ad-url","ad-emoji","ad-color","ad-image","ad-expiry"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
-    document.getElementById("ad-img-preview").style.display="none";
-    showMsg("ad-msg","✅ تمت الإضافة! فعّل الإعلانات لتظهر في التطبيق",true);
+    purgeJsdelivr(ADS_PATH);
+    cancelEditAd();
+    showMsg("ad-msg", isEdit?"✅ تم حفظ التعديل!":"✅ تمت الإضافة! فعّل الإعلانات لتظهر في التطبيق", true);
   } catch(e) { showMsg("ad-msg","❌ "+e.message,false); }
 }
 
@@ -1439,6 +1487,8 @@ async function deleteAd(i) {
     const res = await ghPut(ADS_PATH, adsData, adsSha, "delete ad");
     adsSha = res.content.sha;
     renderAds();
+    purgeJsdelivr(ADS_PATH);
+    if(editingAdIdx === i) cancelEditAd();
   } catch(e) { alert("خطأ: "+e.message); }
 }
 
@@ -1755,14 +1805,18 @@ async function importBulkCSV(){
     if(!photosCache._places) photosCache._places = {};
 
     placeRows.forEach(row => {
-      if(!row.nameAr) return;
+      const nameAr = (row.nameAr||"").trim();
+      if(!nameAr) return;
       const section = VALID_SECTIONS.includes(row.section) ? row.section : "nature";
-      // Remove any existing custom entry with the same name (avoid duplicates on re-import)
-      locsArr = locsArr.filter(l => !(l.nAr === row.nameAr && !l._override));
+      const newId = "imp-" + nameAr;
+      // Remove any existing custom entry with the same name or same generated id
+      // (trimmed comparison — CSV round-trips via Excel/Sheets often add stray whitespace,
+      // which previously broke the match and caused duplicates on re-import)
+      locsArr = locsArr.filter(l => !( (l.id === newId || (l.nAr||"").trim() === nameAr) && !l._override ));
       const entry = {
-        id: "imp-" + row.nameAr,
-        nAr: row.nameAr,
-        nEn: row.nameEn || "",
+        id: newId,
+        nAr: nameAr,
+        nEn: (row.nameEn||"").trim(),
         section: section,
         googleMapsUrl: row.googleMapsUrl || null,
         rating: row.rating ? (parseFloat(row.rating)||row.rating) : null,
@@ -1770,15 +1824,17 @@ async function importBulkCSV(){
         noteEn: row.noteEn || ""
       };
       locsArr.push(entry);
-      if(row.photoUrl) photosCache._places[row.nameAr] = row.photoUrl;
+      if(row.photoUrl) photosCache._places[nameAr] = row.photoUrl;
       updatedCount++;
     });
 
     progressBar.style.width = "55%";
     const res1 = await ghPut(LOCS_PATH, locsArr, locsSha2, "bulk import: " + placeRows.length + " places");
     locsSha = res1.content.sha; locsData = locsArr;
+    purgeJsdelivr(LOCS_PATH);
     progressBar.style.width = "70%";
     await ghPut(PHOTOS_PATH, photosCache, photosSha2, "bulk import: photos");
+    purgeJsdelivr(PHOTOS_PATH);
   }catch(e){
     showMsg("bulk-msg","❌ خطأ في تحديث المواقع: "+e.message,false);
   }
@@ -1794,10 +1850,11 @@ async function importBulkCSV(){
     if(rr.ok){ const rd=await rr.json(); restSha2=rd.sha; const b=Uint8Array.from(atob(rd.content.replace(/\n/g,"")),c=>c.charCodeAt(0)); restArr=JSON.parse(new TextDecoder().decode(b))||[]; }
 
     restRows.forEach(row => {
-      if(!row.nameAr) return;
-      const existingIdx = restArr.findIndex(r => r.nAr === row.nameAr);
+      const nameAr = (row.nameAr||"").trim();
+      if(!nameAr) return;
+      const existingIdx = restArr.findIndex(r => (r.nAr||"").trim() === nameAr);
       const restObj = {
-        nAr: row.nameAr, nEn: row.nameEn||"",
+        nAr: nameAr, nEn: (row.nameEn||"").trim(),
         type: row.section || "arabic",
         priceAr: row.priceAr||"", priceEn: row.priceEn||"",
         googleMapsUrl: row.googleMapsUrl||null,
@@ -1814,6 +1871,7 @@ async function importBulkCSV(){
     progressBar.style.width = "95%";
     const res2 = await ghPut(REST_PATH, restArr, restSha2, "bulk import: " + restRows.length + " restaurants");
     restSha = res2.content.sha; restData = restArr;
+    purgeJsdelivr(REST_PATH);
   }catch(e){
     showMsg("bulk-msg","❌ خطأ في تحديث المطاعم: "+e.message,false);
   }
