@@ -2655,7 +2655,7 @@ function Heritage() {
   );
 }
 
-function Access() {
+function Access({ adsForSection = [] }) {
   const { lang, t, theme } = useLang();
   const th = THEMES[theme];
   const [mode, setMode] = useState("land");
@@ -2716,11 +2716,14 @@ function Access() {
           <div className="rounded-xl p-3 text-xs leading-relaxed" style={{ background: theme === "light" ? "#F0ECDD" : "#212E27", color: th.titleColor, fontFamily: "Tajawal" }}>{t.airportNote}</div>
         </div>
       )}
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"accad"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
 
-function Health() {
+function Health({ adsForSection = [] }) {
   const { lang, t, theme } = useLang();
   const th = THEMES[theme];
   return (
@@ -2750,6 +2753,9 @@ function Health() {
           </a>
         ))}
       </div>
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"healthad"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
@@ -3244,7 +3250,7 @@ function Planner() {
   );
 }
 
-function Stays() {
+function Stays({ adsForSection = [] }) {
   const { lang, t, theme } = useLang();
   const th = THEMES[theme];
   const [areaFilter, setAreaFilter] = useState("all");
@@ -3386,6 +3392,9 @@ function Stays() {
           </div>
         ))}
       </div>
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"staysad"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
@@ -3403,7 +3412,7 @@ function AlertBanner() {
   async function fetchAlert() {
     // Check scheduled/automated notifications first — they take priority if currently active
     try {
-      const schedRes = await fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/scheduled_notifications.json?t=" + Date.now());
+      const schedRes = await fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/scheduled_notifications.json?t=" + Date.now());
       const schedList = await schedRes.json();
       const now = Date.now();
       const activeScheduled = (Array.isArray(schedList) ? schedList : [])
@@ -3426,7 +3435,7 @@ function AlertBanner() {
 
     // Fall back to manual alert.json
     try {
-      const res = await fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/alert.json?t=" + Date.now());
+      const res = await fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/alert.json?t=" + Date.now());
       const data = await res.json();
       if (!data.active) return;
       const seenId = localStorage.getItem(ALERT_SEEN_KEY);
@@ -3509,7 +3518,7 @@ function FoodGuide({ adsForSection = [] }) {
   const [restaurants, setRestaurants] = useState(RESTAURANTS);
 
   useEffect(() => {
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => { if (Array.isArray(data) && data.length > 0) setRestaurants(data); })
       .catch(() => {});
@@ -4005,7 +4014,7 @@ function DhofarRainMap() {
 }
 
 
-function TodayTab() {
+function TodayTab({ adsForSection = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   return (
@@ -4014,6 +4023,9 @@ function TodayTab() {
       <HomeWeatherForecast />
       <PrayerTimes />
       <DhofarRainMap />
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"todayad"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
@@ -4024,7 +4036,7 @@ function XFeed() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/featured.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/featured.json?t=" + Date.now())
       .then(r => r.json())
       .then(data => setPosts(Array.isArray(data) ? data.slice(0, 2) : []))
       .catch(() => {
@@ -4379,7 +4391,7 @@ function ExploreTab({ globalAds = [] }) {
 
   useEffect(() => {
     // Load overrides
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/places_overrides.json?t=" + Date.now())
       .then(r => r.json()).then(d => {
         const map = {};
         (d||[]).forEach(o => { map[o.id] = o; });
@@ -4387,15 +4399,15 @@ function ExploreTab({ globalAds = [] }) {
       }).catch(() => {});
 
     // Load restaurants
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/restaurants.json?t=" + Date.now())
       .then(r => r.json()).then(d => { if(Array.isArray(d)) setRestaurants(d); })
       .catch(() => {});
 
     // Load place photos
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/locations.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/locations.json?t=" + Date.now())
       .then(r => r.json()).then(d => { if(Array.isArray(d)) setCustomLocs(d.filter(l => !l._override)); })
       .catch(() => {});
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/place-photos.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/place-photos.json?t=" + Date.now())
       .then(r => r.json()).then(d => setPhotos(d || {}))
       .catch(() => {});
   }, []);
@@ -4794,7 +4806,7 @@ function AdBanner({ ad, lang, th }) {
 }
 
 
-function NearbyPlaces() {
+function NearbyPlaces({ adsForSection = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   const [status, setStatus] = useState("idle"); // idle | loading | done | error
@@ -4803,7 +4815,7 @@ function NearbyPlaces() {
   const [overrides, setOverrides] = useState({});
 
   useEffect(() => {
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/places_overrides.json?t=" + Date.now())
       .then(r => r.json()).then(d => {
         const map = {};
         (d||[]).forEach(o => { map[o.id] = o; });
@@ -4955,6 +4967,9 @@ function NearbyPlaces() {
           </button>
         </>
       )}
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"nearad"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
@@ -4979,7 +4994,7 @@ const KHAREEF_EVENTS_2026 = [
 
 const EVENT_COLORS = { season:"#2F5D45", festival:"#C98A2E", culture:"#3C6E8F", sport:"#8A4A23", heritage:"#6B4B8A", family:"#2B8A6A" };
 
-function KhareefCalendar() {
+function KhareefCalendar({ adsForSection = [] }) {
   const { lang, theme } = useLang();
   const th = THEMES[theme];
   const [activeMonth, setActiveMonth] = useState(7); // July
@@ -5126,6 +5141,9 @@ function KhareefCalendar() {
           </div>
         </div>
       )}
+      {adsForSection.map((ad, i) => (
+        <AdBanner key={"caled"+i} ad={ad} lang={lang} th={th} />
+      ))}
     </div>
   );
 }
@@ -5720,9 +5738,9 @@ function GlobalSearch({ onClose, lang, th, goTab }) {
 
   useEffect(() => {
     Promise.all([
-      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/restaurants.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
-      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/locations.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
-      fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/places_overrides.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/restaurants.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/locations.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/places_overrides.json?t=" + Date.now()).then(r=>r.json()).catch(()=>[]),
     ]).then(([rests, locs, overridesArr]) => {
       const ovMap = {};
       (overridesArr||[]).forEach(o => { ovMap[o.id] = o; });
@@ -6006,7 +6024,7 @@ export default function App() {
   const [globalAds, setGlobalAds] = useState([]);
 
   useEffect(() => {
-    fetch("https://raw.githubusercontent.com/samiharthy/khareef-dhofar/main/public/ads.json?t=" + Date.now())
+    fetch("https://cdn.jsdelivr.net/gh/samiharthy/khareef-dhofar@main/public/ads.json?t=" + Date.now())
       .then(r => r.json())
       .then(d => { if(d?.enabled && Array.isArray(d.ads)) setGlobalAds(d.ads); })
       .catch(() => {});
@@ -6161,17 +6179,17 @@ export default function App() {
             {tab === "crowd" && <Crowd />}
             {tab === "evening" && <Evening />}
             {tab === "heritage" && <Heritage />}
-            {tab === "access" && <Access />}
-            {tab === "health" && <Health />}
+            {tab === "access" && <Access adsForSection={getAdsForSection("access")} />}
+            {tab === "health" && <Health adsForSection={getAdsForSection("health")} />}
             {tab === "tips" && <Tips />}
-            {tab === "stays" && <Stays />}
+            {tab === "stays" && <Stays adsForSection={getAdsForSection("stays")} />}
           {tab === "hiking" && <HikingTrails />}
             {tab === "about" && <About />}
           {tab === "food" && <FoodGuide adsForSection={getAdsForSection("food")} />}
-          {tab === "today" && <TodayTab />}
+          {tab === "today" && <TodayTab adsForSection={getAdsForSection("today")} />}
           {tab === "guide" && <TouristGuide />}
-          {tab === "nearby" && <NearbyPlaces />}
-          {tab === "calendar" && <KhareefCalendar />}
+          {tab === "nearby" && <NearbyPlaces adsForSection={getAdsForSection("nearby")} />}
+          {tab === "calendar" && <KhareefCalendar adsForSection={getAdsForSection("calendar")} />}
           {tab === "explore" && <ExploreTab globalAds={getAdsForSection("explore")} />}
             {tab === "planner" && <Planner />}
             {lang !== "ar" && (
